@@ -730,7 +730,7 @@ string function CodeCallback_CheckPassThroughAddsMods( entity player, entity hit
 	{
 		if ( passingEntOrWeapon.IsProjectile() )
 		{
-			if ( currMods.contains( "amped_damage" ) )
+			if ( currMods.contains( "amped_damage" ) || currMods.contains( "amped_damage_alt" ) )
 			{
 				#if SERVER
 					                               
@@ -754,6 +754,12 @@ string function CodeCallback_CheckPassThroughAddsMods( entity player, entity hit
 			}
 		}
 
+                                  
+                                                         
+    
+                             
+    
+        
 		return "amped_damage"
 	}
 

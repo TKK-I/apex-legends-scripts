@@ -721,9 +721,17 @@ void function EntitiesDidLoad()
 	                             
 	 
                          
+<<<<<<< HEAD
+		                                                
+=======
                                                                      
+>>>>>>> parent of 044c095 (game update)
       
-			                                                 
+		                                                   
+
+		                               
+		                                                             
+
 		                                    
 		                                                               
 		                                                                                                   

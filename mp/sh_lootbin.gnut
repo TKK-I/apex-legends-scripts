@@ -36,6 +36,11 @@ global function AddCallback_CanOpenLootBin
                              
                                         
                                          
+<<<<<<< HEAD
+                                      
+                                            
+=======
+>>>>>>> parent of 044c095 (game update)
 #endif
 
 #if SERVER && DEV
@@ -46,7 +51,7 @@ global function AddCallback_CanOpenLootBin
 #endif
 
 #if CLIENT
-global function ServerToClient_LootBinOpening
+global function CL_LootBinOpening
 #endif
 
 
@@ -77,6 +82,24 @@ global enum eLootBinCompartment
 	SECRET,
 	_COUNT
 }
+global enum lootBinType
+{
+	REGULAR,
+                   
+	MUNITIONS,
+	SUPPORT
+      
+}
+
+global enum eLootBinSequenceKind
+{
+	OPEN_REGULAR,
+	OPEN_SECRET,
+	OPEN_BOTH,
+	CLOSE_REGULAR,
+	               
+	CLOSE_BOTH,
+}
 #endif
 
 
@@ -100,6 +123,77 @@ global typedef OnLootBinOpeningCallbackType void functionref( entity )
 #endif
 
 #if SERVER
+                                                                                
+ 
+	           
+
+	                                                                                                                               
+	                             
+
+                   
+	                                                    
+	 
+		                               
+	 
+
+	                                              
+	 
+		                             
+	 
+      
+
+	                  
+	 
+		                         
+			                             
+			 
+				                                       
+					                                                  
+					     
+				                                      
+					                                                            
+					     
+				                                    
+					                                                          
+					     
+				        
+					                                                  
+					     
+			 
+			     
+                   
+		                         
+			                             
+			 
+				                                       
+					                                                  
+					     
+				                                      
+					                                                            
+					     
+				                                    
+					                                                          
+					     
+			 
+			     
+		                           
+			                             
+			 
+				                                       
+					                                                          
+					     
+				                                      
+					                                                            
+					     
+				                                    
+					                                                              
+					     
+			 
+			     
+      
+	 
+ 
+
                                                                                                                                                                                             
  
 	                              
@@ -136,10 +230,6 @@ void function ShLootBin_Init()
 	PrecacheModel( LOOT_BIN_MODEL )
 	PrecacheParticleSystem( LOOT_BIN_OPEN_REGULAR_FX )
 	PrecacheParticleSystem( LOOT_BIN_OPEN_SECRET_FX )
-
-	#if SERVER || CLIENT
-		Remote_RegisterClientFunction( "ServerToClient_LootBinOpening", "entity" )
-	#endif
 
 	#if SERVER
 		                                                                             
@@ -203,10 +293,18 @@ void function AddCallback_OnLootBinOpening( OnLootBinOpeningCallbackType callbac
 
                         
                      
-                                                                                                                                                      
+			                                                                                                                                                   
         
 				                           
        
+<<<<<<< HEAD
+
+                    
+	                                                 
+		                                 
+       
+=======
+>>>>>>> parent of 044c095 (game update)
  
 #endif
 
@@ -668,8 +766,8 @@ bool function LootBin_HasSecretCompartment( entity lootBin )
 		return true
 
                     
-                                                                                          
-             
+	if( lootBin.GetSkin() == lootBin.GetSkinIndexByName( MUNITIONS_BOX_LOOT_BIN_SKIN_NAME ) )
+		return true
        
 
 	return false
@@ -737,6 +835,15 @@ array<entity> function LootBin_GetSpawnedLoot( entity lootBin, bool includeRegul
 	                     
 		            
 
+<<<<<<< HEAD
+                    
+	                                                                                                      
+	                                                                                         
+		            
+       
+
+=======
+>>>>>>> parent of 044c095 (game update)
 	           
  
 #endif
@@ -756,19 +863,6 @@ array<entity> function LootBin_GetSpawnedLoot( entity lootBin, bool includeRegul
 	                    
 		                                     
 
-	           
- 
-#endif
-
-
-#if SERVER
-                         
- 
-	             
-	            
-	          
-	              
-	               
 	           
  
 #endif
@@ -799,8 +893,18 @@ array<entity> function LootBin_GetSpawnedLoot( entity lootBin, bool includeRegul
 
 	                     
 
+	                  
+	                           
+                        
+                                             
+       
+
 	                                                           
+<<<<<<< HEAD
+	                                                                                                           
+=======
 	                                                                                                                                                               
+>>>>>>> parent of 044c095 (game update)
 	 
 		                                                   
 	 
@@ -901,6 +1005,68 @@ array<entity> function LootBin_GetSpawnedLoot( entity lootBin, bool includeRegul
 
 
 #if SERVER
+<<<<<<< HEAD
+                                                                                    
+ 
+	                                                           
+
+	             
+	 
+		                                                                            
+			                 
+
+		                               
+	 
+
+	            
+	 
+		                                                                            
+			                 
+
+		                              
+	 
+ 
+
+                                                                                                                     
+ 
+	                                                           
+	                                                                              
+	                                                                             
+
+	                                                
+	 
+		                                 
+		 
+			                                 
+				                               
+				 
+					                                                             
+					                 
+				 
+				                                       
+				 
+					                                                                       
+				 
+				     
+			                                
+				                              
+				 
+					                                                           
+					                 
+				 
+				                                      
+				 
+					                                                                     
+				 
+				     
+		 
+	 
+ 
+#endif
+
+#if SERVER
+=======
+>>>>>>> parent of 044c095 (game update)
                                                                                                          
  
 	                                                                                                        
@@ -1025,6 +1191,8 @@ array<entity> function LootBin_GetSpawnedLoot( entity lootBin, bool includeRegul
 	 
 		                                                 
 		                                       
+
+		                                                
 	 
 
 	                                           
@@ -1038,10 +1206,36 @@ array<entity> function LootBin_GetSpawnedLoot( entity lootBin, bool includeRegul
                          
 		                                                     
 		 
-			                                                                   
+                      
+			                                                    
+			 
+				                                                                               
+			 
+
+			                                              
+			 
+				                                                                                 
+			 
+        
+                                                                      
+         
 		 
         
+                     
 		                                                                                                                                                          
+		                                                                                                                                                                                 
+		                                           
+		 
+			                       
+			                                                    
+		 
+		                                                 
+		 
+			                        
+			                                                    
+		 
+        
+
 	 
 
 	                                                                        
@@ -1112,9 +1306,6 @@ array<entity> function LootBin_GetSpawnedLoot( entity lootBin, bool includeRegul
 		 
 			                   
 		 
-
-		                                          
-			                                                                           
 	 
 
 	          
@@ -1174,7 +1365,7 @@ array<entity> function LootBin_GetSpawnedLoot( entity lootBin, bool includeRegul
 #endif
 
 #if CLIENT
-void function ServerToClient_LootBinOpening( entity lootBin )
+void function CL_LootBinOpening( entity lootBin, int sequenceType )
 {
 	foreach ( OnLootBinOpeningCallbackType cb in file.onLootBinOpeningCallbacks )
 		cb( lootBin )
@@ -1193,10 +1384,22 @@ bool function CanAccessSecretCompartments( entity lootBin, entity player )
 		return false
 
                      
-		bool canOpenCompartment = PlayerHasPassive( player, ePassives.PAS_MEDIC )
+                                                                           
       
+<<<<<<< HEAD
+		                                                                                                           
+		bool canOpenCompartment
+
+		if(lootBin.GetSkin() == lootBin.GetSkinIndexByName( MUNITIONS_BOX_LOOT_BIN_SKIN_NAME ) && Perks_DoesPlayerHavePerk( player, ePerkIndex.MUNITIONS_BOX ))
+			canOpenCompartment = true
+		else if(lootBin.GetSkin() == lootBin.GetSkinIndexByName( LOOT_BIN_SUPPORT_SKIN ) && Perks_DoesPlayerHavePerk( player, ePerkIndex.EXTRA_BIN_LOOT ))
+			canOpenCompartment = true
+		else
+			canOpenCompartment = false
+=======
                                                                                      
                                 
+>>>>>>> parent of 044c095 (game update)
        
 
 	return canOpenCompartment
@@ -1302,11 +1505,11 @@ void function AddCallback_CanOpenLootBin( entity lootBin, bool functionref( enti
 bool function CanUseLootBin( entity player, entity lootBin, int useFlags )
 {
                    
-                                             
-  
-                                                                
-               
-  
+	if( lootBin in file.canOpenLootBinCallback )
+	{
+		if( !file.canOpenLootBinCallback[lootBin]( player, lootBin ) )
+			return false
+	}
       
 
 	if ( player.GetWeaponDisableFlags() == WEAPON_DISABLE_FLAGS_ALL )
@@ -1446,6 +1649,163 @@ string function GetLootBinUseTextOverride( entity lootBin )
 		                                                                   
 	 
  
+<<<<<<< HEAD
+                   
+                      
+ 
+	                        
+	                          
+ 
+
+                                                         
+ 
+	                                                                                                                 
+ 
+
+                                                        
+ 
+	                                                                                           
+ 
+
+                                                                     
+ 
+	                                                                                                         
+ 
+
+                                          
+ 
+	                                                                               
+
+ 
+
+                                               
+ 
+	                                                                  
+	                        
+		      
+
+	                                                                        
+	                          
+	                         
+
+	                                              
+	                                                                 
+	 
+		                         
+	 
+	    
+	 
+		                                                                     
+		                               
+		                                  
+	 
+
+	                                                                                    
+
+	                                    
+	 
+		                                                                              
+		                        
+			        
+		                                                
+		                                                        
+		             
+	 
+
+	                                    
+	 
+		                                                                                      
+		                        
+			        
+		                                                
+		                                                        
+		             
+	 
+ 
+
+                                                                                 
+ 
+	                      
+	                             
+	                                    
+	                        
+		             
+
+	                       
+	                                
+
+	                                                                  
+
+	                                                                   
+	                                                                                             
+
+	                           
+	 
+		                                        
+		                           
+		                                    
+		 
+			                                             
+			 
+				                                          
+				                         
+				                                             
+				 
+					                                                                                                     
+					 
+						                     
+						     
+					 
+				 
+
+				                   
+				 
+					                                                     
+					 
+						                                                                                                                    
+						 
+							                     
+							     
+						 
+					 
+				 
+
+				                    
+				 
+					                                        
+					                           
+					   
+					     
+				 
+				    
+				 
+					                                           
+					                           
+					   
+				 
+			 
+		 
+
+		                                           
+		                             
+		 
+			                                                  
+			 
+				                                               
+				                                  
+			 
+		 
+	 
+	                                   
+	                                 
+	                                                
+	             
+ 
+
+      
+
+=======
+>>>>>>> parent of 044c095 (game update)
 #endif
 
 

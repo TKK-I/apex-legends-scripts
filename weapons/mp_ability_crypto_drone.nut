@@ -202,6 +202,12 @@ void function MpAbilityCryptoDrone_Init()
 		AddCallback_OnWeaponStatusUpdate( CryptoDrone_WeaponStatusCheck )
 		AddCallback_OnPlayerLifeStateChanged( CryptoDrone_OnLifeStateChanged )
 
+		AddCallback_CreatePlayerPassiveRui( CreateCameraCircleStatusRui )
+		AddCallback_DestroyPlayerPassiveRui( DestroyCameraCircleStatusRui )
+
+		AddCallback_CreatePlayerPassiveRui( CreateCryptoAnimatedTacticalRui )
+		AddCallback_DestroyPlayerPassiveRui( DestroyCryptoAnimatedTacticalRui )
+
 		RegisterMinimapPackage( "prop_script", eMinimapObject_prop_script.CRYPTO_DRONE, MINIMAP_OBJECT_RUI, MinimapPackage_CryptoDrone, FULLMAP_OBJECT_RUI, MinimapPackage_CryptoDrone )
                                 
 		                               
@@ -494,7 +500,7 @@ void function OnClientAnimEvent_ability_crypto_drone( entity weapon, string name
                                
 	Crypto_TryPlayScreenTransition( weaponOwner, weapon, weapon.HasMod( "crypto_has_camera" ) )
      
-                                                                                 
+                                                                                         
       
 }
 
@@ -502,13 +508,23 @@ void function OnClientAnimEvent_ability_crypto_drone( entity weapon, string name
 void function Crypto_TryPlayScreenTransition( entity player, entity weapon, bool playFastTransition )
 {
 	if ( weapon.HasMod( "crypto_drone_access" ) )
-		thread PlayScreenTransition( player, playFastTransition )
+		thread PlayScreenTransition( player, weapon, playFastTransition )
 }
       
 
-void function PlayScreenTransition( entity player, bool playFastTransition )
+void function PlayScreenTransition( entity player, entity weapon, bool playFastTransition )
 {
+	if ( !IsValid( player ) || !IsValid( weapon ) )
+		return
+
+	entity drone = CryptoDrone_GetPlayerDrone( player )
+
+	if ( !IsValid( drone ) )
+		return
+
 	EndSignal( player, "OnDeath", "OnDestroy" )
+	EndSignal( weapon, "OnDeath", "OnDestroy" )
+	EndSignal( drone, "OnDeath", "OnDestroy" )
 
 	entity cockpit = player.GetCockpit()
 	if ( !IsValid( cockpit ) )
@@ -1032,6 +1048,10 @@ void function CryptoDrone_WeaponInputThink( entity player, entity weapon )
 	                                          
 	                                       
 	                                       
+	                                   
+
+	                                                     
+	                                                                           
 
                                
 	                                              
@@ -1133,6 +1153,38 @@ void function CryptoDrone_WeaponInputThink( entity player, entity weapon )
        
 
 	                  
+ 
+
+                                                                        
+ 
+	                                               
+		            
+
+	                                                        
+	 		
+
+		                     
+	
+		                                         
+		                       
+			                
+		    
+		 
+			                                                                
+			                                     
+
+			                                                  
+				                   
+		 
+
+		                         
+		 
+			                                                   
+			            
+		 
+	 
+
+	           
  
 
                                       
@@ -1282,7 +1334,7 @@ void function CryptoDrone_WeaponInputThink( entity player, entity weapon )
                                
                                                       
  
-	                                                                   
+	                                          
 	                                       
 	                                    
 
@@ -2224,6 +2276,11 @@ void function Camera_OnEndView( entity player, int statusEffect, bool actuallyCh
 	{
 		RuiDestroyIfAlive( file.cameraRui )
 		file.cameraRui = null
+<<<<<<< HEAD
+		if ( file.cryptoAnimatedTacticalRui != null )
+			ChangeHUDVisibilityWhenInCryptoDrone(false)
+=======
+>>>>>>> parent of 044c095 (game update)
 	}
 }
 
@@ -2373,13 +2430,35 @@ void function TempUpdateRuiDistance( entity player )
 				}
 				else if ( SurveyBeacon_IsSurveyBeacon( trace.hitEnt ) )
 				{
-					if ( ControlPanel_CanUseFunction( player, trace.hitEnt, 0 ) )
+                       
+					if( ControlPanel_CanUseFunction( player, trace.hitEnt, 0 ) )
 					{
-						if ( HasActiveSurveyZone( player ) )
-							targetString = "#SURVEY_ALREADY_ACTIVE"
-						else
+						if( SurveyBeacon_CanUseFunction( player, trace.hitEnt, 0 ) )
+						{
 							targetString = "#CAMERA_INTERACT_SURVEY_BEACON"
+						}
+						else
+						{
+							string scriptName = trace.hitEnt.GetScriptName()
+							if( scriptName == ENEMY_SURVEY_BEACON_SCRIPTNAME )
+							{
+								targetString = "#SURVEY_ENEMY_ALREADY_ACTIVE"
+							}
+							else
+							{
+								targetString = "#CONTROLLER_SURVEY_TEAM_MESSAGE"
+							}
+						}
 					}
+         
+                                                                  
+      
+                                          
+                                              
+          
+                                                      
+      
+          
 				}
                             
                                                                                           
@@ -2654,7 +2733,7 @@ bool function PlayerCanUseCamera( entity ownerPlayer, bool needsValidCamera )
          
 
                    
-				                                                                       
+				                                                                                 
 					        
          
 
@@ -2703,7 +2782,7 @@ bool function PlayerCanUseCamera( entity ownerPlayer, bool needsValidCamera )
                           
           
                     
-					                                                                     
+					                                                                               
 						                     
           
 				                     
@@ -2726,7 +2805,7 @@ bool function PlayerCanUseCamera( entity ownerPlayer, bool needsValidCamera )
 					                                       
 				 
                     
-				                                                                           
+				                                                                                     
 				 
 					                                                                      
 					                                       
@@ -2821,7 +2900,7 @@ bool function PlayerCanUseCamera( entity ownerPlayer, bool needsValidCamera )
 
 		                                      
 		 
-			                                                           
+			                                                                                    
 				                                      
 		 
 
@@ -3045,34 +3124,43 @@ var function GetCameraCircleStatusRui()
 	return file.cameraCircleStatusRui
 }
 
-void function CreateCameraCircleStatusRui()
-{
-                           
-                                 
-   
-                                                                                                    
-   
-      
-   
-                                                                                      
-   
-      
-		file.cameraCircleStatusRui = CreateFullscreenRui( $"ui/camera_circle_status.rpak" )
-       
-	entity localViewPlayer = GetLocalViewPlayer()
-	RuiTrackFloat( file.cameraCircleStatusRui, "deathfieldDistance", localViewPlayer, RUI_TRACK_DEATHFIELD_DISTANCE )
-	RuiTrackFloat( file.cameraCircleStatusRui, "cameraViewFrac", localViewPlayer, RUI_TRACK_STATUS_EFFECT_SEVERITY, eStatusEffect.camera_view )
-                                
-		RuiSetBool( file.cameraCircleStatusRui, "cryptoHudUpdate", true )
-       
-}
-
-void function DestroyCameraCircleStatusRui()
+void function CreateCameraCircleStatusRui( entity player )
 {
 	if ( file.cameraCircleStatusRui != null )
+		return
+
+	if ( PlayerHasPassive( player, ePassives.PAS_CRYPTO ) )
 	{
-		RuiDestroyIfAlive( file.cameraCircleStatusRui )
-		file.cameraCircleStatusRui = null
+                            
+                                  
+    
+                                                                                                     
+    
+       
+    
+                                                                                       
+    
+       
+			file.cameraCircleStatusRui = CreateFullscreenRui( $"ui/camera_circle_status.rpak" )
+        
+			entity localViewPlayer = GetLocalViewPlayer()
+			RuiTrackFloat( file.cameraCircleStatusRui, "deathfieldDistance", localViewPlayer, RUI_TRACK_DEATHFIELD_DISTANCE )
+			RuiTrackFloat( file.cameraCircleStatusRui, "cameraViewFrac", localViewPlayer, RUI_TRACK_STATUS_EFFECT_SEVERITY, eStatusEffect.camera_view )
+                                  
+				RuiSetBool( file.cameraCircleStatusRui, "cryptoHudUpdate", true )
+         
+	}
+}
+
+void function DestroyCameraCircleStatusRui( entity player )
+{
+	if ( !PlayerHasPassive( player, ePassives.PAS_CRYPTO ) )
+	{
+		if ( file.cameraCircleStatusRui != null )
+		{
+			RuiDestroyIfAlive( file.cameraCircleStatusRui )
+			file.cameraCircleStatusRui = null
+		}
 	}
 }
 
@@ -3081,11 +3169,16 @@ var function GetCryptoAnimatedTacticalRui()
 	return file.cryptoAnimatedTacticalRui
 }
 
-var function CreateCryptoAnimatedTacticalRui()
+void function CreateCryptoAnimatedTacticalRui( entity player )
 {
-	file.cryptoAnimatedTacticalRui = CreateCockpitPostFXRui( $"ui/crypto_tactical.rpak", HUD_Z_BASE )
-	UpdateCryptoAnimatedTacticalRui()
-	return file.cryptoAnimatedTacticalRui
+	if( file.cryptoAnimatedTacticalRui != null )
+		return
+
+	if ( PlayerHasPassive( player, ePassives.PAS_CRYPTO ) )
+	{
+		file.cryptoAnimatedTacticalRui = CreateCockpitPostFXRui( $"ui/crypto_tactical.rpak", HUD_Z_BASE )
+		UpdateCryptoAnimatedTacticalRui()
+	}
 }
 
 void function UpdateCryptoAnimatedTacticalRui()
@@ -3149,24 +3242,29 @@ void function TrackCryptoAnimatedTacticalRuiOffhandWeapon()
 			{
 				RuiTrackFloat( file.cryptoAnimatedTacticalRui, "clipAmmoFrac", offhandWeapon, RUI_TRACK_WEAPON_CLIP_AMMO_FRACTION )
 
-				if ( IsArenaMode() )
-				{
-					RuiTrackFloat( file.cryptoAnimatedTacticalRui, "maxMagAmmo", offhandWeapon, RUI_TRACK_WEAPON_CLIP_AMMO_MAX )
-					RuiTrackFloat( file.cryptoAnimatedTacticalRui, "maxAmmo", offhandWeapon, RUI_TRACK_WEAPON_AMMO_MAX )
-					RuiTrackFloat( file.cryptoAnimatedTacticalRui, "stockpileFrac", offhandWeapon, RUI_TRACK_WEAPON_REMAINING_AMMO_FRACTION )
-					RuiSetBool( file.cryptoAnimatedTacticalRui, "displayStockpileCharges", true )
-				}
+                           
+                        
+     
+                                                                                                                 
+                                                                                                         
+                                                                                                                              
+                                                                                  
+     
+          
 			}
 		}
 	}
 }
 
-void function DestroyCryptoAnimatedTacticalRui()
+void function DestroyCryptoAnimatedTacticalRui( entity player )
 {
-	if ( file.cryptoAnimatedTacticalRui != null )
+	if( !PlayerHasPassive( player, ePassives.PAS_CRYPTO ) )
 	{
-		RuiDestroyIfAlive( file.cryptoAnimatedTacticalRui )
-		file.cryptoAnimatedTacticalRui = null
+		if ( file.cryptoAnimatedTacticalRui != null )
+		{
+			RuiDestroy( file.cryptoAnimatedTacticalRui )
+			file.cryptoAnimatedTacticalRui = null
+		}
 	}
 }
 

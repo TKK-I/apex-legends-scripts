@@ -326,6 +326,7 @@ void function WinterExpress_Init()
 		                                                  
 		                                                      
 
+		                                                                                       
 		                                      
 		 
 			                                                                               
@@ -1671,6 +1672,17 @@ void function Client_OnWinnerDetermined( )
 	           
  
 
+#endif         
+
+#if SERVER
+                                                                                        
+ 
+	                                                  
+	                                                   
+	                                                    
+
+	                              
+ 
 #endif         
 
                                         
@@ -3102,6 +3114,9 @@ string function PickCommentaryLineFromBucket_WinterExpressCustom( int commentary
 #if UI
 void function UI_UpdateOpenMenuButtonCallbacks_Spectate( int newLifeState, bool shouldCloseMenu )
 {
+	if ( GetGameState() > eGameState.WinnerDetermined || uiGlobal.isLevelShuttingDown )
+		return
+
 	if ( newLifeState == LIFE_ALIVE )
 	{
 		if ( shouldCloseMenu )

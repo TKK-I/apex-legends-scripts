@@ -124,6 +124,7 @@ global function SURVIVAL_UpdateStringForEquipmentAction
                                                  
                                                                 
                                                                      
+                                         
       
 #endif
 
@@ -220,6 +221,8 @@ global function GetPropSurvivalMainProperty
 global function GetPropSurvivalExtraProperty
 global function GetPropSurvivalMainPropertyFromEnt
 global function GetPropSurvivalExtraPropertyFromEnt
+global function InventoryHasSingleAkimboWeapon
+
 #if SERVER
                                        
                                     
@@ -287,6 +290,36 @@ global const string WEAPON_LOCKEDSET_MOD_BLUEPAINTBALL = "blue_paintball"
                                                             
                                                         
       
+
+                                
+                                                            
+                                                                          
+                                                            
+                                                                          
+                                                              
+                                                                            
+                                                              
+                                                                            
+      
+
+                                                                      
+const table< string, string > LOCKEDSET_MOD_TO_SUFFIX = {
+	[WEAPON_LOCKEDSET_MOD_GOLDPAINTBALL] = WEAPON_LOCKEDSET_SUFFIX_GOLDPAINTBALL,
+	[WEAPON_LOCKEDSET_MOD_PURPLEPAINTBALL] = WEAPON_LOCKEDSET_SUFFIX_PURPLEPAINTBALL,
+	[WEAPON_LOCKEDSET_MOD_BLUEPAINTBALL] = WEAPON_LOCKEDSET_SUFFIX_BLUEPAINTBALL,
+                                 
+                                                                         
+       
+                                
+		[WEAPON_LOCKEDSET_MOD_CUPID] = WEAPON_LOCKEDSET_SUFFIX_CUPID,
+       
+                                 
+                                                               
+                                                               
+                                                                 
+                                                                 
+       
+}
 
 global const string WEAPON_LOCKEDSET_MOD_CRATE = "crate"
 
@@ -1068,6 +1101,16 @@ string function GetWeaponClassNameWithLockedSet( entity weapon )
 {
 	string result = weapon.GetWeaponClassName()
 
+<<<<<<< HEAD
+	foreach ( mod, suffix in LOCKEDSET_MOD_TO_SUFFIX )
+	{
+		if ( weapon.HasMod( mod ) )
+		{
+			result += suffix
+			return result
+		}
+	}
+=======
                                  
                                                          
    
@@ -1083,6 +1126,7 @@ string function GetWeaponClassNameWithLockedSet( entity weapon )
                 
    
        
+>>>>>>> parent of 044c095 (game update)
 
 	switch( weapon.GetWeaponLockedSet() )
 	{
@@ -1103,18 +1147,20 @@ string function GetWeaponClassNameWithLockedSet( entity weapon )
 			break
 	}
 
-	if ( weapon.HasMod( WEAPON_LOCKEDSET_MOD_PURPLEPAINTBALL ) )
-		result += WEAPON_LOCKEDSET_SUFFIX_PURPLEPAINTBALL
-	else if ( weapon.HasMod( WEAPON_LOCKEDSET_MOD_BLUEPAINTBALL ) )
-		result += WEAPON_LOCKEDSET_SUFFIX_BLUEPAINTBALL
-	else if ( weapon.HasMod( WEAPON_LOCKEDSET_MOD_GOLDPAINTBALL ) )
-		result += WEAPON_LOCKEDSET_SUFFIX_GOLDPAINTBALL
 	return result
 }
 
 
 bool function WeaponLootRefIsLockedSet( string ref )
 {
+<<<<<<< HEAD
+	                                                                              
+	if ( SURVIVAL_Loot_IsRefValid( ref ) )
+	{
+		LootData weaponData = SURVIVAL_Loot_GetLootDataByRef( ref )
+		return weaponData.baseWeapon != ref
+	}
+=======
 	if ( ref.find( WEAPON_LOCKEDSET_SUFFIX_GOLD ) >= 0 )
 		return true
 	if ( ref.find( WEAPON_LOCKEDSET_SUFFIX_WHITESET ) >= 0 )
@@ -1138,6 +1184,7 @@ bool function WeaponLootRefIsLockedSet( string ref )
               
        
 
+>>>>>>> parent of 044c095 (game update)
 	return false
 }
 
@@ -2349,20 +2396,14 @@ void function SURVIVAL_Loot_UpdateHighlightForLoot( entity prop )
    
         
 
+                         
+                                               
+                                           
+                               
+
 		SetSurvivalPropHighlight( prop, highlight, prop.e.isSelected )
 		ManageHighlightEntity( prop )
 	#endif          
-
-
-                        
-            
-                                               
-    
-                                           
-    
-        
-                              
-
 }
 
 KitHealData function SURVIVAL_CreateKitHealData( entity player, int kitType )
@@ -3278,6 +3319,13 @@ bool function SURVIVAL_IsLootIrrelevant( entity player, entity lootItem, LootDat
 		return (!IsAmmoInUse( player, lootData.ref ))
 	}
 
+                    
+                                        
+   
+                                                                                                                            
+   
+                          
+
 	return (lootAction == eLootAction.NONE && altLootAction == eLootAction.NONE)
 }
 
@@ -3751,8 +3799,11 @@ string function GetWeaponToReplace( entity player )
 
 		                                          
 		 
-			                                                          
+			                                                           
+			                                           
 				        
+<<<<<<< HEAD
+=======
 
 			                                                               
 				        
@@ -3781,12 +3832,20 @@ string function GetWeaponToReplace( entity player )
                                                                
              
          
+>>>>>>> parent of 044c095 (game update)
 		 
 
                    
                                                  
            
         
+<<<<<<< HEAD
+                     
+		                                    
+			        
+        
+=======
+>>>>>>> parent of 044c095 (game update)
 
 		                                
 		                                
@@ -3904,6 +3963,46 @@ string function GetWeaponToReplace( entity player )
 	                                                    
 	                                                      
  
+
+                                                      
+ 
+	                                         
+	 
+		                                                   
+
+		                                                                        
+		                                                                        
+
+		                                
+		 
+			                      
+				        
+
+			                
+			                                                    
+			 
+				                        
+				 
+					                           
+				 
+			 
+
+			                         
+			 
+				                                                                                  
+				                                                                                      
+			 
+			                         
+			 
+				                                                                                  
+				                                                                                      
+			 
+
+			                                     
+				                                         
+		 
+	 
+ 
 #endif
 
 
@@ -4006,8 +4105,8 @@ void function Inventory_RegisterNetworking()
 			                                                  
        
                     
-                                                                       
-                                                                             
+		                                                                     
+			                                                                          
        
  
 
@@ -5000,8 +5099,8 @@ int function EvolvingArmor_GetEvolutionProgress( entity player )
        
 
                     
-                                                                          
-                                                                 
+	                                                                         
+		                                                               
        
 
 	                                                            
@@ -5388,7 +5487,7 @@ bool function IsAmmoInUse( entity player, string ref )
 
 	foreach ( weapon in SURVIVAL_GetPrimaryWeapons( player ) )
 	{
-		string className = weapon.GetWeaponClassName()
+		string className = GetWeaponClassNameWithLockedSet( weapon )
 		if ( SURVIVAL_Loot_IsRefValid( className ) )
 		{
 			LootData data = SURVIVAL_Loot_GetLootDataByRef( className )
@@ -5446,6 +5545,14 @@ void function DeathBoxThink( entity ent, entity playerUser )
 
 bool function ShouldPickupDNAFromDeathBox( entity ent, entity player )
 {
+<<<<<<< HEAD
+                    
+	if( ent.GetNetBool( DEATH_BOX_BANNER_EXPIRED_NETVAR ) && !Perk_CanPickUpExpiredBanners( player, ent ) )
+		return false
+       
+
+=======
+>>>>>>> parent of 044c095 (game update)
 	if ( ent.GetTeam() != TEAM_UNASSIGNED )
 	{
 		if ( ent.GetTeam() == player.GetTeam() && IsValid( ent.GetOwner() ) )
@@ -5609,11 +5716,19 @@ void function OnUseSurvivalPickup( entity pickup, entity player, int useInputFla
 	else if ( useInputFlags & USE_INPUT_DEFAULT )
 		pickedUp = Survival_PickupItem( pickup, player )
 
+<<<<<<< HEAD
+	if ( !pickedUp )
+	{
+		if ( IsBitFlagSet( useInputFlags, USE_INPUT_LONG ) )
+			Survival_PickupItem( pickup, player, PICKUP_FLAG_LONG )
+	}
+=======
 	if ( pickedUp )
 		return
 
 	if ( useInputFlags & USE_INPUT_LONG )
 		pickedUp = Survival_PickupItem( pickup, player, PICKUP_FLAG_LONG )
+>>>>>>> parent of 044c095 (game update)
 }
 
 
@@ -5712,41 +5827,30 @@ LootData function SURVIVAL_GetLootDataFromWeapon( entity weapon )
 bool function SURVIVAL_Weapon_IsAttachmentLocked( string weaponName )
 {
                         
-		if( IsArenaMode() )
-			return true
+                     
+              
        
 
 	if ( !SURVIVAL_Loot_IsRefValid( weaponName ) )
 		return false
-	array<string> baseMods = SURVIVAL_Loot_GetLootDataByRef( weaponName ).baseMods
-	array<string> lootTags = SURVIVAL_Loot_GetLootDataByRef( weaponName ).lootTags
+	LootData data = SURVIVAL_Loot_GetLootDataByRef( weaponName )
+	array<string> baseMods = data.baseMods
+	array<string> lootTags = data.lootTags
+
 	if ( baseMods.contains( WEAPON_LOCKEDSET_MOD_CRATE ) )
 		return true
-                                 
-                                                             
-              
-       
 
+<<<<<<< HEAD
+	if ( WeaponLootRefIsLockedSet( data.ref ) )
+=======
                                 
                                                         
               
        
 
 	if ( lootTags.contains( WEAPON_LOCKEDSET_MOD_GOLD ) )
+>>>>>>> parent of 044c095 (game update)
 		return true
-	if ( lootTags.contains( WEAPON_LOCKEDSET_MOD_WHITESET ) )
-		return true
-	if ( lootTags.contains( WEAPON_LOCKEDSET_MOD_BLUESET ) )
-		return true
-	if ( lootTags.contains( WEAPON_LOCKEDSET_MOD_PURPLESET ) )
-		return true
-	if ( baseMods.contains( WEAPON_LOCKEDSET_MOD_PURPLEPAINTBALL ) )
-		return true
-	if ( baseMods.contains( WEAPON_LOCKEDSET_MOD_BLUEPAINTBALL ) )
-		return true
-	if ( baseMods.contains( WEAPON_LOCKEDSET_MOD_GOLDPAINTBALL ) )
-		return true
-
 
 	return false
 }
@@ -5755,8 +5859,8 @@ bool function SURVIVAL_Weapon_IsAttachmentLocked( string weaponName )
 bool function SURVIVAL_IsAttachmentPointLocked( string weaponName, string attachmentPoint )
 {
                         
-		if( IsArenaMode() )
-			return true
+                     
+              
        
 
 	if ( SURVIVAL_Weapon_IsAttachmentLocked( weaponName ) && attachmentPoint != "sight" )
@@ -5811,10 +5915,17 @@ int function SURVIVAL_GetInventorySlotCountForPlayer( entity player, LootData da
 	else if ( data.lootType == eLootType.AMMO )
 	{
                      
+<<<<<<< HEAD
+			if ( Perks_DoesPlayerHavePerk( player, ePerkIndex.EXTRA_FIREPOWER ) )
+			{
+				result = result + result / 3
+			}
+=======
                                                                         
     
                                        
     
+>>>>>>> parent of 044c095 (game update)
         
 	}
 	else if ( data.lootType == eLootType.HEALTH )
@@ -5949,6 +6060,22 @@ int function GetPropSurvivalExtraPropertyFromEnt( entity ent )
 }
 #endif
 
+int function InventoryHasSingleAkimboWeapon( entity player, string weaponName )
+{
+	for( int i = 0; i < WEAPON_INVENTORY_SLOT_PRIMARY_COUNT_MAIN; ++i )
+	{
+		entity weapon = player.GetNormalWeapon( i )
+		if( IsValid( weapon ) )
+		{
+			if( weapon.GetWeaponSettingBool( eWeaponVar.is_akimbo_weapon )  && weapon.GetWeaponClassName() == weaponName )
+			{
+				return i
+			}
+		}
+	}
+
+	return -1
+}
 
 #if SERVER || CLIENT
 int function GetPropSurvivalFlagsPropertyFromEnt( entity ent )

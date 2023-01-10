@@ -103,7 +103,7 @@ global const SPECTATOR_SETTINGS = $"settings/player/mp/spectator.rpak"
 global const TEAM_DEATHMATCH = "tdm"
 global const SURVIVAL = "survival"
                        
-global const GAMEMODE_ARENAS = "arenas"
+                                       
       
                         
 global const GAMEMODE_CONTROL = "control"
@@ -127,6 +127,15 @@ global const GAMEMODE_WINTER_EXPRESS = "winter_express"
                                
                                                     
       
+                                 
+                                                           
+      
+
+global const string PLAYLIST_TRAINING = "survival_training"
+                            
+global const string PLAYLIST_NEW_PLAYER_ORIENTATION = "survival_bots_vs_humanteams"
+global const string PLAYLIST_FIRING_RANGE = "survival_firingrange"
+                                  
 
 
 
@@ -314,6 +323,7 @@ global enum crosshairPriorityLevel
 	MENU,
 	PREMATCH,
 	TITANHUD,
+	POSTMATCH,
 	DEFAULT
 }
 
@@ -497,6 +507,7 @@ global enum PerfIndexClient
 	InventoryRefreshEnd,
 	UpdateLootRui,
 	LootGoesInPack,
+	CarePackagePerkLookatUpdate,
 
 	PrivateLobbyThread,
 }
@@ -600,12 +611,13 @@ global const OFFHAND_EQUIPMENT = 3
 global const OFFHAND_INVENTORY = 4
 global const OFFHAND_MELEE = 5
 global const OFFHAND_EMOTE = 6
+global const OFFHAND_GENERIC = 7
 
 global const OFFHAND_TACTICAL = OFFHAND_LEFT
 global const OFFHAND_ULTIMATE = OFFHAND_INVENTORY
 global const OFFHAND_TITAN_CENTER = 2
 
-global const OFFHAND_COUNT = 7
+global const OFFHAND_COUNT = 8
 
 global const OFFHAND_ORDNANCE = OFFHAND_RIGHT
 global const OFFHAND_SPECIAL = OFFHAND_LEFT
@@ -798,10 +810,15 @@ global enum ePresentationType
 	CLUB_LANDING,
 	CLUB_DISCOVERY,
 	ARENAS_RANKED,
+<<<<<<< HEAD
+	APPLIED_STICKER_INJECTOR,
+	APPLIED_STICKER_SMALL_CELL,
+	APPLIED_STICKER_LARGE_CELL,
+=======
                 
 	APPLIED_STICKER,
+>>>>>>> parent of 044c095 (game update)
 	FLAT_STICKER,
-                      
 
 	COUNT
 }
@@ -1099,7 +1116,7 @@ global enum eCommsAction
        
 	PING_WEAPON_CAR,
                                
-                      
+		PING_WEAPON_NEMESIS,
        
 	  
 	PING_OFFHAND_GRENADE_FIRESTAR,
@@ -1222,6 +1239,9 @@ global enum eCommsAction
 	PING_ITEM_HEALTH_LARGE,
 	PING_ITEM_HEALTH_SYRINGE,
 	PING_ITEM_ULTIMATE_ENERGY,
+                    
+                        
+       
 	PING_ITEM_ARMOR_SMALL,
 	PING_ITEM_TREASURE_BOX,
 	  
@@ -1349,6 +1369,13 @@ global enum eCommsAction
 		PING_DARK_VEIL,
 		PING_DARK_VEIL_ENEMY,
        
+<<<<<<< HEAD
+                                               
+		PING_BLOODHOUND_WHITE_RAVEN,
+		PING_BLOODHOUND_WHITE_RAVEN_TARGET_LOC,
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 	  
 	PING_ENEMY_NPC_SNIPER,
 	PING_ENEMY_NPC_SPECTRE,
@@ -1773,7 +1800,7 @@ global enum eCommsAction
        
 
                                
-                        
+		FLAVOR_WEAPON_NEMESIS,
        
 
                        
@@ -1832,7 +1859,7 @@ global enum eCommsAction
        
 
                          
-		PING_CONTROL_DROPPOD_ENEMY,
+		PING_CONTROL_SPAWN_POINT,
 		PING_CONTROL_OBJECTIVE_DEFEND,
 		PING_CONTROL_OBJECTIVE_ATTACK,
        
@@ -1872,12 +1899,17 @@ global enum eCommsAction
 		PING_WEAPON_PROWLER_RAMPARTSPECIAL,
 		PING_WEAPON_FLATLINE_RAMPARTSPECIAL,
        
+
+                                 
+                                  
+       
+
                        
 		PING_GRAVITYCANNON,
        
 	PING_GONDOLA,
                           
-                                   
+		FIRING_RANGE_TARGET_SPEED_CHANGE,
        
 
                        
@@ -1919,8 +1951,24 @@ global enum eCommsAction
        
 
                     
+<<<<<<< HEAD
+		REPLY_CAREPACKAGE_INSIGHT,
+		REPLY_CAREPACKAGE_INSIGHT_LOOTED,
+		REPLY_CAREPACKAGE_INSIGHT_FUTURE,
+		PING_MUNITIONS_BOX,
+		PING_SUPPORT_BOX,
+		PING_ENCRYPTED_CONSOLE,
+		PING_OPENED_MUNITIONS_BOX,
+		PING_OPENED_SUPPORT_BOX,
+       
+
+                        
+                                    
+                                 
+=======
                             
                                    
+>>>>>>> parent of 044c095 (game update)
        
 
 	_count
@@ -1938,10 +1986,10 @@ global const string CARE_PACKAGE_TARGETNAME = "care_package"
 global const string CARE_PACKAGE_LIFELINE_TARGETNAME = "care_package_lifeline"
 
                    
-                                                                          
-                                                                                  
+global const string ENEMY_SURVEY_BEACON_SCRIPTNAME = "enemy_survey_beacon"
+global const string NEXT_ZONE_SURVEY_BEACON_SCRIPTNAME = "next_zone_survey_beacon"
      
-global const string SURVEY_BEACON_SCRIPTNAME = "survey_beacon"
+                                                              
       
 
 
@@ -1983,7 +2031,7 @@ global enum eTooltipStyle
 	CURRENCY,
 	CRAFTING_INFO,
                        
-	ARENAS_SHOP_WEAPON,
+                    
       
 	CLUB_MEMBER,
 	GLADIATOR_CARD_BADGE,
@@ -2132,9 +2180,39 @@ global const string FIRING_RANGE_DUMMIE_SCRIPT_NAME = "npc_dummie"
 global const string FIRING_RANGE_COMBAT_DUMMIE_SCRIPT_NAME = "npc_dummie_combat"
 
                          
-                                                                      
-                               
+global enum eFRSettingType
+{
+	                                   
+	                                                                
+	SHOWRUI,				                                 
+	SHOWDYNSTATS,			                      
+	INFINITEMAGS,			                           
+	SHOWHITMARKS,			                      
+	                                 
+	                                                              
+	FRIENDLYFIRE,			                        
+	                             
+	                                 
+	  		                                
+	  		                                 
+	  		                                                                                
+	  			                                                          
+	  			                                                                            
+	  			                                                                                                        
+	TARGETSPEED,			                           
+	FRDUMMIESHIELDLVL,		                                               
+	FRDUMMIESPEED,
+	COUNT_
+}
 
+<<<<<<< HEAD
+global struct sFRS_PackedBools
+{
+	int frSS_PackedBools = 0
+	int frPS_PackedBools = 0
+}
+
+=======
                          
                                
  
@@ -2144,15 +2222,48 @@ global const string FIRING_RANGE_COMBAT_DUMMIE_SCRIPT_NAME = "npc_dummie_combat"
            
        
  
+>>>>>>> parent of 044c095 (game update)
 
-                                    
- 
-      
-           
-           
-         
-       
- 
+global enum eFRPSettingType
+{
+	SHOW_RUI,
+	SHOW_DYNSTATS,
+	INFINITERELOADS,
+	SHOW_HITMARKS,
+	COUNT_
+}
+
+global enum eDummieBehaviorType
+{
+	                                             
+	                                                    
+	STAYINPLACE,
+	STRAFE,
+	                                                  
+	                                                       
+	CANSTAND,
+	CANCROUCH,
+	RANDINTERVALS,
+	      
+	COUNT_
+}
+
+                
+                                                                                 
+                                 
+   
+  	                                  
+  	                                  
+   
+
+global enum eDummieSettingChangeType
+{
+	NONE,
+	DECREASED,
+	INCREASED,
+	TOGGLED,
+	COUNT_
+}
       
 
                       
@@ -2303,7 +2414,7 @@ global enum ePlayerStryderCharDataArraySlots
 	BANNER_TRACKER3,
 	BANNER_TRACKER3_VALUE,
 	CHARACTER_INTRO_QUIP,
-	UNUSED19,
+	MELEE_SKIN,
 	UNUSED20,
 	UNUSED21,
 	UNUSED22,
@@ -2408,6 +2519,8 @@ global enum eRuiArgType
 	                            
 	                           
 	                          
+
+	                            
  
 #endif
 

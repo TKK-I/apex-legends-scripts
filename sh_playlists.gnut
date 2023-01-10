@@ -7,6 +7,7 @@ global function GetCurrentPlaylistVarTimestamp
 global function GetMaxTeamSizeForPlaylist
 global function GetPlaylistMaps
 
+global function ForceRefreshVisiblePlaylists
 global function GetVisiblePlaylistNames
 global function GetPlaylistModNames
 global function GetPlaylistIndexForName
@@ -139,24 +140,24 @@ global const table<string, asset> GAMEMODE_IMAGE_MAP = {
 	explore_mode = $"rui/menu/gamemode/playlist_bg_olympus_explore",
 
                         
-		arenas_party_crasher = $"rui/menu/gamemode/playlist_bg_arena_party_crasher",
-		arenas_phase_runner = $"rui/menu/gamemode/playlist_bg_arena_phase_runner",
-		arenas_overflow = $"rui/menu/gamemode/playlist_bg_arena_overflow",
-		arenas_skull_town = $"rui/menu/gamemode/playlist_bg_arena_skull_town",
-		arenas_dome = $"rui/menu/gamemode/playlist_bg_arena_dome",
-		arenas_oasis = $"rui/menu/gamemode/playlist_bg_arena_oasis",
-		arenas_encore = $"rui/menu/gamemode/playlist_bg_arena_encore",
-		arenas_habitat = $"rui/menu/gamemode/playlist_bg_arena_habitat",
-		arenas_drop_off = $"rui/menu/gamemode/playlist_bg_arena_drop_off",
+                                                                              
+                                                                            
+                                                                    
+                                                                        
+                                                            
+                                                              
+                                                                
+                                                                  
+                                                                    
 
-		                                                                                             
-		                                                                                  
-		                                                                                
-		                                                                      
-		                                                              
-		                                                            
-		                                                                      
-		                                                                    
+                                                                                               
+                                                                                    
+                                                                                  
+                                                                        
+                                                                
+                                                              
+                                                                        
+                                                                      
        
                          
 		control_barometer = $"rui/menu/gamemode/playlist_bg_control_barometer",
@@ -171,6 +172,19 @@ global const table<string, asset> GAMEMODE_IMAGE_MAP = {
 		gungame_estates_night = $"rui/menu/gamemode/playlist_bg_gungame_estates_night",
 		gungame_the_wall = $"rui/menu/gamemode/playlist_bg_gungame_the_wall",
        
+<<<<<<< HEAD
+                                   
+		hardcore_olympus = $"rui/menu/gamemode/playlist_bg_hardcore_olympus",
+		hardcore_divided_moon = $"rui/menu/gamemode/playlist_bg_hardcore_divided_moon",
+		hardcore_worlds_edge = $"rui/menu/gamemode/playlist_bg_hardcore_worlds_edge",
+       
+                        
+		tdm_party_crasher = $"rui/menu/gamemode/playlist_bg_arena_party_crasher",
+		tdm_overflow = $"rui/menu/gamemode/playlist_bg_arena_overflow",
+		tdm_habitat = $"rui/menu/gamemode/playlist_bg_arena_habitat",
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 }
 
 global const table<string, asset> GAMEMODE_THUMBNAIL_IMAGE_MAP = {
@@ -180,10 +194,10 @@ global const table<string, asset> GAMEMODE_THUMBNAIL_IMAGE_MAP = {
 	firing_range = $"rui/menu/gamemode/playlist_bg_sq_firing_range",
 	generic_01 = $"rui/menu/gamemode/generic_01",
 	generic_02 = $"rui/menu/gamemode/generic_02",
-	ranked_1 = $"rui/menu/gamemode/playlist_bg_kc_mu2_ranked",                                     
-	ranked_2 = $"rui/menu/gamemode/playlist_bg_worldsedge_ranked",                                     
-	ranked_3 = $"rui/menu/gamemode/playlist_bg_olympus_mu2_ranked",                                     
-	ranked_4 = $"rui/menu/gamemode/playlist_bg_storm_point_ranked",                                     
+	ranked_1 = $"rui/menu/gamemode/playlist_bg_sq_kc_mu2_ranked",
+	ranked_2 = $"rui/menu/gamemode/playlist_bg_sq_worldsedge_ranked",
+	ranked_3 = $"rui/menu/gamemode/playlist_bg_sq_olympus_mu2_ranked",
+	ranked_4 = $"rui/menu/gamemode/playlist_bg_sq_storm_point_ranked",
 	ranked_5 = $"rui/menu/gamemode/playlist_bg_sq_divided_moon_ranked",
 	solo_iron_crown = $"rui/menu/gamemode/solo_iron_crown",
 	solo = $"rui/menu/gamemode/solo_iron_crown",
@@ -194,27 +208,27 @@ global const table<string, asset> GAMEMODE_THUMBNAIL_IMAGE_MAP = {
 
 	trios = $"rui/menu/gamemode/playlist_bg_sq_trios",
 
-	panel_worlds_edge = $"rui/menu/gamemode/playlist_bg_worldsedge_vanilla",
-	panel_worlds_edge_mu1 = $"rui/menu/gamemode/worlds_edge_mu1",
-	panel_worlds_edge_mu2 = $"rui/menu/gamemode/playlist_bg_worldsedge_mu2",
-	panel_worlds_edge_mu3 = $"rui/menu/gamemode/playlist_bg_worldsedge_mu3",
+	panel_worlds_edge = $"rui/menu/gamemode/playlist_bg_sq_worldsedge_mu3",
+	panel_worlds_edge_mu1 = $"rui/menu/gamemode/playlist_bg_sq_worldsedge_mu3",
+	panel_worlds_edge_mu2 = $"rui/menu/gamemode/playlist_bg_sq_worldsedge_mu3",
+	panel_worlds_edge_mu3 = $"rui/menu/gamemode/playlist_bg_sq_worldsedge_mu3",                                                    
 
-	panel_olympus = $"rui/menu/gamemode/playlist_bg_olympus",
-	panel_olympus_mu1 = $"rui/menu/gamemode/playlist_bg_olympus_mu1",
-	panel_olympus_mu2 = $"rui/menu/gamemode/playlist_bg_olympus_mu2",
+	panel_olympus = $"rui/menu/gamemode/playlist_bg_sq_olympus_mu2",
+	panel_olympus_mu1 = $"rui/menu/gamemode/playlist_bg_sq_olympus_mu2",
+	panel_olympus_mu2 = $"rui/menu/gamemode/playlist_bg_sq_olympus_mu2",                                                    
 
 	canyon_land_mu1 = $"rui/menu/gamemode/play_apex",
-	panel_canyon_land = $"rui/menu/gamemode/playlist_bg_kc_vanilla",
-	panel_canyon_land_mu1 = $"rui/menu/gamemode/playlist_bg_kc",
-	panel_canyon_land_mu2 = $"rui/menu/gamemode/playlist_bg_kc_mu2",
-	panel_canyon_land_mu3 = $"rui/menu/gamemode/playlist_bg_kc_mu3",
-	panel_canyon_land_mu3_hu1 = $"rui/menu/gamemode/playlist_bg_kc_mu3_hu1",
-	panel_canyon_land_night = $"rui/menu/gamemode/playlist_bg_kc_night",
+	panel_canyon_land = $"rui/menu/gamemode/playlist_bg_sq_kc_mu3_hu1",
+	panel_canyon_land_mu1 = $"rui/menu/gamemode/playlist_bg_sq_kc_mu3_hu1",
+	panel_canyon_land_mu2 = $"rui/menu/gamemode/playlist_bg_sq_kc_mu3_hu1",
+	panel_canyon_land_mu3 = $"rui/menu/gamemode/playlist_bg_sq_kc_mu3_hu1",
+	panel_canyon_land_mu3_hu1 = $"rui/menu/gamemode/playlist_bg_sq_kc_mu3_hu1"
+	panel_canyon_land_night = $"rui/menu/gamemode/playlist_bg_kc_night",                                                     
 
-	panel_storm_point = $"rui/menu/gamemode/playlist_bg_storm_point",
-	panel_storm_point_mu1 = $"rui/menu/gamemode/playlist_bg_storm_point_mu1",
+	panel_storm_point = $"rui/menu/gamemode/playlist_bg_sq_storm_point_mu1",
+	panel_storm_point_mu1 = $"rui/menu/gamemode/playlist_bg_sq_storm_point_mu1",                                                    
 
-	panel_divided_moon = $"rui/menu/gamemode/playlist_bg_divided_moon",
+	panel_divided_moon = $"rui/menu/gamemode/playlist_bg_sq_divided_moon",
 
 	shotguns_and_snipers = $"rui/menu/gamemode/playlist_bg_sq_shotguns_and_snipers",
 	panel_worlds_edge_mu2_airdrop = $"rui/menu/gamemode/playlist_bg_worldsedge_airdrop",
@@ -264,22 +278,22 @@ global const table<string, asset> GAMEMODE_THUMBNAIL_IMAGE_MAP = {
 	explore_mode = $"rui/menu/gamemode/playlist_bg_olympus_explore",
 
                         
-		arenas_party_crasher = $"rui/menu/gamemode/playlist_bg_sq_arena_party_crasher"
-		arenas_phase_runner = $"rui/menu/gamemode/playlist_bg_sq_arena_phase_runner",
-		arenas_overflow = $"rui/menu/gamemode/playlist_bg_sq_arena_overflow",
-		arenas_skull_town = $"rui/menu/gamemode/playlist_bg_sq_arena_skull_town",
-		arenas_encore = $"rui/menu/gamemode/playlist_bg_sq_arena_encore",
-		arenas_habitat = $"rui/menu/gamemode/playlist_bg_sq_arena_habitat",
-		arenas_drop_off = $"rui/menu/gamemode/playlist_bg_sq_arena_drop_off",
+                                                                                
+                                                                               
+                                                                       
+                                                                           
+                                                                   
+                                                                     
+                                                                       
 
-		                                                                                             
-		                                                                                     
-		                                                                                   
-		                                                                         
-		                                                                 
-		                                                               
-		                                                                         
-		                                                                       
+                                                                                               
+                                                                                       
+                                                                                     
+                                                                           
+                                                                   
+                                                                 
+                                                                           
+                                                                         
        
 
                          
@@ -296,6 +310,21 @@ global const table<string, asset> GAMEMODE_THUMBNAIL_IMAGE_MAP = {
 		gungame_estates_night = $"rui/menu/gamemode/playlist_bg_sq_gungame_estates_night",
 		gungame_the_wall = $"rui/menu/gamemode/playlist_bg_sq_gungame_the_wall",
        
+<<<<<<< HEAD
+
+                                   
+		hardcore_olympus = $"rui/menu/gamemode/playlist_bg_sq_hardcore_olympus",
+		hardcore_divided_moon = $"rui/menu/gamemode/playlist_bg_sq_hardcore_divided_moon",
+		hardcore_worlds_edge = $"rui/menu/gamemode/playlist_bg_sq_hardcore_worlds_edge",
+       
+
+                        
+		tdm_party_crasher = $"rui/menu/gamemode/playlist_bg_sq_arena_party_crasher",
+		tdm_overflow = $"rui/menu/gamemode/playlist_bg_sq_arena_overflow",
+		tdm_habitat = $"rui/menu/gamemode/playlist_bg_sq_arena_habitat",
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 }
 
 global const table<string, asset> GAMEMODE_MINI_ICON_MAP = {
@@ -391,6 +420,7 @@ struct
 	array<CachedPlaylistData> cachedPlaylistArray
 	table<string, CachedPlaylistData> cachedPlaylistMap
 	int lastCheckedTime = 0
+	bool isOptInEnabled = false
 	array<string> cachedPlaylistNames
 
 } file
@@ -775,6 +805,11 @@ array<string> function GetPlaylistModNames()
 	return list
 }
 
+void function ForceRefreshVisiblePlaylists()
+{
+	file.lastCheckedTime = 0
+}
+
 array<string> function GetVisiblePlaylistNames( bool isPrivateMatchQuery = false )
 {
 		bool doOptIn = false
@@ -783,10 +818,23 @@ array<string> function GetVisiblePlaylistNames( bool isPrivateMatchQuery = false
 				doOptIn = true
 		#endif
 
+<<<<<<< HEAD
+		if ( isOptInServer )
+			shouldCache = false
+	#endif      
+
+	                                                          
+	int timeSinceLastChecked = ( GetUnixTimestamp() - file.lastCheckedTime )
+	int checkInterval = GetCurrentPlaylistVarInt( "visible_playlist_refresh_time_sec", shouldCache ? 10 : 1 )
+	if ( timeSinceLastChecked >= 0 && file.isOptInEnabled == shouldDisplayOptInOptions && timeSinceLastChecked < checkInterval )
+		return file.cachedPlaylistNames
+=======
 		if ( !doOptIn && ( ( GetUnixTimestamp() - file.lastCheckedTime ) < GetCurrentPlaylistVarInt( "visible_playlist_refresh_time_sec", 10 ) ) )
 			return file.cachedPlaylistNames
+>>>>>>> parent of 044c095 (game update)
 
 	file.lastCheckedTime = GetUnixTimestamp()
+	file.isOptInEnabled = shouldDisplayOptInOptions
 
 	if ( GetPlaylistCount() != file.cachedPlaylistArray.len() )
 		Warning( "Playlist count mismatch: cache (%d) != actual (%d)", file.cachedPlaylistArray.len(), GetPlaylistCount() )
@@ -1096,11 +1144,26 @@ bool function PlaylistHasRotationGroup( string playlistName )
 #if UI
 string function GetDefaultPlaylist()
 {
+                               
+	if ( GetPartySize() == 1 )
+	{
+		if ( !IsLocalPlayerExemptFromTraining() && !HasLocalPlayerCompletedTraining() )
+			return PLAYLIST_TRAINING
+
+		if ( !IsLocalPlayerExemptFromNewPlayerOrientation() && !HasLocalPlayerCompletedNewPlayerOrientation() )
+			return PLAYLIST_NEW_PLAYER_ORIENTATION
+	}
+	else if ( DoNonlocalPlayerPartyMembersNeedToCompleteNewPlayerOrientation() )
+	{
+		return PLAYLIST_NEW_PLAYER_ORIENTATION
+	}
+     
+                                                                                                       
+                          
+      
+
 	array<string> list = GetVisiblePlaylistNames()
 	Assert( list.len() > 0 )
-
-	if ( GetPartySize() == 1 && !IsExemptFromTraining() && !IsTrainingCompleted() )
-		return PLAYLIST_TRAINING
 
 	foreach ( playlist in list )
 	{
@@ -1113,7 +1176,11 @@ string function GetDefaultPlaylist()
 
 	foreach ( playlist in list )
 	{
-		if ( playlist == PLAYLIST_TRAINING )
+                               
+		if ( playlist == PLAYLIST_TRAINING || playlist == PLAYLIST_NEW_PLAYER_ORIENTATION )
+     
+                                      
+      
 			continue
 		return playlist
 	}

@@ -813,6 +813,9 @@ void function PrivateMatch_GameStatus_TeamRoster_Update( int dirtyBit )
 	if ( file.enableMenu == false )
 		return
 
+	if ( GetPlaylistVarBool( GetCurrentPlaylistName(), "custom_match_scoreboard_test", true ) )                                                     
+		return
+
 	int nextSlotIdx = -1
 	foreach ( teamIndex in file.teamIndices )
 	{
@@ -876,15 +879,11 @@ void function PrivateMatch_GameStatus_ConfigurePlayerButton( var button, PlayerD
 	{
 		RuiSetInt( buttonRui, "playerState", GetPlayerHealthStatus( pData.playerEntity ) )
 		RuiSetBool( buttonRui, "isObserveTarget", GetLocalClientPlayer().GetObserverTarget() == pData.playerEntity )
-		RuiSetInt( buttonRui, "connectionQuality", pData.playerEntity.GetConnectionQualityIndex() )
-		RuiSetBool( buttonRui, "isConnectionQualityWidgetVisible", true )
 	}
 	else
 	{
 		RuiSetInt( buttonRui, "playerState", ePlayerHealthStatus.PM_PLAYERSTATE_ELIMINATED )
 		RuiSetBool( buttonRui, "isObserveTarget", false )
-		RuiSetInt( buttonRui, "connectionQuality", 5 )
-		RuiSetBool( buttonRui, "isConnectionQualityWidgetVisible", false )
 	}
 
 	RuiSetString( buttonRui, "buttonText",  pData.playerName )
@@ -1144,7 +1143,6 @@ void function UpdatePrivateMatchPlayerConnections()
 					if ( connectionQuality0 != connectionQuality1 )
 					{
 						teamRoster.connectionMap[ button ] <- connectionQuality1
-						HudElem_SetRuiArg( button, "connectionQuality", connectionQuality1, eRuiArgType.INT )
 						DirtyBit( TEAM_MULTITEAM_FIRST + idx )
 					}
 				}
@@ -1164,24 +1162,38 @@ void function TryInitializeGameStatusMenu()
 	{
 		TabData tabData = GetTabDataForPanel( file.menu )
 		tabData.centerTabs = true
-
+		                         
+		if ( !GetPlaylistVarBool( GetCurrentPlaylistName(), "custom_match_scoreboard_test", true ) )
 		{
 			TabDef tabdef = AddTab( file.menu, Hud_GetChild( file.menu, "PrivateMatchRosterPanel" ), "#TOURNAMENT_TEAM_STATUS" )		    
-			tabdef.width = 220
+			SetTabBaseWidth( tabdef, 220 )
 		}
+		else
+		{
+			TabDef tabdef = AddTab( file.menu, Hud_GetChild( file.menu, "PrivateMatchScoreboardPanel" ), "#TOURNAMENT_TEAM_STATUS" )		    
+			SetTabBaseWidth( tabdef, 240 )
+		}
+
 		{
 			TabDef tabdef = AddTab( file.menu, Hud_GetChild( file.menu, "PrivateMatchOverviewPanel" ), "#TOURNAMENT_MATCH_STATS" )		    
-			tabdef.width = 240
+			SetTabBaseWidth( tabdef, 240 )
 		}
 		{
 			TabDef tabdef = AddTab( file.menu, Hud_GetChild( file.menu, "PrivateMatchSummaryPanel" ), "#TOURNAMENT_MATCH_STATS" )		    
-			tabdef.width = 240
+			SetTabBaseWidth( tabdef, 240 )
 		}
 
 		if ( HasMatchAdminRole() )
 		{
 			TabDef tabdef = AddTab( file.menu, Hud_GetChild( file.menu, "PrivateMatchAdminPanel" ), "#TOURNAMENT_ADMIN_CONTROLS" )
+<<<<<<< HEAD
+			SetTabBaseWidth( tabdef, 300 )
+
+			tabdef.visible = false
+			tabdef.enabled = false
+=======
 			tabdef.width = 300
+>>>>>>> parent of 044c095 (game update)
 		}        
 
 		SetTabDefsToSeasonal(tabData)
@@ -1190,6 +1202,7 @@ void function TryInitializeGameStatusMenu()
 		file.tabsInitialized = true
 	}
 }
+
 
 void function OnOpenPrivateMatchGameStatusMenu()
 {
@@ -1253,8 +1266,10 @@ void function OnPrivateMatchStateChange( int gameState )
 	bool summaryActive 		= tabData.activeTabIdx == eGameStatusPanel.PM_GAMEPANEL_INGAME_SUMMARY
 
 	bool midGame = gameState < eGameState.WinnerDetermined
-	SetTabDefVisible( inGameSummary, midGame )
-	SetTabDefVisible( postGameSummary, !midGame )
+	bool isBattleRoyale = ( GetCurrentPlaylistVarString( "stats_match_type", "survival" ) == "survival" )
+	bool isStandardBR = ( GetCurrentPlaylistVarInt( "max_teams", 20 ) <= 20 )
+	SetTabDefVisible( inGameSummary, midGame && isBattleRoyale && isStandardBR)
+	SetTabDefVisible( postGameSummary, isBattleRoyale && !midGame && isStandardBR )
 
 	if ( !midGame && summaryActive )
 		ActivateTab( tabData, eGameStatusPanel.PM_GAMEPANEL_POSTGAME_SUMMARY )

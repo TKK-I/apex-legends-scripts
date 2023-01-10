@@ -7,7 +7,7 @@ global function CollectionEvents_Init
 
 #if SERVER || CLIENT || UI
 global function GetActiveCollectionEvent
-global function CollectionEvent_GetChallenges                                
+global function CollectionEvent_GetChallenges                                           
 global function CollectionEvent_GetFrontPageRewardBoxTitle
 global function CollectionEvent_GetCollectionName
                                               
@@ -20,7 +20,7 @@ global function CollectionEvent_GetMainPackImage
 global function CollectionEvent_GetFrontPageGRXOfferLocation
                                                          
 global function CollectionEvent_GetRewardGroups
-global function CollectionEvent_GetAboutText                                
+global function CollectionEvent_GetAboutText                                           
 global function CollectionEvent_GetMainIcon
 global function CollectionEvent_GetMainThemeCol
 global function CollectionEvent_GetFrontPageBGTintCol
@@ -32,6 +32,25 @@ global function CollectionEvent_GetFrontPageTimeRemainingCol
                                                              
 global function CollectionEvent_GetBGPatternImage
 global function CollectionEvent_GetBGTabPatternImage
+<<<<<<< HEAD
+global function CollectionEvent_GetTabLeftSideImage                                           
+global function CollectionEvent_GetTabCenterImage                                           
+global function CollectionEvent_GetTabRightSideImage                                           
+global function CollectionEvent_GetTabImageSelectedAlpha
+global function CollectionEvent_GetTabImageUnselectedAlpha
+global function CollectionEvent_GetTabCenterRui                                           
+global function CollectionEvent_GetTabBGDefaultCol                                            
+global function CollectionEvent_GetTabBarDefaultCol                                           
+global function CollectionEvent_GetTabBGFocusedCol                                           
+global function CollectionEvent_GetTabTextDefaultCol                                           
+global function CollectionEvent_GetTabBarFocusedCol                                           
+global function CollectionEvent_GetTabGlowFocusedCol                                           
+global function CollectionEvent_GetTabBGSelectedCol                                           
+global function CollectionEvent_GetTabBarSelectedCol                                           
+global function CollectionEvent_GetTabTextSelectedCol                                           
+global function CollectionEvent_GetAboutPageSpecialTextCol                                           
+global function CollectionEvent_GetHeaderIcon                                           
+=======
 global function CollectionEvent_GetTabLeftSideImage                                
 global function CollectionEvent_GetTabRightSideImage                                
 global function CollectionEvent_GetTabCenterRui                                
@@ -46,6 +65,7 @@ global function CollectionEvent_GetTabBarSelectedCol
 global function CollectionEvent_GetTabTextSelectedCol                                
 global function CollectionEvent_GetAboutPageSpecialTextCol                                
 global function CollectionEvent_GetHeaderIcon                                
+>>>>>>> parent of 044c095 (game update)
 #endif
 
                                                       
@@ -80,9 +100,19 @@ global function CollectionEvent_GetCurrentMaxEventPackPurchaseCount
 
 #if UI
                                                   
+<<<<<<< HEAD
+                    
+                                              
+      
+global function CollectionEvent_GetPackOffer                                           
+global function CollectionEvent_GetLobbyButtonImage                                           
+global function CollectionEvent_HasLobbyTheme                                           
+global function CollectionEvent_IsItemFlavorFromEvent
+=======
 global function CollectionEvent_GetPackOffer                                
 global function CollectionEvent_GetLobbyButtonImage                                
 global function CollectionEvent_HasLobbyTheme                                
+>>>>>>> parent of 044c095 (game update)
 #endif
 
 #if SERVER
@@ -761,12 +791,12 @@ int function HeirloomEvent_GetItemCount( ItemFlavor event, bool onlyOwned, entit
 
 	foreach ( ItemFlavor item in eventItems )
 	{
-		                                                                                                                                                            
+		                                                                                                                                                    
 		#if SERVER
 			                                                                          
 				       
 
-			                                                                                                                       
+			                                                                                                  
 			                                                                                                                                                
 				                                                          
 		#endif
@@ -788,6 +818,20 @@ int function HeirloomEvent_GetCurrentRemainingItemCount( ItemFlavor event, entit
 }
 #endif
 
+                    
+      
+                                                                                       
+ 
+                               
+             
+
+                                                                        
+                                                                                     
+                                                                                          
+                                        
+ 
+      
+      
 
 #if UI
 GRXScriptOffer ornull function CollectionEvent_GetPackOffer( ItemFlavor event )
@@ -810,8 +854,13 @@ int function CollectionEvent_GetCurrentMaxEventPackPurchaseCount( ItemFlavor eve
 		                                      
 			        
 	#elseif UI
-		if ( CollectionEvent_GetPackOffer( event ) == null )
-			return 0
+                      
+                                                       
+           
+       
+			if ( CollectionEvent_GetPackOffer( event ) == null )
+				return 0
+        
 	#endif
 
 
@@ -832,7 +881,7 @@ int function CollectionEvent_GetCurrentMaxEventPackPurchaseCount( ItemFlavor eve
 	                                                                                                         
 	      
 
-	                                                                                                           
+	                                                                                                     
 	                                                                                                      
 	                                                
 	                                                              
@@ -1028,7 +1077,7 @@ int function CollectionEvent_GetCurrentMaxEventPackPurchaseCount( ItemFlavor eve
 		      
 	                                      
 
-	                                                                                                         
+	                                                                        
 	                                                                                  
 	 
 		                                                 

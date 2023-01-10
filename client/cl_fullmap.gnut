@@ -158,13 +158,15 @@ ScoreboardData function Survival_GetScoreboardData()
        
 
 	ScoreboardData data
+
+	data.numScoreColumns = 1
+	data.columnDisplayIcons.append( $"rui/hud/gamestate/player_kills_icon" )
+	data.columnDisplayIconsScale.append( 1.0 )
+	data.columnNumDigits.append( 2 )
+
 	if( isWinterExpress )
 	{
 		data.numScoreColumns = 3
-		data.columnDisplayIcons.append( $"rui/hud/gamestate/player_kills_icon" )
-		data.columnDisplayIconsScale.append( 1.0 )
-		data.columnNumDigits.append( 2 )
-
 		data.columnDisplayIcons.append( $"rui/hud/gamestate/assist_count_icon2" )
 		data.columnDisplayIconsScale.append( 0.8 )
 		data.columnNumDigits.append( 2 )
@@ -188,11 +190,11 @@ array< string > function Survival_GetPlayerScores( entity player )
 
 	array< string > scores
 
+	string eliminations = string( player.GetPlayerNetInt( "kills" ) )
+	scores.append( eliminations )
+
 	if( isWinterExpress )
 	{
-		string eliminations = string( player.GetPlayerNetInt( "kills" ) )
-		scores.append( eliminations )
-
 		string assists = string( player.GetPlayerNetInt( "assists" ) )
 		scores.append( assists )
 
@@ -260,6 +262,31 @@ void function Survival_ScoreboardUpdateHeader( var headerRui, var frameRui, int 
 }
 #endif          
 
+<<<<<<< HEAD
+#if CLIENT
+ vector function Survival_ScoreboardGetTeamColor( int team )
+ {
+	 bool isWinterExpress = false
+	 int teamIndex = Squads_GetSquadUIIndex( team )
+
+	 vector color  = SrgbToLinear( GetSkydiveSmokeColorForTeam( teamIndex + TEAM_IMC ) / 255.0 )
+
+                        
+		 isWinterExpress = WinterExpress_IsModeEnabled()
+        
+                     
+                         
+			 if( isWinterExpress )
+				 color =  Squads_GetSquadColor( teamIndex )
+         
+       
+
+	return color
+ }
+#endif         
+
+=======
+>>>>>>> parent of 044c095 (game update)
 void function InitFullmap()
 {
 

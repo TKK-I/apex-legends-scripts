@@ -116,10 +116,7 @@ var function OnWeaponPrimaryAttack_ability_grapple( entity weapon, WeaponPrimary
 	{
 		owner.SetGrappleAutoAimTarget( grappleAutoAimTarget )
 	}
-	if ( weapon.HasMod( "survival_finite_ordnance" ) )
-		return 0
-	else
-		return weapon.GetWeaponSettingInt( eWeaponVar.ammo_min_to_fire )
+	return 0
 }
 
 #if SERVER
@@ -223,8 +220,40 @@ void function CodeCallback_OnGrappleAttach( entity player, entity hitent, vector
 		if ( !grappleWeapon.GetWeaponSettingBool( eWeaponVar.grapple_weapon ) )
 			return
 
+<<<<<<< HEAD
+                                         
+                                                                  
+                                                                                         
+                                                   
+
+                                                     
+
+             
+                                                                            
+         
+
+                                                
+                                                                      
+    
+                                            
+                                    
+    
+              
+                      
+                                                            
+                                                                                   
+                                                   
+                                                     
+
+             
+                                                                            
+         
+
+       
+=======
 		if ( grappleWeapon.HasMod( "survival_finite_ordnance" ) )
 		{
+>>>>>>> parent of 044c095 (game update)
 			if ( GetCurrentPlaylistVarBool( "pathfinder_grapple_scaled_ammo_drain", true ) )
 			{
 				thread GrappleDecreaseAmmo( player, grappleWeapon )
@@ -234,7 +263,7 @@ void function CodeCallback_OnGrappleAttach( entity player, entity hitent, vector
 				int newAmmo = maxint( 0, grappleWeapon.GetWeaponPrimaryClipCount() - grappleWeapon.GetWeaponSettingInt( eWeaponVar.ammo_min_to_fire ) )
 				grappleWeapon.SetWeaponPrimaryClipCount( newAmmo )
 			}
-		}
+        
 
 		int flags = grappleWeapon.GetScriptFlags0()
 		if ( ! (flags & GRAPPLEFLAG_CHARGED) )

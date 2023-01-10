@@ -44,6 +44,14 @@ const string MIRAGE_DECOY_DROP_MOVER_SCRIPTNAME 		= "mirage_decoy_drop_mover"
       
 #endif
 
+<<<<<<< HEAD
+#if CLIENT
+                     
+global function ServerToClient_ShowCloakHintText
+                           
+#endif   
+=======
+>>>>>>> parent of 044c095 (game update)
 
             
 #if CLIENT
@@ -279,10 +287,10 @@ void function PassivesShared_Init()
 		                                          
 		                                                                           
                        
-                                                                     
-    
-                                                                   
-    
+			                                                                 
+			 
+				                                                               
+			 
                              
 	 
 	                                                                            
@@ -310,6 +318,7 @@ void function PassivesShared_Init()
                                                                                        
         
 
+		                                                                                  
 		                                                                    
 		                                                                 
 	#endif
@@ -405,6 +414,9 @@ void function OnRegisterRootItemFlavors()
 #if SERVER || CLIENT
 bool function PlayerHasPassive( entity player, int passive )
 {
+	if( !IsValid( player ) )
+		return false
+
 	return player.HasPassive( passive )
 }
 #endif
@@ -596,22 +608,36 @@ void function ClientCodeCallback_OnPassiveChanged( entity player, int passiveIdx
                      
                                                                      
  
-                                                                                                     
-  
-                                       
-                                         
+	                                                                                                    
+	 
+			                                    
+			                                      
 
+<<<<<<< HEAD
+			                                                                             
+			                                                                               
+
+			                                                  
+	 
+=======
                                                      
   
+>>>>>>> parent of 044c095 (game update)
  
 
                                                                        
  
-                                                                                 
-            
+	                                                                                
+	           
 
+<<<<<<< HEAD
+	                               
+	                                                                                                   
+	                                                                                                     
+=======
                                                                                                                        
                                                                                                                          
+>>>>>>> parent of 044c095 (game update)
  
                            
 
@@ -646,6 +672,22 @@ void function ClientCodeCallback_OnPassiveChanged( entity player, int passiveIdx
  
 #endif
 
+<<<<<<< HEAD
+#if CLIENT
+                     
+void function ServerToClient_ShowCloakHintText()
+{
+	entity player = GetLocalViewPlayer()
+
+	if (IsValid(player))
+	{
+		AnnouncementMessageRight( player, "#CLOAK_UNARMED_WARNING" )
+	}
+}
+                           
+#endif          
+=======
+>>>>>>> parent of 044c095 (game update)
 
 #if SERVER
                                                   
@@ -1045,6 +1087,25 @@ void function ClientCodeCallback_OnPassiveChanged( entity player, int passiveIdx
       
 
 #if SERVER
+                                                                                             
+ 
+	                         
+		      
+
+	                                        
+		      
+
+	             
+	 
+		                                                         
+	 
+
+	                   
+	 
+		                                                         
+	 
+ 
+
                                                                                       
  
 	                                                              

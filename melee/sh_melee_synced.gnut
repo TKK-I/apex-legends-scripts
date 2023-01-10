@@ -23,6 +23,9 @@ global function CodeCallback_IsValidMeleeExecutionTarget
 
 #if CLIENT
 global function ServerCallback_WatchForSyncedMeleeCancelPeriod
+                        
+                                                                
+      
 global function ServerCallback_SyncedMeleeDone
 #endif
 
@@ -272,6 +275,31 @@ void function ServerCallback_WatchForSyncedMeleeCancelPeriod( float allowedCance
 	thread ServerCallback_WatchForSyncedMeleeCancelPeriod_Thread( allowedCancelTime )
 }
 
+                        
+                                                                        
+ 
+                                     
+
+                          
+        
+
+                                              
+
+                                                                   
+
+                               
+                                                       
+    
+
+              
+ 
+
+                                                                
+ 
+                                                                  
+ 
+      
+
 void function ServerCallback_SyncedMeleeDone()
 {
 	entity player = GetLocalViewPlayer()
@@ -331,6 +359,47 @@ void function ServerCallback_SyncedMeleeDone()
 	                                                  
 	                                          
  
+
+                        
+                                                                        
+ 
+                                        
+                                                                          
+    
+
+                                                        
+                                                 
+
+                                                                                           
+
+              
+ 
+
+                                                                   
+ 
+                                                        
+                                                 
+
+                                        
+                                                                                            
+                                                                                          
+                                                                                         
+                                                                                         
+                                                                                                
+                                                                                           
+    
+
+                                                                                        
+                                                                                      
+                                                                                     
+                                                                                     
+                                                                                            
+                                                                                       
+
+                                                   
+                                           
+ 
+      
 
                                                                                                              
  
@@ -460,8 +529,14 @@ void function ServerCallback_SyncedMeleeDone()
 
 			                                                               
 			                                   
-
-			                                           
+                           
+                                                                             
+     
+                                                
+     
+        
+				                                           
+         
 			                                      
 
 			                                       
@@ -501,7 +576,7 @@ void function ServerCallback_SyncedMeleeDone()
 
 	                                                                                                   
 
-	                                                                                                    
+	                                                                                                                                                  
 		                                                                        
 
 	                          
@@ -624,7 +699,14 @@ void function ServerCallback_SyncedMeleeDone()
 		                                                   
 		                        
 			                                           
-		                                                      
+
+                          
+                                                                           
+    
+                                                                   
+    
+        
+		                                                                                                                            
 		                                                                                                                         
 	 
 
@@ -687,7 +769,23 @@ void function ServerCallback_SyncedMeleeDone()
 	             
  
 
-                                           
+                        
+                                                                                    
+ 
+                                                        
+                                                 
+
+                                                                                     
+              
+
+                                                            
+                                                      
+
+                                        
+ 
+      
+
+                                                            
  
 	                              
 
@@ -711,6 +809,18 @@ void function ServerCallback_SyncedMeleeDone()
 	                                                                                                                       
 	                                                        
  
+
+                        
+                                                             
+ 
+            
+
+                                            
+  
+                                                                                     
+  
+ 
+      
 
                                                                                        
  
@@ -737,12 +847,48 @@ void function ServerCallback_SyncedMeleeDone()
 		                                                                
 	 
 
-                                   
-		                                                         
-      
-                                                                     
+	                                                         
+	 
+                                    
+			                                                         
+                           
+                                                                                 
+                                                  
+         
+       
+                                                                      
+                                                             
+                                         
+	 
+	    
+	 
+		                                                                                                                                                                                         
+	 
+
+                         
+                                                                            
+   
+                                                                                   
+                                                                      
+    
+                                                             
+                                                                   
+                                                                                      
+
+                                                                                                                       
+
                                                             
-                                        
+     
+                                                                                        
+                                                                                        
+                                                                                                   
+
+                                                                                     
+     
+                                                   
+    
+   
+       
 
 	                                                                  
 	 

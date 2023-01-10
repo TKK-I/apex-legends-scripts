@@ -8,6 +8,11 @@ globalize_all_functions
 
 global const ANALYSIS_PREVIEW_TIME = 5.0
 const float DEFAULT_MIN_AIRDROP_DISTANCE = 3000.0
+<<<<<<< HEAD
+global const float DEFAULT_MAX_AIRDROP_SEARCH_RUNTIME = 10
+global const float FLIGHTPATH_ELEVATION_VALIDATION_OFFSET = 7500.0
+=======
+>>>>>>> parent of 044c095 (game update)
 
                        
                                                
@@ -1389,7 +1394,7 @@ array<entity> function GetAirDropTraceIgnoreEntArray()
 	                       
  
 
-                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                                                                               
  
 	                                       
 	                            
@@ -1419,11 +1424,21 @@ array<entity> function GetAirDropTraceIgnoreEntArray()
 	                                         
 		                    
 
+	                                                                                                                    
+	                                                                
+	                                                       
+	                        
+
 	              
 	 
-		                                                         
+		                                                              
+				                                                         
 		 
-			                                                                                                                   
+			                                                          
+				                                                                                                                     
+			    
+				                                                                                                                   
+
 			                             
 			                             
 			      
@@ -1500,59 +1515,9 @@ array<entity> function GetAirDropTraceIgnoreEntArray()
     
                                       
 
-		                               
+		            
 		 
-			                                                                                                                                                                                                           
-			                      
-			 
-				           
-			 
-		 
-
-                          
-			                                                                                                                                 
-			                                       
-			 
-				                                                                              
-			 
-                                
-
-		                                                                              
-		                                                                                                      
-		                                                     
-		 
-			                                  
-			                     
-				                                
-			                          
-
-			                              
-			                                        
-			                                                 
-			                                              
-
-			                
-			                                        
-			 
-				                                                                                                                                         
-				                       
-				 
-					                     
-						                                                                                                 
-						                                                                                       
-						                                                                                              
-					                          
-					           
-					     
-				 
-			 
-
-			                     
-			                        
-			 
-				                                                                                             
-			 
-			                          
+			                                                                                                                                                     
 		 
 
 		           
@@ -1562,18 +1527,80 @@ array<entity> function GetAirDropTraceIgnoreEntArray()
 			        
 		 
 
-		                                                              
+		      
+	 
+
+	           
+ 
+
+                                                                                                                                                                                                                 
+ 
+	                               
+	 
+		                                                                                                                                                       
+		                      
+		 
+			            
+		 
+	 
+
+                         
+		                                                                                                                                 
+		                              
+		 
+			                                                    
+				            
+		 
+                               
+
+	                                                                              
+	                                                                                                      
+	                                            
+	 
+		                                  
+		                     
+			                                
+		                          
+
+		                              
+		                                        
+		                                    
+		                                              
+
+		                
+		                                        
+		 
+			                                                                                                                                         
+			                       
+			 
+				                     
+					                                                                                                 
+					                                                                                       
+					                                                                                              
+				                          
+
+				            
+			 
+		 
+
+		                     
+			                        
+			 
+				                                                                                             
+			 
+		                          
+	 
+
+	                  
+	 
+		                                                 
 		                                            
 		 
 			                        
-				                                                                                     
+				                                                                        
 
-			          
-			           
-			        
+			            
 		 
-
-		      
 	 
 
 	           

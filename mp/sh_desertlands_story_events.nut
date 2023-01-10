@@ -6,11 +6,24 @@ global function DesertlandsStoryEvents_Init
                                                                
 #endif
 
+<<<<<<< HEAD
+                       
+#if DEV
+#if SERVER
+	                                                                    
+	                                                      
+#endif
+#endif
+
+const asset ANNIVERSARY_SHIP_MDL = $"mdl/vehicle/goblin_dropship/goblin_dropship.rmdl"
+      
+=======
 #if CLIENT
 const int S10E04_CHALLENGE_ID_MAX = 2
 const int S10E04_VARIANCE_MAX = 4
 const string S10E04_PRINTS_SCRIPTNAME_TEMPLATE = "s10e04_challengemark_%d_%d"
 #endif
+>>>>>>> parent of 044c095 (game update)
 
 struct
 {
@@ -46,6 +59,35 @@ void function DesertlandsStoryEvents_Init()
 		                                         
 		                                             
 	#endif
+<<<<<<< HEAD
+
+                        
+	#if SERVER
+		                                                                                                                   
+		 
+			                                     
+
+			                                                                                                             
+			                                                                        
+			               
+			 
+				       
+					                                                                                                        
+					     
+				       
+					                                                                  
+					     
+				       
+					                                                                 
+					     
+				        
+					     
+			 
+		 
+	#endif
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 }
 
 void function EntitiesDidLoad()
@@ -74,6 +116,75 @@ void function EntitiesDidLoad()
  
 #endif
 
+<<<<<<< HEAD
+                       
+#if SERVER
+                                                                                                             
+ 
+	                                                                            
+		                                                      
+ 
+
+                                                                            
+ 
+	                                                     
+	                                                                                 
+		                                                      
+ 
+
+
+                                                                    
+ 
+	                                                  
+	                                                  
+	                                                  
+ 
+
+                                                             
+ 
+	                                                                                                   
+	                                          
+
+	            
+		                         
+		 
+			                          
+				                  
+		 
+	 
+
+	                   
+	            
+	 
+		       
+			                                           
+			     
+		       
+			                                           
+			     
+		       
+			                                           
+			     
+		        
+			     
+	 
+
+	                    
+	 
+		                  
+		      
+	 
+
+	                                          
+	 
+		                         
+	 
+
+	                                        
+ 
+#endif
+      
+=======
 #if CLIENT
 void function HideStoryEventTrails()
 {
@@ -91,3 +202,4 @@ void function HideStoryEventTrails()
 	}
 }
 #endif
+>>>>>>> parent of 044c095 (game update)

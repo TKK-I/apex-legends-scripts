@@ -748,7 +748,7 @@ bool function FerroWall_BlockScan( vector startPos, vector endPos )
  
 	                                    
 	                               
-	                             
+	                                     
 
 	                                                      
 		                                                                             
@@ -2217,4 +2217,36 @@ void function FerroWallPassThroughFX( entity hitOwner, entity wall, vector hitPo
 			#endif
 		}
 	}
+<<<<<<< HEAD
+}
+
+array<entity> function GetFerroWallIgnoreArray()
+{
+	array<entity> ignoreArray
+
+	ignoreArray.extend( GetPlayerArray() )
+	ignoreArray.extend( GetAllResinShards() )
+	ignoreArray.extend( GetNPCArray() )
+	ignoreArray.extend( GetEntArrayByScriptName( TROPHY_SYSTEM_NAME ) ) 					             
+	ignoreArray.extend( GetEntArrayByScriptName( TESLA_TRAP_NAME ) )						               
+	ignoreArray.extend( GetEntArrayByScriptName( DIRTY_BOMB_TARGETNAME ) )					              
+	ignoreArray.extend( GetEntArrayByScriptName( DEATH_TOTEM_TARGETNAME ) )					                
+	ignoreArray.extend( GetEntArrayByScriptName( BLACKHOLE_PROP_SCRIPTNAME ) )				              
+	ignoreArray.extend( GetEntArrayByScriptName( BLACK_MARKET_SCRIPTNAME ) )				                   
+	ignoreArray.extend( GetEntArrayByScriptName( BASE_WALL_SCRIPT_NAME ) )					              
+	ignoreArray.extend( GetEntArrayByScriptName( MOUNTED_TURRET_PLACEABLE_SCRIPT_NAME ) )	                
+	ignoreArray.extend( GetEntArrayByScriptName( ECHO_LOCATOR_SCRIPT_NAME ) )				          
+	ignoreArray.extend( GetEntArrayByScriptName( SHIELD_THROW_SCRIPTNAME ) )				                     
+	ignoreArray.extend( GetEntArrayByScriptName( MOBILE_SHIELD_SCRIPTNAME ) )				                            
+	ignoreArray.extend( GetEntArrayByScriptName( CRYPTO_DRONE_SCRIPTNAME ) )				               
+	ignoreArray.extend( GetEntArrayByScriptName( VANTAGE_COMPANION_SCRIPTNAME ) )			      
+	ignoreArray.extend( GetPlayerDecoyArray() )												               
+	ignoreArray.extend( GetEntArrayByScriptName( "LootRoller" ) )
+	ignoreArray.extend( GetAllDeathBoxes() )
+	ignoreArray.extend( GetEntArrayByScriptName( WORKBENCH_CLUSTER_SCRIPTNAME ) )
+	ignoreArray.extend( GetEntArrayByScriptName( HOVER_VEHICLE_SCRIPTNAME ) )
+
+	return ignoreArray
+=======
+>>>>>>> parent of 044c095 (game update)
 }

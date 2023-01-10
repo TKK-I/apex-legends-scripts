@@ -186,6 +186,12 @@ struct FileForeverStruct
 	var inspectRewardButton3
 	var skipAnimButton
 	var blackFlash
+<<<<<<< HEAD
+                     
+		var battlePassButton
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 }
 FileForeverStruct& fileForever
 #endif
@@ -280,6 +286,13 @@ struct FileLevelStruct
 		asset ornull            	specialItemPackImg = null
 		PurchaseDialogConfig ornull	specialPurchaseDialogConfig = null
 		void functionref()			onNavigatingBackFunc = null
+<<<<<<< HEAD
+                      
+			bool						isBpRewardPremium = false
+			bool						isBpOwned = false
+        
+=======
+>>>>>>> parent of 044c095 (game update)
 	#endif
 }
 FileLevelStruct& fileLevel
@@ -660,7 +673,7 @@ void function UIToClient_OnGRXPackOpeningResultsAvailable()
 
 		Assert( FINAL_TIER == mythicSkins.len() )
 
-		                                                                                         
+		                                                        
 		Remote_ServerCallFunction( "ClientCallback_UpdateMythicChallenges" )
 
 		for ( int i = 0; i < mythicSkins.len(); i++ )
@@ -730,13 +743,11 @@ bool function ZerothItemIsSpecial( ItemFlavor flav, bool isThematicCharacterPack
 #if CLIENT
 array<ItemFlavor> function FilterAndSortPackResults( array<ItemFlavor> resultList )
 {
-	                                                            
-
 	array<ItemFlavor> out = []
 	ItemFlavor ornull packTheme = null
 	int packThemeType
 
-	                                                                                     
+	                                                                            
 	bool isThematicCharacterPack = false                               
 	bool isThematicItemTypePack = false                       
 	bool isThematicWeaponCategoryPack = false                
@@ -777,15 +788,13 @@ array<ItemFlavor> function FilterAndSortPackResults( array<ItemFlavor> resultLis
 		}
 	}
 
-                 
-		                                                                                                                                                             
-		bool hasStickers = GetGlobalSettingsBool( ItemFlavor_GetAsset( fileLevel.currentPackFlav ), "hasStickers" )
-		if ( hasStickers )
-		{
-			isThematicItemTypePack = true                                                                                     
-			packThemeType = eItemType.sticker
-		}
-                       
+	                                                                                                                                                   
+	bool hasStickers = GetGlobalSettingsBool( ItemFlavor_GetAsset( fileLevel.currentPackFlav ), "hasStickers" )
+	if ( hasStickers )
+	{
+		isThematicItemTypePack = true                                                                                     
+		packThemeType = eItemType.sticker
+	}
 
 	                                                                                                                 
 	out.sort( int function( ItemFlavor a, ItemFlavor b ) : ( isThematicCharacterPack, isThematicItemTypePack, isThematicWeaponCategoryPack, packTheme, packThemeType ) {
@@ -1776,11 +1785,9 @@ void function ShowRewardBasedOnItemType( int itemType, ItemFlavor item, vector a
 			thread ShowRewards_Voucher( item, attachOrigin, attachAngles, rarity, quantity, displayIndex, attachment )
 			break
 
-                
 		case eItemType.sticker:
 			thread ShowRewards_Sticker( item, attachOrigin, attachAngles, rarity, displayIndex )
 			break
-                      
 
 		default:
 			Warning( "Loot Ceremony reward item type not supported: " + DEV_GetEnumStringSafe( "eItemType", itemType ) )
@@ -2641,9 +2648,9 @@ void function ShowRewards_Badge( ItemFlavor item, int badgeDataInteger, vector o
 	RuiSetBool( ruiBadge, "isVisible", true )
 
 	int ornull overrideDataIntegerOrNull      = badgeDataInteger >= 0 ? badgeDataInteger : null
-	bool TEMP_showOneTierHigherThanIsUnlocked = true
+	bool showOneTierHigherThanIsUnlocked = true
 
-	CreateNestedGladiatorCardBadge( ruiBadge, "badge", LocalClientEHI(), item, -1, null, overrideDataIntegerOrNull, TEMP_showOneTierHigherThanIsUnlocked )
+	CreateNestedGladiatorCardBadge( ruiBadge, "badge", LocalClientEHI(), item, -1, null, overrideDataIntegerOrNull, showOneTierHigherThanIsUnlocked )
 
 	OnThreadEnd(
 		function() : ( ruiBadge, topoBadge, bgModel )
@@ -2873,7 +2880,6 @@ void function ShowRewards_Voucher( ItemFlavor item, vector origin, vector angles
 
 
 #if CLIENT
-                
 void function ShowRewards_Sticker( ItemFlavor item, vector origin, vector angles, int rarity, int displayIndex )
 {
 	EndSignal( level, "EndSetPresentationType" )
@@ -2913,7 +2919,6 @@ void function ShowRewards_Sticker( ItemFlavor item, vector origin, vector angles
 	else
 		InspectMenuFunctionality_Model( item, displayIndex, rarity, quantity, stickerModel, mover, angles, maxYaw )
 }
-                      
 #endif
 
 
@@ -3617,11 +3622,9 @@ array<LoadoutEntry> function EquipButton_GetItemLoadoutEntries( ItemFlavor item,
 			}
 			break
 
-                
 		case eItemType.sticker:
 			       
 			break
-                      
 
 		default:
 			Assert( 0, "Loot Ceremony equip button does not support reward type: " + DEV_GetEnumStringSafe( "eItemType", itemType ) )
@@ -4069,9 +4072,7 @@ void function PopulateInspectMenuDetails( ItemFlavor item, int rarity, int quant
 		eItemType.voucher,
 		eItemType.emote_icon,
 		eItemType.character_emote,
-                
 		eItemType.sticker,
-                      
 	]
 
 	bool hasValidCharacterOrWeapon = ( GetItemFlavorAssociatedCharacterOrWeapon( item ) != null )                                                                      
@@ -4312,10 +4313,7 @@ void function InspectMenuFunctionality_Model( ItemFlavor item, int displayIndex,
 
 		vector flashColor    = ItemFlavor_GetQualityColor( item ) / 255
 		bool includeChildren = true
-		bool depthDiscard = false
-                  
-			depthDiscard = ItemFlavor_GetType( item ) == eItemType.sticker
-                        
+		bool depthDiscard = ItemFlavor_GetType( item ) == eItemType.sticker
 		thread FlashMenuModel( model, eMenuModelFlashType.LOOT_CEREMONY_QUICK, flashColor, includeChildren, depthDiscard )
 
 		if ( itemType == eItemType.weapon_skin || itemType == eItemType.melee_skin || itemType == eItemType.account_currency_bundle )
@@ -5265,6 +5263,16 @@ void function InitLootBoxMenu( var newMenuArg )
 	HudElem_SetRuiArg( fileForever.purchaseButton, "buttonText", "" )
 	AddButtonEventHandler( fileForever.purchaseButton, UIE_CLICK, PurchaseButtonOnClick )
 
+<<<<<<< HEAD
+                     
+		fileForever.battlePassButton = Hud_GetChild( fileForever.menu, "InspectBattlePassPurchaseButton" )
+		HudElem_SetRuiArg( fileForever.battlePassButton, "buttonText", Localize( "#STORE_BATTLEPASS_UNLOCK" ) )
+		HudElem_SetRuiArg( fileForever.battlePassButton, "descText", Localize( "#STORE_WITH_PREMIUM" ) )
+		AddButtonEventHandler( fileForever.battlePassButton, UIE_CLICK, BattlePassButtonOnClick )
+       
+
+=======
+>>>>>>> parent of 044c095 (game update)
 	fileForever.mouseClickElem = Hud_GetChild( fileForever.menu, "ModelRotateMouseCapture" )
 	fileForever.inspectVideoPanel = Hud_GetChild( fileForever.menu, "InspectVideoPanel" )
 
@@ -5435,7 +5443,14 @@ void function SetStoreItemPresentationModeActive( GRXScriptOffer grxOffer )
 	fileLevel.specialItemPackImg = null
 	fileLevel.specialPurchaseDialogConfig = null
 	fileLevel.onNavigatingBackFunc = null
+<<<<<<< HEAD
+                     
+		fileLevel.isBpOwned = false
+		fileLevel.isBpRewardPremium = false
+       
+=======
 
+>>>>>>> parent of 044c095 (game update)
 	AdvanceMenu( GetMenu( "LootBoxOpen" ) )
 }
 
@@ -5458,6 +5473,21 @@ void function SetBattlePassItemPresentationModeActive( BattlePassReward bpReward
 	fileLevel.specialPurchaseDialogConfig = null
 	fileLevel.onNavigatingBackFunc = null
 
+<<<<<<< HEAD
+                     
+		ItemFlavor ornull activeBattlePass = GetPlayerLastActiveBattlePass( ToEHI( GetLocalClientPlayer() ) )
+		bool hasActiveBattlePass = activeBattlePass != null && GRX_IsInventoryReady()
+		if ( hasActiveBattlePass )
+		{
+			expect ItemFlavor( activeBattlePass )
+			fileLevel.isBpOwned = DoesPlayerOwnBattlePass( GetLocalClientPlayer(), activeBattlePass )
+		}
+
+		fileLevel.isBpRewardPremium = bpReward.isPremium
+       
+
+=======
+>>>>>>> parent of 044c095 (game update)
 	AdvanceMenu( GetMenu( "LootBoxOpen" ) )
 }
 
@@ -5479,6 +5509,13 @@ void function SetTreasurePackItemPresentationModeActive( BattlePassReward bpRewa
 	fileLevel.specialItemPackImg = null
 	fileLevel.specialPurchaseDialogConfig = null
 	fileLevel.onNavigatingBackFunc = null
+<<<<<<< HEAD
+                     
+		fileLevel.isBpOwned = false
+		fileLevel.isBpRewardPremium = false
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 
 	AdvanceMenu( GetMenu( "LootBoxOpen" ) )
 }
@@ -5501,6 +5538,13 @@ void function SetGenericItemPresentationModeActiveWithNavBack( ItemFlavor itemFl
 	fileLevel.specialItemPackImg = null
 	fileLevel.specialPurchaseDialogConfig = null
 	fileLevel.onNavigatingBackFunc = onNavigatingBackFunc
+<<<<<<< HEAD
+                     
+		fileLevel.isBpOwned = false
+		fileLevel.isBpRewardPremium = false
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 
 	AdvanceMenu( GetMenu( "LootBoxOpen" ) )
 }
@@ -5537,6 +5581,13 @@ void function SetCollectionEventItemPresentationModeActive( ItemFlavor flav, GRX
 	fileLevel.specialItemPackImg = packImg
 	fileLevel.specialPurchaseDialogConfig = null
 	fileLevel.onNavigatingBackFunc = null
+<<<<<<< HEAD
+                     
+		fileLevel.isBpOwned = false
+		fileLevel.isBpRewardPremium = false
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 
 	AdvanceMenu( GetMenu( "LootBoxOpen" ) )
 }
@@ -5557,6 +5608,13 @@ void function SetChallengeRewardPresentationModeActive( ItemFlavor itemFlav, int
 	fileLevel.specialItemPackImg = null
 	fileLevel.specialPurchaseDialogConfig = null
 	fileLevel.onNavigatingBackFunc = null
+<<<<<<< HEAD
+                     
+		fileLevel.isBpOwned = false
+		fileLevel.isBpRewardPremium = false
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 
 	if( Mythics_IsItemFlavorMythicSkin( itemFlav ) )
 	{
@@ -5598,9 +5656,7 @@ bool function InspectItemTypePresentationSupported( ItemFlavor item )
 		case eItemType.skydive_emote:
 		case eItemType.emote_icon:
 		case eItemType.character_emote:
-                
 		case eItemType.sticker:
-                      
 			return true
 
 		case eItemType.account_currency:
@@ -5668,6 +5724,14 @@ void function OnLootBoxMenu_Open()
 		Hud_SetVisible( fileForever.purchaseButton, false )
 		Hud_SetEnabled( fileForever.purchaseButton, false )
 
+<<<<<<< HEAD
+                      
+			Hud_SetVisible( fileForever.battlePassButton, false )
+			Hud_SetEnabled( fileForever.battlePassButton, false )
+        
+
+=======
+>>>>>>> parent of 044c095 (game update)
 		AddCallbackAndCallNow_OnGRXInventoryStateChanged( LootCeremony_UpdateOpenAdditionalButton )
 		thread LootBoxOpenSequenceUI( true )
 	}
@@ -5700,6 +5764,13 @@ void function OnLootBoxMenu_Close()
 		fileLevel.specialItemPriceHeader = ""
 		fileLevel.specialItemLockPurchaseButton = false
 		fileLevel.onNavigatingBackFunc = null
+<<<<<<< HEAD
+                      
+			fileLevel.isBpOwned = false
+			fileLevel.isBpRewardPremium = false
+        
+=======
+>>>>>>> parent of 044c095 (game update)
 	}
 	else
 	{
@@ -5803,7 +5874,7 @@ void function ClientToUI_EquipToWheelButtonShowDialog( SettingsAssetGUID itemGUI
 {
 	ItemFlavor item             = GetItemFlavorByGUID( itemGUID )
 	int itemType                = ItemFlavor_GetType( item )
-	                                                                                                 
+	                                                                                       
 	ItemFlavor character        = expect ItemFlavor( GetItemFlavorAssociatedCharacterOrWeapon( item ) )
 	array<LoadoutEntry> entries = []
 	int numSlots
@@ -5880,6 +5951,18 @@ void function PurchaseButtonOnClick( var button )
 }
 #endif
 
+<<<<<<< HEAD
+#if UI
+                    
+void function BattlePassButtonOnClick( var button )
+{
+	CloseActiveMenu()
+	BattlePass_PurchaseButton_OnActivate( button )
+}
+      
+#endif
+=======
+>>>>>>> parent of 044c095 (game update)
 
 #if UI
 void function PreviewButtonOnClick( var button )
@@ -6051,6 +6134,14 @@ void function UpdateSpecialItemPresentationPurchaseButton()
 	Hud_SetEnabled( fileForever.equipButton, true )
 	Hud_SetLocked( fileForever.equipButton, false )
 
+<<<<<<< HEAD
+                     
+		Hud_SetVisible( fileForever.battlePassButton, !fileLevel.isBpOwned && fileLevel.isBpRewardPremium )
+		Hud_SetEnabled( fileForever.battlePassButton, !fileLevel.isBpOwned && fileLevel.isBpRewardPremium )
+       
+
+=======
+>>>>>>> parent of 044c095 (game update)
 	if ( showPurchase || showEquip )
 	{
 		HudElem_SetRuiArg( fileForever.inspectMenu, "moveDescDown", true )
@@ -6068,9 +6159,7 @@ void function UpdateSpecialItemPresentationPurchaseButton()
 	}
 
 	bool showUnlockedWithoutEquip = isOwned && ( itemType == eItemType.gladiator_card_badge ||
-                
 											  itemType == eItemType.sticker ||
-                      
 											  itemType == eItemType.weapon_charm ||
 										      itemType == eItemType.music_pack )
 
@@ -6083,14 +6172,10 @@ void function UpdateSpecialItemPresentationPurchaseButton()
 		HudElem_SetRuiArg( fileForever.equipButton, "buttonText", "#UNLOCKED" )
 
 		string descText = ""
-		if ( itemType == eItemType.gladiator_card_badge )
+		if ( itemType == eItemType.gladiator_card_badge || itemType == eItemType.sticker )
 			descText = "#EQUIP_IN_LEGENDS_MENU"
 		else if ( itemType == eItemType.weapon_charm || itemType == eItemType.music_pack )
 			descText = "#EQUIP_IN_LOADOUT_MENU"
-                
-		else if ( itemType == eItemType.sticker )                                                                
-			descText = "#EQUIP_IN_LEGENDS_MENU"
-                      
 
 		HudElem_SetRuiArg( fileForever.equipButton, "descText", descText )
 	}

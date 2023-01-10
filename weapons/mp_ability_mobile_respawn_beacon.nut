@@ -312,7 +312,7 @@ var function OnWeaponPrimaryAttackAnimEvent_mobile_respawn(entity ent, WeaponPri
 	                                                                                         
 	                                           
                     
-                                                                                                                            
+		                                                                                                                          
        
 	                                      
 	                               

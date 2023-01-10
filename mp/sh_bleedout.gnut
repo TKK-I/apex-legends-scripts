@@ -620,9 +620,13 @@ int function BleedoutState_GetPlayerBleedoutState( entity player )
 void function OnPingCreatedByAnyPlayer_TrackCrosshairTarget( entity pingingPlayer, int pingType, entity focusEnt, vector pingLoc, entity wayPoint )
 {
                     
+<<<<<<< HEAD
+		if ( pingType != ePingType.BLEEDOUT && pingType != ePingType.RESPAWN_BANNER && pingType != ePingType.CAREPACKAGE_INSIGHT && pingType != ePingType.CAREPACKAGE_INSIGHT_FUTURE )
+=======
                                                                                                                                                                                 
+>>>>>>> parent of 044c095 (game update)
       
-		if ( pingType != ePingType.BLEEDOUT && pingType != ePingType.RESPAWN_BANNER )
+                                                                               
        
 			return
 

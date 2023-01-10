@@ -249,7 +249,9 @@ string function PrivateMatch_GetTeamName( int teamIndex )
 {
 	Assert( teamIndex >= TEAM_MULTITEAM_FIRST )
 	string teamName = GameRules_GetTeamName( teamIndex )
-	return teamName != "" ? teamName : Localize( "#TEAM_NUMBERED", teamIndex - 1 )
+	string defaultTeamName = ( AllianceProximity_IsUsingAlliances() )?Localize( "#TEAM_NUMBERED", AllianceProximity_GetAllianceFromTeam( teamIndex ) + 1 ) :Localize( "#TEAM_NUMBERED", teamIndex - 1 )
+
+	return teamName != "" ? teamName : defaultTeamName
 }
 
 void function PrivateMatch_BeginStartMatch()
@@ -801,6 +803,9 @@ void function PrivateMatch_SetUpTeamRosters( string playlistName )
                                                
  
 	                        
+		      
+
+	                                                                                                                    
 		      
 
 	                     
@@ -1378,6 +1383,135 @@ void function ObserverHighlightEnableChanged( entity observer, bool newValue )
 	}
 }
 
+<<<<<<< HEAD
+void function OnSpectatorStarted()
+{
+	printt( "Spectator_OnSpectatorStarted" )
+
+	entity localClientPlayer = GetLocalClientPlayer()
+
+	                                          
+	if ( !file.buttonHintsCreated && localClientPlayer.GetTeam() == TEAM_SPECTATOR )
+	{
+		                    
+		file.buttonHints.push(CreatePermanentCockpitPostFXRui( $"ui/observer_panel_hints.rpak", MINIMAP_Z_FRAME ) )
+		file.buttonHints.push(CreatePermanentCockpitPostFXRui( $"ui/observer_controller_hints.rpak",  MINIMAP_Z_FRAME) )
+		file.buttonHints.push(CreatePermanentCockpitPostFXRui( $"ui/observer_keyboard_hints.rpak", MINIMAP_Z_FRAME ) )
+		file.buttonHints.push(CreatePermanentCockpitPostFXRui( $"ui/observer_dpads_hints.rpak",  MINIMAP_Z_FRAME ) )
+		file.buttonHints.push(CreatePermanentCockpitPostFXRui( $"ui/observer_camera_controls_hints.rpak", MINIMAP_Z_FRAME ) )
+
+#if NX_PROG || PC_PROG_NX_UI		
+		RuiSetString( file.buttonHints[1], "yButtonLabel", "#OBSERVER_CONTROLLER_X_BUTTON" )
+		RuiSetString( file.buttonHints[1], "yButtonDescLabel", "#OBSERVER_CONTROLLER_X_BUTTON_DESC" )
+		RuiSetString( file.buttonHints[1], "xButtonLabel", "#OBSERVER_CONTROLLER_Y_BUTTON" )
+		RuiSetString( file.buttonHints[1], "xButtonDescLabel", "#OBSERVER_CONTROLLER_Y_BUTTON_DESC_ALT" )
+		RuiSetString( file.buttonHints[1], "bButtonLabel", "#OBSERVER_CONTROLLER_A_BUTTON" )
+		RuiSetString( file.buttonHints[1], "bButtonDescLabel", "#OBSERVER_CONTROLLER_A_BUTTON_DESC" )
+		RuiSetString( file.buttonHints[1], "aButtonLabel", "#OBSERVER_CONTROLLER_B_BUTTON" )
+		RuiSetString( file.buttonHints[1], "aButtonDescLabel", "#OBSERVER_CONTROLLER_B_BUTTON_DESC" )
+#else
+		RuiSetString( file.buttonHints[1], "yButtonLabel", "#OBSERVER_CONTROLLER_Y_BUTTON" )
+		RuiSetString( file.buttonHints[1], "yButtonDescLabel", "#OBSERVER_CONTROLLER_Y_BUTTON_DESC_ALT" )
+		RuiSetString( file.buttonHints[1], "xButtonLabel", "#OBSERVER_CONTROLLER_X_BUTTON" )
+		RuiSetString( file.buttonHints[1], "xButtonDescLabel", "#OBSERVER_CONTROLLER_X_BUTTON_DESC" )
+		RuiSetString( file.buttonHints[1], "bButtonLabel", "#OBSERVER_CONTROLLER_B_BUTTON" )
+		RuiSetString( file.buttonHints[1], "bButtonDescLabel", "#OBSERVER_CONTROLLER_B_BUTTON_DESC" )
+		RuiSetString( file.buttonHints[1], "aButtonLabel", "#OBSERVER_CONTROLLER_A_BUTTON" )
+		RuiSetString( file.buttonHints[1], "aButtonDescLabel", "#OBSERVER_CONTROLLER_A_BUTTON_DESC" )
+#endif
+
+		                                                                       
+		file.buttonHintsCreated = true
+
+		                                                                        
+		RegisterButtonPressedCallback( KEY_B, OnToggleButtonHintsVisibility )
+		RegisterConCommandTriggeredCallback( "toggle_observer_btn_hints", OnToggleButtonHintsVisibility )
+	}
+}
+
+void function OnFPSSpectatorStarted( entity player, entity currentTarget )
+{
+	printt( "Spectator_OnFPSSpectatorStarted" )
+
+	if (file.buttonHintsCreated)
+	{
+		for ( int i = 0; i < file.buttonHints.len(); i++ )
+		{
+			RuiSetBool( file.buttonHints[i], "isObserverMode", true )
+			RuiSetBool( file.buttonHints[i], "isFPS", true )
+		}
+	}
+	if(file.buttonHints.len() > 0)
+	{
+#if NX_PROG || PC_PROG_NX_UI	
+		RuiSetString( file.buttonHints[1], "xButtonDescLabel", "#OBSERVER_CONTROLLER_Y_BUTTON_DESC_ALT" )
+#else
+		RuiSetString( file.buttonHints[1], "yButtonDescLabel", "#OBSERVER_CONTROLLER_Y_BUTTON_DESC_ALT" )
+#endif
+	}
+}
+
+void function OnTPSSpectatorStarted( entity player, entity currentTarget )
+{
+	printt( "Spectator_OnTPSSpectatorStarted" )
+
+	if (file.buttonHintsCreated)
+	{
+		for ( int i = 0; i < file.buttonHints.len(); i++ )
+		{
+			RuiSetBool( file.buttonHints[i], "isObserverMode", true )
+			RuiSetBool( file.buttonHints[i], "isFPS", false )
+		}
+	}
+	
+	if(file.buttonHints.len() > 0)
+	{
+#if NX_PROG || PC_PROG_NX_UI
+		RuiSetString( file.buttonHints[1], "xButtonDescLabel", "#OBSERVER_CONTROLLER_Y_BUTTON_DESC" )
+#else
+		RuiSetString( file.buttonHints[1], "yButtonDescLabel", "#OBSERVER_CONTROLLER_Y_BUTTON_DESC" )
+#endif
+	}
+}
+
+void function OnFreecamSpectatorStarted( entity spectatingPlayer )
+{
+	printt( "Spectator_OnFreecamSpectatorStarted" )
+
+	if (file.buttonHintsCreated)
+	{
+		for ( int i = 0; i < file.buttonHints.len(); i++ )
+		{
+			RuiSetBool( file.buttonHints[i], "isObserverMode", false )
+		}
+	}
+}
+
+void function OnToggleButtonHintsVisibility( var button )
+{
+	printt("Spectator_OnToggleButtonHintsVisibility", file.buttonHintsHidden)
+
+	if (file.buttonHintsHidden)
+	{
+		for ( int i = 0; i < file.buttonHints.len(); i++ )
+		{
+			RuiSetBool( file.buttonHints[i], "isOpen", true )
+			RuiSetBool( file.buttonHints[i], "animateIn", true )
+		}
+	}
+	else
+	{
+		for ( int i = 0; i < file.buttonHints.len(); i++ )
+		{
+			RuiSetBool( file.buttonHints[i], "isOpen", false )
+			RuiSetBool( file.buttonHints[i], "animateOut", true )
+		}
+	}
+	file.buttonHintsHidden = !file.buttonHintsHidden
+}
+
+=======
+>>>>>>> parent of 044c095 (game update)
                                                              
    
   	                                        
@@ -1482,9 +1616,27 @@ void function PrivateMatch_OnGameStateChanged( int newVal )
 	}
 	else if ( newVal == eGameState.Resolution )
 	{
+<<<<<<< HEAD
+		DeathScreenCreateNonMenuBlackBars()
+		                                                                                                                 
+		if ( GameRules_GetTeamName( GetWinningTeam() ) == "Unassigned" )
+		{
+			                                                            
+			thread function() : ( )
+			{
+				WaitSignal( clGlobal.levelEnt, "GameModes_CompletedResolutionCleanup" )
+
+				if ( IsValid( GetLocalViewPlayer() ) )
+					RunUIScript( "PrivateMatch_CreateMatchEndEarlyDialog")
+
+
+				UpdateBlackBarRui()
+			}()
+=======
 		if ( GameRules_GetTeamName( GetWinningTeam() ) == "Unassigned" )
 		{
 			RunUIScript( "PrivateMatch_CreateMatchEndEarlyDialog")
+>>>>>>> parent of 044c095 (game update)
 		}
 
 		                                                                     

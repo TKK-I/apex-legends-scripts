@@ -73,7 +73,12 @@ const string EMOTE_PIN_ACTION_INTERRUPT 			= "interrupted"
                                                      
                                                                    
                                            
-                                      
+                                        
+
+                                                                                      
+                                                                                        
+
+                                                                     
       
 
 #endif
@@ -177,6 +182,11 @@ struct
 
 	#if SERVER
 		                              	                  
+
+                      
+			                                               
+			                                                       
+        
 	#endif
 
 	#if CLIENT
@@ -231,8 +241,13 @@ void function ShEmotes_Init()
 	                             
 
                      
-                                        
-                                    
+		                                      
+		                                                   
+
+		                                  
+
+		                                                                                                      
+		                                                                                                                  
        
 #endif          
 
@@ -347,7 +362,7 @@ void function OnItemFlavorRegistered_Character( ItemFlavor characterClass )
 	 
 		                                                          
 
-		                                           
+		                                                          
 		                                                                       
 		 
 			                                                                
@@ -370,7 +385,7 @@ void function OnItemFlavorRegistered_Character( ItemFlavor characterClass )
 	 
 		                                                          
 
-		                                           
+		                                                          
 		                                                                       
 		 
 			                                                                
@@ -1019,6 +1034,8 @@ void function ModelPerformEmote( entity model, ItemFlavor item, entity mover, bo
 	if ( IsEmoteEnabledForPodiumScreen() && !CanLocalClientPerformPodiumScreenEmote() )
 		RuiSetBool( GetPodiumSequenceRui(), "emoteAvailable", false )
 
+	bool isLocalPlayerModel = ( GetPodiumScreenCharacterModelForEHI( LocalClientEHI() ) == model )
+
 	string anim3p     = CharacterQuip_GetAnim3p( item )
 	string loopAnim3p = CharacterQuip_GetAnimLoop3p( item )
 	waitthread PlayAnim( model, anim3p, mover )
@@ -1028,8 +1045,59 @@ void function ModelPerformEmote( entity model, ItemFlavor item, entity mover, bo
 
 	wait BASE_WAIT                                                                               
 
+<<<<<<< HEAD
+	if ( usesLoop )
+	{
+		float loopTime = 0
+
+		loopTime = DEV_CharacterEmote_GetCustomAnimSequenceTime( loopAnim3p )
+		if ( loopTime < 0 )
+			loopTime = model.GetSequenceDuration( loopAnim3p )
+
+		while ( true )
+		{
+			string flourishSeq = ""
+			var flourishBlock = CharacterQuip_SelectWeightedAnimFlourish3p( item )
+
+			if ( flourishBlock )
+				flourishSeq = GetSettingsBlockString( flourishBlock, "sequence" )
+
+			if ( flourishSeq == "" )
+			{
+				                                             
+				waitthread PlayAnim( model, loopAnim3p, mover )
+				break
+			}
+
+			float flourishTime = DEV_CharacterEmote_GetCustomAnimSequenceTime( flourishSeq )
+			if ( flourishTime < 0 )
+				flourishTime = model.GetSequenceDuration( flourishSeq )
+
+			thread PlayAnim( model, loopAnim3p, mover )
+
+			if ( autoFlourish )
+			{
+				wait loopTime
+			}
+			else
+			{
+				if ( isLocalPlayerModel )
+					thread PodiumPromptFlourish()
+
+				WaitSignal( model, SIGNAL_EMOTE_FLOURISH )
+			}
+
+			thread PlayAnim( model, flourishSeq, mover )
+			wait flourishTime
+
+			if ( !autoFlourish && GetSettingsBlockBool( flourishBlock, "flourishEndsLoop" ) )
+				break
+		}
+	}
+=======
 	if ( loopAnim3p != "" )
 		waitthread PlayAnim( model, loopAnim3p, mover )
+>>>>>>> parent of 044c095 (game update)
 	else if ( !oneShot )
 	{
 		wait LOOP_WAIT - BASE_WAIT
@@ -1584,9 +1652,9 @@ float function DEV_CharacterEmote_GetCustomAnimSequenceTime( string animName )
 			                            
 			     
                     
-                        
-                               
-        
+		                      
+			                            
+			     
       
 		        
 		 
@@ -1666,35 +1734,157 @@ float function DEV_CharacterEmote_GetCustomAnimSequenceTime( string animName )
                     
                                                                                  
  
-                                  
-                                                         
+	                                 
+	                                                        
 
-                                                                                                   
+	                                                                                                  
 
+<<<<<<< HEAD
+	                                  
+	                          
+
+	                          
+		                                    
+
+	                            
+		                                    
+
+	                                  
+	                                                                           
+=======
                                    
                                                    
+>>>>>>> parent of 044c095 (game update)
  
 
                                                                        
  
-                                      
-                               
-                                 
-                                      
+	                                     
+	                              
+	                                
+	                                     
 
-             
-                                      
-   
-                                                               
-                                                                                                        
-                                                                  
+	            
+		                                    
+		 
+			                                                            
+			                                                                                                     
+			  	                                                            
+			                           
+		 
+	 
 
-                                
-                                                
-   
-  
+	                                        
+	                                                                         
+
+	                                                                                                                              
+
+	                               
+	 
+		                                                               
+
+		                                      
+		                                         
+		                                                          
+
+		            
+		                  
+		                                                                 
+		                                                                                     
+		 
+			                                                                         
+			                                                         
+		 
+		    
+		 
+			                                                    
+		 
+		                                       
+
+		                
+		                                                                                                                          
+		                                                                                                                          
+		                                                                                                                          
+		                                                                                                                          
+
+		                  
+		                    
+		                     
+		                   
+		                      
+
+		                                                                                                        
+
+		                                
+		 
+			                                                                           
+			                                                                              
+			 
+				                                                 
+				                           
+				     
+			 
+			                                                   
+		 
+
+		                                                            
+		                                       
+
+		                          
+			                              
+		    
+			                          
+	 
+	    
+	 
+		                                                                  
+		                                                                                    
+		                                                                          
+
+		                                                          
+		                          
+	 
+ 
 
                                          
+<<<<<<< HEAD
+ 
+	                       
+		      
+
+	                                                   
+	                                                                            
+
+	                                                                                                                     
+	              
+ 
+
+                                                   
+ 
+	                          
+		            
+
+	                        
+		            
+
+	                         
+	                                                                                                                                                                        
+		            
+
+	           
+ 
+
+                                                                               
+ 
+	                                                                           
+	                                                                                   
+
+	                                                              
+
+	                                                                                                        
+ 
+
+=======
                                                              
 
                                                                                                                             
@@ -1724,5 +1914,6 @@ float function DEV_CharacterEmote_GetCustomAnimSequenceTime( string animName )
   
  
 
+>>>>>>> parent of 044c095 (game update)
       
 #endif

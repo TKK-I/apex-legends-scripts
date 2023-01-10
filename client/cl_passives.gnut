@@ -1,7 +1,12 @@
 global function Cl_Passives_Init
+global function AddCallback_CreatePlayerPassiveRui
+global function AddCallback_DestroyPlayerPassiveRui
 
 struct
 {
+	array<void functionref( entity player )> CreatePlayerPassiveRui
+	array<void functionref( entity player )> DestroyPlayerPassiveRui
+
                 
                  
                 
@@ -25,23 +30,33 @@ void function Cl_Passives_Init()
        
 }
 
+void function AddCallback_CreatePlayerPassiveRui( void functionref( entity ) callbackFunc )
+{
+	file.CreatePlayerPassiveRui.append( callbackFunc )
+}
+
+void function AddCallback_DestroyPlayerPassiveRui( void functionref( entity ) callbackFunc )
+{
+	file.DestroyPlayerPassiveRui.append( callbackFunc )
+}
+
 void function OnInitWeaponStatusRuis_CLPassives( entity player )
 {
 	if ( player != GetLocalViewPlayer() )
 		return
 
-	DestroyPassiveRuis( player )                              
-
-	if ( PlayerHasPassive( player, ePassives.PAS_VALK ) )
-		CreateValkJetPackRui( player )
-
-	if ( PlayerHasPassive( player, ePassives.PAS_CRYPTO ) )
+	                            
+	foreach ( callbackFunc in file.DestroyPlayerPassiveRui )
 	{
-		                                                       
-		CreateCryptoCameraCircleRui( player )
-		CreateCryptoTacticalRui( player )
+		callbackFunc( player )
 	}
 
+<<<<<<< HEAD
+	foreach ( callbackFunc in file.CreatePlayerPassiveRui )
+	{
+		callbackFunc( player )
+	}
+=======
                 
 		if ( PlayerHasPassive( player, ePassives.PAS_VANTAGE ) )
 		{
@@ -57,6 +72,7 @@ void function OnInitWeaponStatusRuis_CLPassives( entity player )
                                          
    
        
+>>>>>>> parent of 044c095 (game update)
 }
 
 void function OnPlayerClassChanged_CLPassives( entity player )
@@ -64,7 +80,10 @@ void function OnPlayerClassChanged_CLPassives( entity player )
 	if ( player != GetLocalViewPlayer() )
 		return
 
-	DestroyPassiveRuis( player )
+	foreach ( callbackFunc in file.DestroyPlayerPassiveRui )
+	{
+		callbackFunc( player )
+	}
 }
 
                                                                    
@@ -76,15 +95,17 @@ void function OnSpectatorTargetChanged( entity observer, entity prevTarget, enti
 	if ( observer.GetTeam() != TEAM_SPECTATOR )
 		return
 
-	DestroyPassiveRuis( newTarget, IsValid(newTarget) )
+	if( !IsValid(newTarget) )
+		return
+
+	foreach ( callbackFunc in file.DestroyPlayerPassiveRui )
+	{
+		callbackFunc( newTarget )
+	}
+<<<<<<< HEAD
 }
 
-void function DestroyPassiveRuis( entity player, bool isValidPlayer = true )
-{
-	if ( !isValidPlayer || !PlayerHasPassive( player, ePassives.PAS_VALK ) )
-	{
-		Valk_DestroyJetPackRui()
-	}
+=======
 
 	if ( !isValidPlayer || !PlayerHasPassive( player, ePassives.PAS_CRYPTO ) )
 	{
@@ -157,6 +178,7 @@ void function CreateVantageTacticalRui( entity player )
  
       
 
+>>>>>>> parent of 044c095 (game update)
                
                                                                                            
                                                                                                   

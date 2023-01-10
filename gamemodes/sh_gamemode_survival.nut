@@ -210,7 +210,11 @@ void function GamemodeSurvivalShared_Init()
 		Sh_RespawnBeacon_Init()
 
                      
+<<<<<<< HEAD
+		Perk_MunitionsBox_Init()
+=======
                                
+>>>>>>> parent of 044c095 (game update)
         
 
 		MobileRespawnBeacon_Init()
@@ -308,8 +312,8 @@ bool function Survival_PlayerCanDrop( entity player )
 	  	            
 
                        
-	if( IsArenaMode() && !GamePlaying() )
-		return false
+                                      
+              
       
 
 	if ( player.ContextAction_IsActive() && !player.ContextAction_IsRodeo() )

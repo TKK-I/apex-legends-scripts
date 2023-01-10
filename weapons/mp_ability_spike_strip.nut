@@ -8,6 +8,7 @@ global function OnWeaponPrimaryAttack_ability_spike_strip
 #if SERVER
                                                   
                                                  
+                                
 #endif
 
 #if CLIENT
@@ -81,6 +82,12 @@ const float SPIKE_STRIP_SPIKE_SCALE_STABBING = 1.0
 const float SPIKE_STRIP_DELAY_BEFORE_EXPANDING = 0.3
 const float SPIKE_STRIP_DISTANCE_FROM_CORE_THRESHOLD = 250
 const float SPIKE_STRIP_DISTANCE_FROM_CORE_THRESHOLD_SQR = SPIKE_STRIP_DISTANCE_FROM_CORE_THRESHOLD * SPIKE_STRIP_DISTANCE_FROM_CORE_THRESHOLD
+<<<<<<< HEAD
+const vector SPIKE_STRIP_USE_BOUNDING_MINS = < -15, -15, 0 >
+const vector SPIKE_STRIP_USE_BOUNDING_MAXS = < 15, 15, 40 >
+const float SPIKE_STRIP_VO_DEBOUNCE_TIME = 10.0
+=======
+>>>>>>> parent of 044c095 (game update)
 
 const vector FRIENDLY_SPIKE_COLOR = <80, 150, 255>
 const vector ENEMY_SPIKE_COLOR = <255, 32, 10>
@@ -118,6 +125,7 @@ struct
 		                                        
 		                                          
 		                                   
+		                               
 	#endif
 
 	int 		maxTraps
@@ -159,6 +167,8 @@ void function MpAbilitySpikeStrip_Init()
 		                                                                                    
 		                                                                                             
 		                                                                                             
+
+		                                                                
 	#endif
 
 	#if CLIENT
@@ -206,7 +216,7 @@ var function OnWeaponPrimaryAttack_ability_spike_strip( entity weapon, WeaponPri
 {
 	#if SERVER
 		                                
-		                                                             
+		                                                                                                                                         
 		                              
 	#endif          
 
@@ -222,7 +232,7 @@ var function OnWeaponTossReleaseAnimEvent_ability_spike_strip( entity weapon, We
 {
 	#if SERVER
 		                                
-		                                                             
+		                                                                                                                                         
 		                              
 		                                               
 	#endif          
@@ -353,6 +363,11 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 }
 
 #if SERVER
+                                         
+ 
+		                                                                   
+ 
+
                                                           
  
 	                                   
@@ -449,7 +464,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
  
 	                               
 	                                 
-	                             
+	                                     
 	                               
 	                                        
 
@@ -485,6 +500,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 	                                                        
 
 	                                                   
+	                                                                     
 	                                                                      
 	                                        
 	                                                                          
@@ -1295,7 +1311,11 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 		                                                    
 		                      
 		 
+<<<<<<< HEAD
+			                                                                                                                                                                                                                               
+=======
 			                                                                                                                                                                           
+>>>>>>> parent of 044c095 (game update)
 			 
 				                    
 				                     
@@ -1429,6 +1449,14 @@ bool function CanDeployOnEnt( entity ent, vector pos )
                                                     
  
 	                                
+<<<<<<< HEAD
+	                       
+	 
+		                              
+		                                      
+	 
+=======
+>>>>>>> parent of 044c095 (game update)
 
 	                                                                                                                                                              
 	                                               

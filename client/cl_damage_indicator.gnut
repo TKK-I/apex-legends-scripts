@@ -133,10 +133,12 @@ void function RumbleForPilotDamage( float damageAmount, int damageType, int dama
 
 	if ( isDeathField )
 	{
+		                                                                                                     
 		Rumble_Play( "death_field_pain", {} )
 		return
 	}
 
+	                                                                                                      
 	Rumble_Play( "rumble_pilot_hurt", {} )
 }
 
@@ -459,6 +461,12 @@ void function GrenadeArrowThink( entity player, entity grenade, float damageRadi
 {
 	EndSignal( grenade, "OnDeath" )                                           
 	EndSignal( grenade, "OnDestroy" )
+<<<<<<< HEAD
+                                 
+                                             
+       
+=======
+>>>>>>> parent of 044c095 (game update)
 	EndSignal( player, "OnDeath" )
 
 	wait startDelay

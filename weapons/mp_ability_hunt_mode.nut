@@ -54,7 +54,7 @@ void function MpAbilityHuntModeWeapon_Init()
 #if SERVER
                                                                                        
  
-	           
+	             
 	                           
 		      
 
@@ -71,19 +71,24 @@ void function MpAbilityHuntModeWeapon_Init()
 			                                                                                                       
 
                                                 
-                                                        
-                                                                                    
+			                                                     
+				                                                                                      
         
 
                                                                                  
-                        
-    
-                                                                         
-                                                                      
-                                                                         
-                                 
-                                                        
-    
+			                       
+                          
+                                           
+         
+
+			                  
+			 
+				                                                                     
+				                                                                  
+				                                                                     
+				                             
+					                                                   
+			 
         
 		 
 	 
@@ -117,14 +122,19 @@ void function MpAbilityHuntModeWeapon_Init()
 		                                                                                                       
 
                                                                                
-                      
-  
-                                                                     
-                                                                    
-                                                                       
-                               
-                                                      
-  
+	                       
+                        
+                                         
+       
+
+	                  
+	 
+		                                                                   
+		                                                                  
+		                                                                     
+		                             
+			                                                   
+	 
       
 	 
 
@@ -208,7 +218,7 @@ void function HuntMode_Start( entity player )
 		 
 
                                                
-                                                                                
+		                                                                                    
        
 
 	#endif
@@ -388,45 +398,45 @@ void function EndThreadOn_HuntCommon( entity player )
 	                                                                                    
 
                         
-		                            
+                              
        
 
                                                 
-	                                                                           
-	 
-		                                                        
-		                                               
-		 
-			                                     
-			                                         
-			                      
-		 
+                                                                            
+  
+                                                          
+                                                 
+   
+                                        
+                                            
+                         
+   
 
                          
-		                                                           
-		 
-			                                                                                 
-			                                                                                          
-			                 
-			                 
+                                                             
+   
+                                                                                    
+                                                                                             
+                    
+                    
 
-			                                                                 
-			 
-				                     
-				             
-			 
-			    
-			 
-				                                                          
-				                                                                                                                 
-			 
+                                                                    
+    
+                         
+                 
+    
+       
+    
+                                                              
+                                                                                                                     
+    
 
-			                                                      
-			                                                                            
-			                          
-		 
+                                                         
+                                                                               
+                             
+   
         
-	 
+  
                                                     
 
 	                                                                               
@@ -435,26 +445,26 @@ void function EndThreadOn_HuntCommon( entity player )
 		                                                                            
 		 
                                                   
-			                                                    
-			 
-				                                                        
-				                                              
-				 
-					                                                
-					                                         
-				 
-			 
+                                                       
+    
+                                                            
+                                                  
+     
+                                                     
+                                              
+     
+    
                                                       
 
 			                        
 			 
                                                    
                            
-					                                                        
-					 
-						                                                         
-						                                                                               
-					 
+                                                             
+      
+                                                               
+                                                                                     
+      
           
                                                        
 

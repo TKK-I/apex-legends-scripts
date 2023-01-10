@@ -5,6 +5,7 @@
 global function GunGame_Init
 global function IsGunGameActive
 global function GunGame_GetPlayerScore
+global function GunGame_IsPlayerAhead
 #if DEV
 #if SERVER
                                            
@@ -101,6 +102,7 @@ void function GunGame_Init()
 
 #if SERVER
 	              
+	                                                                                 
 
 	                                            
 	                                            
@@ -145,6 +147,9 @@ void function GunGame_Init()
 	CircleBannerAnnouncementsEnable( false )
 	FreeDM_SetDisplayScoreThread( DisplayGunGameScore_thread )
 	FreeDM_SetScoreboardSetupFunc( GunGame_ScoreboardSetup() )
+
+	AddCallback_GameStateEnter( eGameState.Prematch, GunGame_OnPlayerGameStateEntered )
+	AddCallback_GameStateEnter( eGameState.PickLoadout, GunGame_OnPlayerGameStateEntered )
 #endif
 }
 
@@ -180,7 +185,7 @@ void function GunGame_Init()
 
 	                                  
 	 
-		                                
+		                                      
 			     
 
 		                     
@@ -218,7 +223,7 @@ void function GunGame_Init()
 	 
 
 	                                                                                                                
-	                                                       
+	                                                             
 	 
 		                                                                   
 		       
@@ -816,6 +821,15 @@ void function GunGame_Init()
 	                                     
  
 
+<<<<<<< HEAD
+                                                                                 
+ 
+	                                         
+	                                          
+	                                           
+
+	                              
+=======
                                  
  
 	                                                
@@ -868,6 +882,7 @@ void function GunGame_Init()
 	 
 
 	         
+>>>>>>> parent of 044c095 (game update)
  
 
 #endif          
@@ -890,6 +905,17 @@ void function ServerCallback_AnnounceScored( int lootIndex )
 	{
 		file.announceOnRespawnMsg = Localize( "#GUNGAME_SCORED", weaponName )
 		file.playSoundOnRespawn = GUNGAME_PROMOTION_SOUND
+	}
+}
+
+void function GunGame_OnPlayerGameStateEntered()
+{
+	foreach ( entity player in GetPlayerArray() )
+	{
+		if ( !IsValid( player ) )
+			continue
+
+		SetCustomPlayerInfo( player )
 	}
 }
 
@@ -974,6 +1000,9 @@ void function Client_OnPlayerSpawned( entity localPlayer )
 
 void function Client_OnTeamChanged( entity player, int oldTeam, int newTeam )
 {
+	if( !IsValid( player ) )
+		return
+
 	SetCustomPlayerInfo( player )
 }
 
@@ -1100,14 +1129,19 @@ void function DisplayGunGameScore_thread()
 	RuiSetInt( rui, "scoreLimit", convertedScoreLimit )
 	RuiSetInt( rui, "scoreProgressLimit", GetScorePerGun() )
 
+	int previousTopScore = 0
+
 	while( GetGameState() < eGameState.WinnerDetermined )
 	{
-		entity localPlayer = GetLocalViewPlayer()
-		if( !IsValid( localPlayer ) || localPlayer.GetTeam() == TEAM_SPECTATOR )
+		foreach ( entity player in GetPlayerArray() )
 		{
-			WaitFrame()
-			continue
+			if ( !IsValid( player ) )
+				continue
+
+			SetCustomPlayerInfo( player )
 		}
+
+		entity localPlayer = GetLocalViewPlayer()
 
 		                             
 		                            
@@ -1147,24 +1181,18 @@ void function DisplayGunGameScore_thread()
 		}
 
 		const int MAX_UI_TEAMS = 4
-		int numTeams = GetNumTeamsExisting()
+		int numTeams = GetCurrentPlaylistVarInt( "max_teams", 4 )
 		int myTeam = localPlayer.GetTeam()
 		array<int> squadScores
 
-		foreach ( entity player in GetPlayerArray() )
-		{
-			if ( !IsValid( player ) )
-				continue
-
-			SetCustomPlayerInfo( player )
-		}
 
 		                            
 		array<entity> squadMembers = GetPlayerArrayOfTeam( myTeam )
 
 		RuiSetInt(rui, "squadSize", squadMembers.len())
 
-		squadMembers.fastremovebyvalue( localPlayer )
+		if( IsValid( localPlayer ) && localPlayer.GetTeam() != TEAM_SPECTATOR )
+			squadMembers.fastremovebyvalue( localPlayer )
 
 		squadMembers.sort( SquadMemberIndexSort )
 
@@ -1180,6 +1208,15 @@ void function DisplayGunGameScore_thread()
 			}
 		}
 
+		int newTopScore = previousTopScore
+
+		int localPlayerScore = 1
+		if( IsValid( localPlayer ) && localPlayer.GetTeam() != TEAM_SPECTATOR )
+			localPlayerScore = GunGame_GetPlayerScore( localPlayer ) + 1
+
+		if( newTopScore < localPlayerScore )
+			newTopScore = localPlayerScore
+
 		for( int i = 0; i < squadMembers.len(); i++ )
 		{
 			if(file.connectedSquadMembers.find(squadMembers[i]) == -1)
@@ -1191,21 +1228,31 @@ void function DisplayGunGameScore_thread()
 			entity weapon = squadMembers[i].GetNormalWeapon( WEAPON_INVENTORY_SLOT_PRIMARY_0 )
 			if( IsValid( weapon ) )
 			{
+				int score = GunGame_GetPlayerScore(squadMembers[i]) + 1
 				LootData weaponData = SURVIVAL_GetLootDataFromWeapon( weapon )
 				RuiSetImage( rui, "teammateWeaponIcon" + i, weaponData.hudIcon )
-				RuiSetInt( rui, "teammateWeaponNumber" + i, GunGame_GetPlayerScore(squadMembers[i]) + 1 )
+				RuiSetInt( rui, "teammateWeaponNumber" + i, score )
+
+				if( newTopScore < score)
+					newTopScore = score
 			}
 
-			RuiSetBool(rui, "squadWeaponPreview" + i, true)
+			if( i < 2 )                       
+				RuiSetBool(rui, "squadWeaponPreview" + i, true)
 		}
+
+		                                            
+		if( previousTopScore < newTopScore )
+			SquadLeader_UpdateAllUnitFramesRui()
 
 		for( int team = TEAM_IMC; team < TEAM_IMC + MAX_UI_TEAMS; team++ )
 		{
 			int squadIndex = Squads_GetSquadUIIndex( team )
+			int reorderedIndex = Squads_GetReorderedTeamsUIId( team )
 
-			if( squadIndex >= numTeams )
+			if( reorderedIndex >= numTeams )
 			{
-				RuiSetBool( rui, "squadVisible" + squadIndex, false )
+				RuiSetBool( rui, "squadVisible" + reorderedIndex, false )
 				continue
 			}
 
@@ -1218,7 +1265,7 @@ void function DisplayGunGameScore_thread()
 			}
 
 			int squadWeaponIndex = GetGlobalNetInt( GUNGAME_SQUAD_WEAPON_INDEX + Squads_GetArrayIndexForTeam( team ) )
-			RuiSetInt( rui, "score_" + (squadIndex + 1), teamScore )
+			RuiSetInt( rui, "score_" + (reorderedIndex + 1), teamScore )
 
 			if( SURVIVAL_Loot_IsLootIndexValid( squadWeaponIndex ) && teamScore < file.scorePipRUIs.len()-1 )
 			{
@@ -1230,7 +1277,7 @@ void function DisplayGunGameScore_thread()
 				string weaponName = GetWeaponInfoFileKeyField_GlobalString( lootData.baseWeapon, "shortprintname" )
 				RuiSetString( file.scorePipRUIs[teamScore], "weaponName", weaponName )
 
-				if( squadIndex == 0 )               
+				if( reorderedIndex == 0 )               
 				{
 					RuiSetColorAlpha( file.scorePipRUIs[teamScore], "weaponColor", Squads_GetSquadColor( 0 ), 1.0 )
 					RuiSetBool( file.scorePipRUIs[teamScore], "clientSquadScore", true )
@@ -1239,6 +1286,8 @@ void function DisplayGunGameScore_thread()
 
 			GunGame_SetCharacterInfo( rui,team )
 		}
+
+		previousTopScore = newTopScore
 
 		WaitFrame()
 	}
@@ -1282,32 +1331,13 @@ void function GunGame_SetCharacterInfo( var rui, int team )
 		return
 
 	int squadIndex = Squads_GetSquadUIIndex( team )
+	int reorderedIndex = Squads_GetReorderedTeamsUIId( team )
 	string indexString = string( squadIndex + 1 )
-
-	int highScore = -1
-	entity squadKillLeader = null
-	foreach ( entity player in GetPlayerArrayOfTeam(team ) )
-	{
-		int playerScore = player.GetPlayerNetInt( GUNGAME_PLAYERSCORE )
-		if( playerScore > highScore )
-		{
-			squadKillLeader = player
-			highScore = playerScore
-		}
-	}
-
-	if( !IsValid( squadKillLeader ) )
-	{
-		Warning( "GunGame_SetCharacterInfo - Could not find squad kill leader!" )
-		return
-	}
-
-	ItemFlavor character = LoadoutSlot_GetItemFlavor( ToEHI( squadKillLeader ), Loadout_Character() )
-
-	RuiSetImage( rui, "squadImage" + indexString, Squads_GetSquadIcon(squadIndex ) )
-	RuiSetString( rui, "squadName" + indexString, Squads_GetSquadName(squadIndex ) )
+	
+	RuiSetImage( rui, "squadImage" + indexString, Squads_GetSquadIcon(reorderedIndex ) )
+	RuiSetString( rui, "squadName" + indexString, Squads_GetSquadName(reorderedIndex ) )
 	RuiSetBool( rui, "squadVisible" + indexString, true )
-	RuiSetColorAlpha( rui, "squadBorderColor" + indexString, SrgbToLinear( GetPlayerInfoColor( squadKillLeader )/255 ), 1.0 )
+	RuiSetColorAlpha( rui, "squadBorderColor" + indexString, Squads_GetSquadColor( reorderedIndex ), 1.0 )
 }
 #endif          
 
@@ -1394,12 +1424,6 @@ array< entity > function GunGame_SortPlayersByScore( array< entity > teamPlayers
 #if CLIENT
 void function GunGame_ScoreboardUpdateHeader( var headerRui, var frameRui, int team )
 {
-	int myTeam = GetLocalViewPlayer().GetTeam()
-	if( myTeam == TEAM_SPECTATOR )
-		return
-
-	bool isFriendly = team == myTeam
-
 	if( headerRui != null )
 	{
 		int squadIndex = Squads_GetSquadUIIndex( team )
@@ -1408,7 +1432,7 @@ void function GunGame_ScoreboardUpdateHeader( var headerRui, var frameRui, int t
 		RuiSetString( headerRui, "headerText", Localize( Squads_GetSquadName( squadIndex ) ) )
 		int squadWeaponIndex = GetGlobalNetInt( GUNGAME_SQUAD_WEAPON_INDEX + Squads_GetArrayIndexForTeam( team ) )
 
-		if( SURVIVAL_Loot_IsLootIndexValid( squadWeaponIndex ) )
+		if( SURVIVAL_Loot_IsLootIndexValid( squadWeaponIndex ) && GetGameState() >= eGameState.Playing )
 		{
 			LootData lootData = SURVIVAL_Loot_GetLootDataByIndex( squadWeaponIndex )
 			RuiSetInt( headerRui, "weaponNumber", minint( teamScore + 1, GetCurrentPlaylistVarInt( "scorelimit", 30 ) ) )
@@ -1427,6 +1451,18 @@ void function GunGame_ScoreboardUpdateHeader( var headerRui, var frameRui, int t
 }
 #endif          
 
+<<<<<<< HEAD
+#if CLIENT
+vector function GunGame_ScoreboardGetTeamColor( int team )
+{
+	int squadIndex = Squads_GetSquadUIIndex( team )
+
+	return Squads_GetSquadColor( team - TEAM_IMC )
+}
+#endif         
+
+=======
+>>>>>>> parent of 044c095 (game update)
 bool function IsGunGameActive()
 {
 	return GetCurrentPlaylistVarBool( "freedm_gun_game_active", false)
@@ -1435,6 +1471,27 @@ bool function IsGunGameActive()
 int function GunGame_GetPlayerScore( entity player )
 {
 	return player.GetPlayerNetInt( GUNGAME_PLAYERSCORE )
+}
+
+bool function GunGame_IsPlayerAhead( entity player )
+{
+	int team = player.GetTeam()
+	array<entity> squadMembers = GetPlayerArrayOfTeam( team )
+
+	entity playerAhead
+	int highestScore = 0
+
+	foreach( member in squadMembers )
+	{
+		int score = GunGame_GetPlayerScore( member )
+		if( score > highestScore )
+		{
+			highestScore = score
+			playerAhead = member
+		}
+	}
+
+	return playerAhead == player
 }
 
 int function GetScorePerGun()

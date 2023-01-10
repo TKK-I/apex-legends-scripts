@@ -42,7 +42,18 @@ global function OnAirdropUse
                                                   
                                           
                                               
+<<<<<<< HEAD
+                                          
+                                                     
                                   
+                                            
+                                    
+                                         
+                                                        
+                                                
+=======
+                                  
+>>>>>>> parent of 044c095 (game update)
              
 
 #endif          
@@ -175,7 +186,14 @@ struct
 		                                                                                        
 		                                                                  
 		       
+<<<<<<< HEAD
+			                       
+			                                   
+			                                    
+			                                
+=======
 		                       
+>>>>>>> parent of 044c095 (game update)
 		      
 
                           
@@ -343,6 +361,7 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 	                                                                                                                
 	                                                                                                                             
 	                      					                     
+	                             				                                    
 	                  						                                  
 
                                
@@ -381,7 +400,21 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 		                                            
 
 		                  
+<<<<<<< HEAD
+		       
+			                   
+			 
+				                            
+				                                                                                                                                                                                                       
+			 
+			    
+		      
+		 
+			                                                                                                                                                                                                    
+		 
+=======
 		                                                                                                                                                                      
+>>>>>>> parent of 044c095 (game update)
 		                                                                               
 			                                                       
 
@@ -641,7 +674,7 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 
 		                                              
 
-		                                                                            
+		                                                                                          
 
 		                                                                      
 			                        
@@ -660,9 +693,242 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 		      
 
 	                                                
+<<<<<<< HEAD
+	 
+		                                                     
+		                                                            
+
+		                                                   
+		 
+			                                    
+			                                                                              
+			                                                                
+		 
+	 
+	    
+	 
+		                                                                   
+		                                                            
+
+		                                                   
+		 
+			                                    
+			                                                                              
+			                                                                
+		 
+	 
+
+	                                                 
+ 
+
+                                                     
+ 
+	                                                 
+ 
+
+                                                     
+                                                            
+ 
+	                                         
+	 
+		                                                                                                
+		                                                                        
+
+		                                  
+		 
+			                                                          
+			                                                           
+		 
+	 
+
+	                                            
+		      
+
+	                                                
+	                                                                              
+ 
+
+                                              
+ 
+	                                          
+	 
+		                                                                  
+
+		                                             
+		 
+			                                                                              
+			                                                                
+		 
+
+		                                        
+	 
+
+	                                                                            
+	 
+		                                              
+	 
+ 
+
+                                                                                                                      
+                                  
+                                                     
+ 
+	                                         
+	 
+		                                                                                                
+		                                                                        
+
+		                                  
+		 
+			                                                          
+			                                                           
+		 
+	 
+
+	                                                      
+	 
+		                                                 
+	 
+ 
+
+                                            
+                                                                                                                     
+ 
+	                                                                               
+
+	                                  
+	                                 
+	 
+		                                                                                                                                        
+	 
+	    
+	 
+		                                                                                                           
+	 
+	                                   
+	                                  
+
+	                            
+	 
+		                                                                                          
+
+		                                                                                     
+		                                                                                                    
+	 
+	    
+	 
+		                                                                                        
+
+		                                                                                   
+		                                                                                                  
+	 
+ 
+
+                                                                                    
+                                                                                                                          
+ 
+	                                                                                                        
+ 
+
+                                                                                                                          
+ 
+	                                     
+	                           
+		                                                        
+
+	                                                                                  
+
+	                  
+	                                                                                                                                                                               
+
+	                            
+	 
+		                                                                                         
+		                                                                                                        
+
+		                                                                                                                                  
+		                                   
+		                                  
+
+		                                                                                              
+	 
+	    
+	 
+		                                                                                       
+		                                                                                                      
+
+		                                                                                            
+	 
+ 
+
+                                                                                                                                                                                                              
+ 
+	                                                                                                                             
+ 
+
+                                                                                                                                                                   
+ 
+	                                
+	                                                       
+
+	                                                                                                  
+	                                                                                                                                                               
+	                             
+	                             
+	                  
+		                                          
+
+	                                                                                
+	                         
+		                              
+
+	                        
+	                                                                                                                      
+
+	                                                   
+	 
+		                                                           
+		                                                                               
+		                                         
+
+		                                                              
+		                                               
+	 
+
+	                                                  
+	 
+		                                                   
+		                                                      
+	 
+
+	                            
+	 
+		                                                            
+
+		                                       
+		 
+			                                                                                 
+			                                                                   
+		 
+	 
+	    
+	 
+		                                                   
+		 
+			                                                                                              
+
+			                                                                                                           
+			                                                                               
+		 
+	 
+
+	                             
+	                                               
+=======
 		                                                                             
 	    
 		                                                                                           
+>>>>>>> parent of 044c095 (game update)
  
 
 
@@ -719,6 +985,33 @@ entity function GetAirdropForHitEnt( entity hitEnt )
  
 	                      
  
+
+                                                    
+ 
+	                                  
+ 
+
+                                         
+ 
+                    
+		                            
+       
+
+	                                                       
+	 
+		                                      
+		                         
+			                 
+		                                
+	 
+
+	                                                               
+	 
+		                                        
+	 
+
+
+ 
              
 
                                                 
@@ -730,6 +1023,30 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 	 
 	      
  
+
+       
+                                                       
+ 
+	                                                                               
+
+	                                         
+ 
+
+                                                                         
+ 
+	                           
+	                                                                      
+
+	                                    
+	                                    
+
+	                                                                                              
+
+	                                                                                     
+	                     
+ 
+      
+
 
                                                                             
  
@@ -781,7 +1098,7 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 	                  
  
 
-                                                                                                                                
+                                                                                                                                                         
  
 	                    					                   
 	                                       	          
@@ -829,6 +1146,12 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 	 
 
 	                                  
+
+	       
+		                 
+			                                  
+	             
+
               
                                                                                                                                     
                                      
@@ -882,6 +1205,7 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 
 	                                                               
 	 
+		                                              
 		                                                                             
 	 
 	    
@@ -904,7 +1228,7 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 	                       
 
                     
-                                            
+	                                           
        
 
 	                                                            
@@ -965,7 +1289,7 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 	                                            
 
 	                                                               
-		                                                                           
+		                                                                                 
 
                          
 		                                                                                         
@@ -1248,15 +1572,15 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 				 
 			 
                         
-				                                                                                                                               
-				                                      
-				 
-					                                                
-					 
-						                                                                                                                                       
-						                                 
-					 
-				 
+                                                                                                                                   
+                                          
+     
+                                                     
+      
+                                                                                                                                             
+                                       
+      
+     
          
 
 			                                                                            
@@ -1285,6 +1609,37 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 				                                 
 			 
 			                         
+<<<<<<< HEAD
+
+                                 
+                         
+    
+                                        
+     
+                                                     
+      
+                                                                                                                                                  
+                                       
+      
+
+                                                   
+      
+                                                                                                                                                 
+                                       
+      
+
+         
+      
+                                                                                                                                                   
+                                       
+      
+
+     
+    
+                                   
+
+=======
+>>>>>>> parent of 044c095 (game update)
 			     
 
 		                    
@@ -1310,6 +1665,24 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 		                              
 	 
 
+<<<<<<< HEAD
+                    
+	                                                  
+	 
+		                              
+	 
+       
+
+                          
+                                        
+   
+                      
+                                   
+   
+       
+
+=======
+>>>>>>> parent of 044c095 (game update)
 	                                                          
 	                                                                        
 	                                                                             
@@ -1363,33 +1736,35 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 
 	                                                                                                                   
 
-	                                                                                                
-	                                                            
-	 
-		                                     
-		                                                                                      
-		                 	                                              
-		                 	                                   
+                        
+                                                                                                 
+                                                             
+  
+                                       
+                                                                                        
+                                                                  
+                                                       
 
-		                                                                        
-		                                                                                 
+                                                                          
+                                                                                   
 
-		                                  
-		 
-			                                                                                       
+                                    
+   
+                                                                                          
 
-			                      
-			 
-				                                                                     
-				                                                                                                  
-				                   
-				 
-					                                                                       
-					                                    
-				 
-			 
-		 
-	 
+                         
+    
+                                                                         
+                                                                                                      
+                       
+     
+                                                                            
+                                         
+     
+    
+   
+  
+       
 
                 
 	                 
@@ -1400,6 +1775,14 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 	                                                  
 	                          
 	                                       
+	
+	                                     
+	                                        
+	 
+		                              
+		                                                                          
+	 
+
 
                 
 	                  
@@ -1469,7 +1852,7 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 	             
  
 
-                                                                                                                                                                                
+                                                                                                                                                                                                                    
  
 	                                                                  
 	                                                                                                                                  
@@ -1478,6 +1861,16 @@ entity function GetAirdropForHitEnt( entity hitEnt )
 
 	                            
 	                                         
+                             
+		                                                                      
+		 
+			                            
+			 
+				                                  
+				                                                      
+			 
+		 
+       
 
 	                                
 	                                  
