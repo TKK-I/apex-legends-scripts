@@ -30,7 +30,7 @@ const string MIRAGE_VOYAGE_MUSIC_CONTROLLER_SCRIPT_NAME = "mirage_voyage_music_t
                                                                                         
                                                                                    
                                                           
-                                                    
+                                                           
 
                                                                        
                                                                           
@@ -55,6 +55,14 @@ const string MIRAGE_VOYAGE_MUSIC_CONTROLLER_SCRIPT_NAME = "mirage_voyage_music_t
                                                        
 
                                                         
+
+                                                    
+
+                       
+                                             
+                                                   
+                                                                                                                                                                                 
+      
 
                                                  
                                                       
@@ -176,6 +184,11 @@ void function InitMirageVoyageMusicEnts()
 	entity musicController = GetEntByScriptName( MIRAGE_VOYAGE_MUSIC_CONTROLLER_SCRIPT_NAME )
 	entity ambientGeneric  = GetEntByScriptName( MIRAGE_VOYAGE_AMBIENT_GENERIC_SCRIPT_NAME )
 
+                       
+	if ( Anniversary_IsBeachPartyEnabled() )
+		ambientGeneric.SetSoundName( "Music_TT_Mirage_PartyTrack_BeachParty" )
+      
+
 	ambientGeneric.SetSoundCodeControllerEntity( musicController )
 }
 #endif          
@@ -189,6 +202,10 @@ void function InitMirageVoyageMusicEnts()
 
 	                                         
 	                                          
+                       
+	                                        
+	                                     
+      
 
 	                                             
 	                                      
@@ -204,6 +221,19 @@ void function InitMirageVoyageMusicEnts()
  
 	                               
 		      
+
+	            
+	                                                                      
+	                         
+	                                     
+	                                                                                                            
+	                                                      
+	                                                                      
+	                                                                                          
+
+	                                                  
+	                         
+		                                                                  
 
 	         
 	                                                                     
@@ -400,6 +430,11 @@ void function InitMirageVoyageMusicEnts()
 	                
 	                                                      
 
+                        
+	                                   
+       
+
+
 	                                     
  
 #endif          
@@ -432,6 +467,41 @@ void function InitMirageVoyageMusicEnts()
  
 #endif
 
+                       
+#if SERVER
+                                          
+ 
+	                               
+	                                                    
+		                                                            
+
+	                       
+	                                          
+	 
+		                                                               
+	 
+	    
+	 
+		                                                            
+	 
+
+	             
+	 
+		                                                       
+		                                   
+			        
+
+		                                                                                                                                     
+		                                                                               
+
+		                           
+
+		                    
+			                
+	 
+ 
+#endif
+      
 
 bool function IsMirageVoyageEnabled()
 {
@@ -441,7 +511,13 @@ bool function IsMirageVoyageEnabled()
 		#if SERVER
 			                                                                
 			                                                        
+			                                                         
 			                                                           
+			                                                      
+                       
+			                                                    
+				                                            
+      
 		#elseif CLIENT
 			entScriptnamesToCheck.append( MIRAGE_VOYAGE_AMBIENT_GENERIC_SCRIPT_NAME )
 		#endif
@@ -561,6 +637,9 @@ bool function IsMirageVoyageEnabled()
 	                                                  
 	                                                
 
+	                                                                   
+	                          
+
 	                              
 	                                                               
 	 
@@ -600,6 +679,9 @@ bool function IsMirageVoyageEnabled()
 	 
 
 	                                 
+
+	                               
+		                          
  
 #endif          
 
@@ -969,7 +1051,7 @@ bool function IsMirageVoyageEnabled()
  
 	                                            
 
-	                                                        
+	                                               
 		      
 
 	                 
@@ -995,7 +1077,7 @@ bool function IsMirageVoyageEnabled()
 
                                                                                             
  
-	                                                        
+	                                               
 		      
 
 	                 

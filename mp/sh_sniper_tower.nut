@@ -131,7 +131,7 @@ bool function SniperTower_CanUse( entity player, entity panel, int useFlags )
 
 void function SniperTower_OnUse( entity panel, entity player, int useInputFlags )
 {
-	if ( IsBitFlagSet( useInputFlags, USE_INPUT_LONG ) )
+	if ( useInputFlags & USE_INPUT_LONG )
 		thread SniperTower_UseThink_Thread( panel, player )
 }
 

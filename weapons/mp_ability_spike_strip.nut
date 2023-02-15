@@ -8,6 +8,7 @@ global function OnWeaponPrimaryAttack_ability_spike_strip
 #if SERVER
                                                   
                                                  
+                                
 #endif
 
 #if CLIENT
@@ -52,7 +53,6 @@ const float SPIKE_STRIP_DORMANT_IDLE_SFX_REPEAT_TIME = 18.0
 
                
 global const string SPIKE_STRIP_CORE_SPIKE_NAME = "core_spike_target_name"
-const string SPIKE_STRIP_USE_ENTITY_NAME = "core_spike_use_entity"
 const string KILL_CLIENT_THREAD_SIGNAL = "spike_strip_kill_client_thread"
 global const string SPIKE_STRIP_WEAPON_NAME = "mp_ability_spike_strip"
 const string SPIKE_STRIP_EXPLOSION_IMPACT_TABLE = "exp_ferro_tac_SM"
@@ -82,8 +82,12 @@ const float SPIKE_STRIP_SPIKE_SCALE_STABBING = 1.0
 const float SPIKE_STRIP_DELAY_BEFORE_EXPANDING = 0.3
 const float SPIKE_STRIP_DISTANCE_FROM_CORE_THRESHOLD = 250
 const float SPIKE_STRIP_DISTANCE_FROM_CORE_THRESHOLD_SQR = SPIKE_STRIP_DISTANCE_FROM_CORE_THRESHOLD * SPIKE_STRIP_DISTANCE_FROM_CORE_THRESHOLD
+<<<<<<< HEAD
 const vector SPIKE_STRIP_USE_BOUNDING_MINS = < -15, -15, 0 >
 const vector SPIKE_STRIP_USE_BOUNDING_MAXS = < 15, 15, 40 >
+const float SPIKE_STRIP_VO_DEBOUNCE_TIME = 10.0
+=======
+>>>>>>> parent of 044c095 (game update)
 
 const vector FRIENDLY_SPIKE_COLOR = <80, 150, 255>
 const vector ENEMY_SPIKE_COLOR = <255, 32, 10>
@@ -121,6 +125,7 @@ struct
 		                                        
 		                                          
 		                                   
+		                               
 	#endif
 
 	int 		maxTraps
@@ -162,11 +167,12 @@ void function MpAbilitySpikeStrip_Init()
 		                                                                                    
 		                                                                                             
 		                                                                                             
+
+		                                                                
 	#endif
 
 	#if CLIENT
 		AddTargetNameCreateCallback( SPIKE_STRIP_CORE_SPIKE_NAME, MainSpikeCreated )
-		AddTargetNameCreateCallback( SPIKE_STRIP_USE_ENTITY_NAME, UseEntityCreated )
 		RegisterConCommandTriggeredCallback( "+scriptCommand5", OnCharacterButtonPressed )
 		AddCallback_UseEntGainFocus( SpikeStrip_OnGainFocus )
 		AddCallback_UseEntLoseFocus( SpikeStrip_OnLoseFocus )
@@ -210,7 +216,7 @@ var function OnWeaponPrimaryAttack_ability_spike_strip( entity weapon, WeaponPri
 {
 	#if SERVER
 		                                
-		                                                             
+		                                                                                                                                         
 		                              
 	#endif          
 
@@ -226,7 +232,7 @@ var function OnWeaponTossReleaseAnimEvent_ability_spike_strip( entity weapon, We
 {
 	#if SERVER
 		                                
-		                                                             
+		                                                                                                                                         
 		                              
 		                                               
 	#endif          
@@ -244,7 +250,7 @@ void function OnProjectileCollision_ability_spike_strip( entity projectile, vect
 {
 	entity owner = projectile.GetOwner()
 
-	if( !IsValid( owner ) || !IsAlive( owner ) )
+	if( !IsValid( owner ) )
 	{
 #if SERVER
 		                    
@@ -317,7 +323,7 @@ void function OnProjectileCollision_ability_spike_strip( entity projectile, vect
 			                      
 			                                       
 			                    
-		                                                                           
+		                                                               
 
 		                                                                                                                    
 		                                                
@@ -342,9 +348,6 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 		if ( ent.GetScriptName() == CRYPTO_DRONE_SCRIPTNAME  )
 			return false
 
-		if( ent.GetScriptName() == BUBBLE_SHIELD_SCRIPTNAME )
-			return false
-
 		if ( ent.IsProjectile() )
 			return false
 
@@ -360,6 +363,11 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 }
 
 #if SERVER
+                                         
+ 
+		                                                                   
+ 
+
                                                           
  
 	                                   
@@ -423,7 +431,6 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 		      
 
 	                                     
-	                                                        
 		      
 
 	                                                  
@@ -433,7 +440,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 
 	                     
 		                                
-	                                                                                                                      
+	                                                                                                               
 	               
  
 
@@ -446,6 +453,9 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 	                                                                                                                         
 	                           
 		                    
+	                 
+	                                                             
+	                                              
 	                                                           
 	                                       
  
@@ -454,7 +464,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
  
 	                               
 	                                 
-	                             
+	                                     
 	                               
 	                                        
 
@@ -470,16 +480,6 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 	                                                              
 	                                                      
 	                            
-
-	                                                                                                                                         
-	                           
-	                    
-	                                                                                            
-	                                                       
-	                            
-	                     
-	                                                                 
-	                                                  
 
 	                                                   
 	                             
@@ -500,6 +500,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 	                                                        
 
 	                                                   
+	                                                                     
 	                                                                      
 	                                        
 	                                                                          
@@ -511,8 +512,6 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 
 	                                                 
 	                                                                                                                                   
-	                                  
-	                                             
 	                               
 
 	                                          
@@ -534,7 +533,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 			                             
 			 
 				                                                                                                                                   
-				                                                                                                                                 
+				                                                                                                                    
 				                     
 			 
 		 
@@ -1142,9 +1141,8 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 
                                                                                                                                                                                                    
  
-	                                                                                                                          
+	                                                                                                     
 	                               
-	                                                   
 	                          
 	 
 		                           
@@ -1313,7 +1311,11 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 		                                                    
 		                      
 		 
-			                                                                                                                                                                                                    
+<<<<<<< HEAD
+			                                                                                                                                                                                                                               
+=======
+			                                                                                                                                                                           
+>>>>>>> parent of 044c095 (game update)
 			 
 				                    
 				                     
@@ -1372,7 +1374,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 			                                                                                              
 			                      
 			 
-				                                                                                                                                                                                
+				                                                                                                                                                        
 					        
 
 				                                                
@@ -1447,8 +1449,14 @@ bool function CanDeployOnEnt( entity ent, vector pos )
                                                     
  
 	                                
+<<<<<<< HEAD
 	                       
+	 
+		                              
 		                                      
+	 
+=======
+>>>>>>> parent of 044c095 (game update)
 
 	                                                                                                                                                              
 	                                               
@@ -1467,10 +1475,6 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 		                        
 		 
 			                                   
-			                             
-			 
-				                                  
-			 
 		 
 	   
 
@@ -1612,7 +1616,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 		                                                                        
 		 
 			                                                              
-			                                            
+			                             
 			 
 				                                                           
 				 
@@ -1626,7 +1630,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 				                                                                                            
 				                                                                                                                            
 		 
-		                                                                                                                   
+		                                                                                                            
 	 
 
 	                                           
@@ -1652,7 +1656,7 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 		                                                                        
 		 
 			                                                              
-			                                            
+			                             
 			 
 				                                                           
 				 
@@ -1671,14 +1675,14 @@ bool function CanDeployOnEnt( entity ent, vector pos )
 				                                                                                            
 				                                                                                                                            
 		 
-		                                                                                                                   
+		                                                                                                            
 	 
 
 	                                           
 
 	                                 
 	 
-		                                                                                                                    
+		                                                                                                             
 	 
  
 #endif
@@ -1720,26 +1724,10 @@ void function MainSpikeCreated( entity spike )
 	ShowGrenadeArrow( player, spike, file.detectionRadius, 0.0, true, eThreatIndicatorVisibility.INDICATOR_SHOW_TO_ENEMIES )
 }
 
-void function UseEntityCreated( entity useEnt )
-{
-	AddCallback_OnUseEntity_ClientServer( useEnt, SpikeStrip_OnUseClient )
-}
-
-void function SpikeStrip_OnUseClient( entity spike, entity player, int useFlags )
-{
-	if ( IsControllerModeActive() )
-	{
-		if ( !IsBitFlagSet( useFlags, USE_INPUT_LONG ) )
-		{
-			thread IssueReloadCommand( player )
-		}
-	}
-}
-
 void function OnCharacterButtonPressed( entity player )
 {
 	entity useEnt = player.GetUsePromptEntity()
-	if ( !IsValid( useEnt ) || useEnt.GetTargetName() != SPIKE_STRIP_USE_ENTITY_NAME )
+	if ( !IsValid( useEnt ) || useEnt.GetTargetName() != SPIKE_STRIP_CORE_SPIKE_NAME )
 		return
 
 	if ( useEnt.GetOwner() != player )
@@ -1747,9 +1735,7 @@ void function OnCharacterButtonPressed( entity player )
 
 	CustomUsePrompt_SetLastUsedTime( Time() )
 
-	entity coreSpike = useEnt.GetParent()
-	if( IsValid( coreSpike ) )
-		Remote_ServerCallFunction( "ClientCallback_TryPickupSpikeStrip", coreSpike )
+	Remote_ServerCallFunction( "ClientCallback_TryPickupSpikeStrip", useEnt )
 }
 
 void function SpikeStrip_OnGainFocus( entity ent )
@@ -1761,7 +1747,7 @@ void function SpikeStrip_OnGainFocus( entity ent )
 	if ( !IsValid( player ) )
 		return
 
-	if ( player == ent.GetOwner() && ent.GetTargetName() == SPIKE_STRIP_USE_ENTITY_NAME )
+	if ( player == ent.GetOwner() && ent.GetTargetName() == SPIKE_STRIP_CORE_SPIKE_NAME )
 	{
 		CustomUsePrompt_SetText( Localize( "#WPN_SPIKES_PICKUP" ) )
 		CustomUsePrompt_Show( ent )

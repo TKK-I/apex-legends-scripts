@@ -149,7 +149,7 @@ global const array<string> PRESET_PILOT_BINDS =
 #endif
 ]
 
-global const table<int, int> GAMEPAD_BUTTON_INDICES =
+global const table<int, int> GAMEPAD_BUTTON_INDECES =
 {
 	[ BUTTON_A ] =					0,
 	[ BUTTON_B ] =					1,
@@ -263,12 +263,8 @@ void function SetStandardAbilityBindingsForSpectator( entity player )
 {
 	SetStandardAbilityBindingsForPilot( player )
 
-	int buttonIndexA = GAMEPAD_BUTTON_INDICES[BUTTON_A]
-	int buttonIndexX = GAMEPAD_BUTTON_INDICES[BUTTON_X]
-	SetAbilityBinding( player, buttonIndexA, "toggle_obs_highlight", "", KBT_TAPPED )
-	SetAbilityBinding( player, buttonIndexA, "toggle_obs_ring_survey", "", KBT_HELD )
-	SetAbilityBinding( player, buttonIndexX, "toggle_observer_btn_hints", "", KBT_TAPPED )
-	SetAbilityBinding( player, buttonIndexX, "toggle_observer_ui", "", KBT_HELD )
+	SetAbilityBinding( player, 0, "toggle_observer_highlight", "", KBT_TAPPED )
+	SetAbilityBinding( player, 0, "toggle_observer_ring_survey", "", KBT_HELD )
 }
 #endif
 
@@ -711,7 +707,7 @@ void function RemoveCallback_OnRefreshCustomGamepadBinds( void functionref(entit
 
 int function GetButtonBoundTo( string command )
 {
-	foreach ( buttonID, index in GAMEPAD_BUTTON_INDICES )
+	foreach ( buttonID, index in GAMEPAD_BUTTON_INDECES )
 	{
 		if ( ButtonIsBoundToAction( buttonID, command ) )
 			return buttonID
@@ -742,8 +738,8 @@ void function RefreshCustomGamepadBinds_UI()
 #if UI || UI
 int function GetButtonIndexForButtonEnum( int buttonEnum )
 {
-	if ( buttonEnum in GAMEPAD_BUTTON_INDICES )
-		return GAMEPAD_BUTTON_INDICES[ buttonEnum ]
+	if ( buttonEnum in GAMEPAD_BUTTON_INDECES )
+		return GAMEPAD_BUTTON_INDECES[ buttonEnum ]
 
 	Assert( false, ("Invalid button enum: " + buttonEnum) )
 	return 0
@@ -793,7 +789,7 @@ string function GetGamepadButtonStringForIndex( int buttonIndex )
 
 int function GetButtonEnumForIndex( int index )
 {
-	foreach ( enumVal, idx in GAMEPAD_BUTTON_INDICES )
+	foreach ( enumVal, idx in GAMEPAD_BUTTON_INDECES )
 	{
 		if ( index != idx )
 			continue

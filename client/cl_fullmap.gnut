@@ -145,7 +145,6 @@ void function Fullmap_SetupScoreboard()
 
 	Teams_AddCallback_ScoreboardData( Survival_GetScoreboardData )
 	Teams_AddCallback_Header( Survival_ScoreboardUpdateHeader )
-	Teams_AddCallback_GetTeamColor( Survival_ScoreboardGetTeamColor )
 	Teams_AddCallback_PlayerScores( Survival_GetPlayerScores )
 	Teams_AddCallback_SortScoreboardPlayers( Survival_SortPlayersByScore )
 }
@@ -159,13 +158,15 @@ ScoreboardData function Survival_GetScoreboardData()
        
 
 	ScoreboardData data
+
+	data.numScoreColumns = 1
+	data.columnDisplayIcons.append( $"rui/hud/gamestate/player_kills_icon" )
+	data.columnDisplayIconsScale.append( 1.0 )
+	data.columnNumDigits.append( 2 )
+
 	if( isWinterExpress )
 	{
 		data.numScoreColumns = 3
-		data.columnDisplayIcons.append( $"rui/hud/gamestate/player_kills_icon" )
-		data.columnDisplayIconsScale.append( 1.0 )
-		data.columnNumDigits.append( 2 )
-
 		data.columnDisplayIcons.append( $"rui/hud/gamestate/assist_count_icon2" )
 		data.columnDisplayIconsScale.append( 0.8 )
 		data.columnNumDigits.append( 2 )
@@ -189,11 +190,11 @@ array< string > function Survival_GetPlayerScores( entity player )
 
 	array< string > scores
 
+	string eliminations = string( player.GetPlayerNetInt( "kills" ) )
+	scores.append( eliminations )
+
 	if( isWinterExpress )
 	{
-		string eliminations = string( player.GetPlayerNetInt( "kills" ) )
-		scores.append( eliminations )
-
 		string assists = string( player.GetPlayerNetInt( "assists" ) )
 		scores.append( assists )
 
@@ -246,9 +247,14 @@ void function Survival_ScoreboardUpdateHeader( var headerRui, var frameRui, int 
 				int score = WinterExpress_GetTeamScore( uiTeam  )
 
 				RuiSetString( headerRui, "headerText", Localize( Squads_GetSquadName( squadIndex ) ) )
+				RuiSetColorAlpha( headerRui, "teamColor", Squads_GetSquadColor( squadIndex ), 1.0 )
 				RuiSetImage( headerRui, "teamIcon", Squads_GetSquadIcon(squadIndex))
 				RuiSetInt( headerRui, "score", score )
 				RuiSetBool( headerRui, "isWinning", WinterExpress_IsTeamWinning(uiTeam ) )
+
+				if( frameRui != null )
+					RuiSetColorAlpha( frameRui, "teamColor", Squads_GetSquadColor( squadIndex ), 1.0 )
+
 			}
          
         
@@ -256,13 +262,14 @@ void function Survival_ScoreboardUpdateHeader( var headerRui, var frameRui, int 
 }
 #endif          
 
+<<<<<<< HEAD
 #if CLIENT
  vector function Survival_ScoreboardGetTeamColor( int team )
  {
 	 bool isWinterExpress = false
 	 int teamIndex = Squads_GetSquadUIIndex( team )
 
-	 vector color  = SrgbToLinear( GetSkydiveSmokeColorForTeam( teamIndex ) / 255.0 )
+	 vector color  = SrgbToLinear( GetSkydiveSmokeColorForTeam( teamIndex + TEAM_IMC ) / 255.0 )
 
                         
 		 isWinterExpress = WinterExpress_IsModeEnabled()
@@ -278,6 +285,8 @@ void function Survival_ScoreboardUpdateHeader( var headerRui, var frameRui, int 
  }
 #endif         
 
+=======
+>>>>>>> parent of 044c095 (game update)
 void function InitFullmap()
 {
 
@@ -918,7 +927,7 @@ FullmapDrawParams function GetFullmapDrawParams()
 {
 	UISize screenSize = GetScreenSize()
 
-	float mapSizeScale = GetCurrentPlaylistVarFloat( "fullmap_size_scale", 0.941 )
+	float mapSizeScale = GetCurrentPlaylistVarFloat( "fullmap_size_scale", 0.94 )
 	float posScaleX    = GetCurrentPlaylistVarFloat( "fullmap_pos_x", -0.5 )
 	float posScaleY    = GetCurrentPlaylistVarFloat( "fullmap_pos_y", -0.5                            )
 
@@ -1021,8 +1030,7 @@ void function UpdateMap_THREAD()
 		if ( IsSpectator( GetLocalClientPlayer() ) && file.updatePlayerTags == true)
 		{
 			array< entity > sortedPlayers = GetPlayerArray()
-			sortedPlayers.sort( int function(entity playerA, entity playerB)
-			{
+			sortedPlayers.sort( int function(entity playerA, entity playerB){
 				entity player = GetLocalViewPlayer()
 				if ( playerA.GetTeam() == playerB.GetTeam() && playerA.GetTeam() == player.GetTeam() )
 				{
@@ -1797,8 +1805,7 @@ void function OnSpectatorTagModeChanged( entity player, int newMode )
 	file.updatePlayerTags = true
 }
 
-void function SetCurrentZoom(float zoomFactor, vector zoomPos , bool adjustValues = true)
-{
+void function SetCurrentZoom(float zoomFactor, vector zoomPos , bool adjustValues = true){
 	if(adjustValues)
 	{	                                                        
 		vector normalized  = NormalizeWorldPos( zoomPos )

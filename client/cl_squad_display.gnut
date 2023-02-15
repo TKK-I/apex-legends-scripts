@@ -391,7 +391,7 @@ void function _PlayerStatusUpdateThread( var panel, var statsPanel, var muteButt
 	if ( IsValid( playerEnt ) )
 		thread UpdateMicStatus( playerEnt, Hud_GetRui( statsPanel ) )
 
-	while ( true )
+	while ( 1 )
 	{
 		bool connected = IsValid( playerEnt ) && playerEnt.IsConnectionActive()
 

@@ -829,7 +829,7 @@ void function ShowScoreboardMP()
 
 		RuiSetInt( Hud_GetRui( file.pingText ), "ping", MyPing() )
 
-		if ( allPlayers.len() > 0 )
+		if ( allPlayers.len() )
 		{
 			file.prevPlayer = allPlayers[ (selectedPlayerIndex + allPlayers.len() - 1) % allPlayers.len() ]
 			file.nextPlayer = allPlayers[ (selectedPlayerIndex + 1) % allPlayers.len() ]

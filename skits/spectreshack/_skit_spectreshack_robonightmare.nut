@@ -119,14 +119,6 @@ global function SpectreShackControl_V4_ClientInit
 	                                      
  
 
-                                             
- 
-	                                       
-	                                       
-	                                       
-	                                       
- 
-
 #endif          
 
 struct MyVars
@@ -2055,17 +2047,8 @@ table<entity, MyVars> sh_cpToVars
 		                                                                                         
 	 
 
-	                                                                
 	                                     
 	 
-		                                                              
-		 
-			                                                           
-			 
-				                                                               
-			 
-			                  
-		 
 		        
 	 
 
@@ -3274,8 +3257,7 @@ table<entity, MyVars> sh_cpToVars
 			                                                         
 			 
 				                                                       
-				                     
-				 
+				                      
 					                                                                               
 					                                                                                                                               
 					                                      
@@ -3861,8 +3843,7 @@ void function ArmoryPrint( MyVars ornull varsOrNull, string message, bool devOnl
 		                                               
 		                                        
 		                                              
-		                       
-		 
+		                        
 			        
 			                           
 		   
@@ -3927,8 +3908,7 @@ void function ArmoryPrint( MyVars ornull varsOrNull, string message, bool devOnl
 		                   
 		 
 			                            
-			                     
-			 
+			                      
 				                              
 				                    
 			 

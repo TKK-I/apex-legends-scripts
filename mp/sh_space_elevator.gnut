@@ -48,7 +48,7 @@ const bool SPACEELEVATOR_LIFETIME_DEBUG = false
 const float SPACEELEVATOR_TUNING_RADIUS = 70
 const int SPACEELEVATOR_TUNING_HEIGHT = 1200
 
-const float SPACEELEVATOR_TUNING_UP_SPEED = 340
+const float SPACEELEVATOR_TUNING_UP_SPEED = 375
 const float SPACEELEVATOR_TUNING_HORIZ_SPEED = 170
 const float SPACEELEVATOR_TUNING_HORIZ_ACCEL = 2000
 const float SPACEELEVATOR_TUNING_TO_CENTER_SPEED = 50
@@ -558,9 +558,9 @@ void function SPACEELEVATOR_TriggerEnter( entity trigger, entity ent )
 		return
 
 #if SERVER
-	                                                           
+	                                                                                                             
 	 
-		                                                                        
+		                                                                            
 		 
 			                                
 			 
@@ -613,11 +613,8 @@ void function SPACEELEVATOR_TriggerEnter( entity trigger, entity ent )
 
 	                                         
 
-	                                                                 
-
-	                                           
 	            
-		                                                       
+		                                    
 		 
 			                                
 			 
@@ -635,10 +632,6 @@ void function SPACEELEVATOR_TriggerEnter( entity trigger, entity ent )
 				                                                            
 				 
 					                                                       
-				 
-				    
-				 
-					                                     
 				 
 			 
 		 
@@ -689,6 +682,8 @@ void function SPACEELEVATOR_TriggerEnter( entity trigger, entity ent )
 			                                                                                                     
 		 
 		                                
+		                                   
+
 
 		           
 	 
@@ -861,7 +856,7 @@ void function SPACEELEVATOR_InTriggerThread( entity trigger, entity player )
 		{
 			if ( IsValid( player ) )
 			{
-				if ( StatusEffect_HasSeverity( player, eStatusEffect.in_space_elevator ) )
+				if ( StatusEffect_GetSeverity( player, eStatusEffect.in_space_elevator ) > 0 )
 				{
 					ApplyElevatorEffects( player, trigger, player3PSpaceElevatorFXArray, data, false )
 				}
@@ -906,7 +901,7 @@ void function SPACEELEVATOR_InTriggerThread( entity trigger, entity player )
 				DebugDrawSphere( player.GetOrigin(), 11, <75, 0, 150>, true, TICK_RATE )
 			}
 
-			if ( !StatusEffect_HasSeverity( player, eStatusEffect.in_space_elevator ) )
+			if ( StatusEffect_GetSeverity( player, eStatusEffect.in_space_elevator ) <= 0 )
 			{
 				ApplyElevatorEffects( player, trigger, player3PSpaceElevatorFXArray, data, true )
 				#if SERVER
@@ -1101,7 +1096,7 @@ void function  SpaceElevator_1PFX_Thread( entity player, int fxHandle )
 			break
 
 		                                                                                       
-		bool shouldBeOn = !StatusEffect_HasSeverity( player, eStatusEffect.in_black_hole_field )
+		bool shouldBeOn = StatusEffect_GetSeverity( player, eStatusEffect.in_black_hole_field ) == 0
 		if ( !wasOn && shouldBeOn )
 		{
 			EffectWake( fxHandle )
@@ -1159,7 +1154,7 @@ void function CL_SpaceElevatorProgressRUIThread( entity player, entity base )
 	                                                                             
 
 	float progress = 0.0
-	while ( IsValid( base ) && StatusEffect_HasSeverity( player, eStatusEffect.in_space_elevator ) )
+	while ( IsValid( base ) && StatusEffect_GetSeverity( player, eStatusEffect.in_space_elevator ) > 0 )
 	{
 		                                
 		vector playerPos       = player.GetOrigin()

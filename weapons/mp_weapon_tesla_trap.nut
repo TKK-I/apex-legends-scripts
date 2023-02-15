@@ -497,17 +497,32 @@ void function OnWeaponOwnerChanged_weapon_tesla_trap( entity weapon, WeaponOwner
 
 bool function OnWeaponAttemptOffhandSwitch_weapon_tesla_trap( entity weapon )
 {
+	                                       
+	entity ownerPlayer = weapon.GetWeaponOwner()
+	Assert( ownerPlayer.IsPlayer() )
+
+	                                                     
+	if ( Bleedout_IsBleedingOut( ownerPlayer ) )
+		return false
+
 	entity player = weapon.GetWeaponOwner()
+	if ( player.IsPhaseShifted() )
+		return false
+
+	                                                            
+	if ( player.IsZiplining() )
+		return false
+
 	asset model  = TESLA_TRAP_PROXY_MODEL
 	entity proxy = TeslaTrap_CreateTrapPlacementProxy( model )
 
-	TeslaTrap_UpdateFocalNodeForPlayer( player, proxy )
+	TeslaTrap_UpdateFocalNodeForPlayer( ownerPlayer, proxy )
 
-	if ( weapon == player.GetActiveWeapon( eActiveInventorySlot.mainHand ) )
-		return true
+	if ( weapon == ownerPlayer.GetActiveWeapon( eActiveInventorySlot.mainHand ) )
+		return true                                               
 
 	                                                                                                   
-	if ( !TeslaTrap_PlayerHasFocalTrap( player ) )
+	if ( !TeslaTrap_PlayerHasFocalTrap( ownerPlayer ) )
 	{
 		int ammoReq  = weapon.GetAmmoPerShot()
 		int currAmmo = weapon.GetWeaponPrimaryClipCount()
@@ -516,7 +531,7 @@ bool function OnWeaponAttemptOffhandSwitch_weapon_tesla_trap( entity weapon )
 	}
 
 #if SERVER
-	                                          
+	                                        
 	 
 		                                               
 		 
@@ -531,7 +546,7 @@ bool function OnWeaponAttemptOffhandSwitch_weapon_tesla_trap( entity weapon )
 #endif         
 
 	#if CLIENT
-		player.Signal( "TeslaTrap_StopFocalTrapUpdate" )
+		ownerPlayer.Signal( "TeslaTrap_StopFocalTrapUpdate" )
 	#endif         
 
 	return true
@@ -1199,7 +1214,7 @@ entity function TeslaTrap_CreateTrapPlacementProxy( asset modelName )
 
 	                                                                   
 
-	                                                       
+	                                                   
 		                                            
  
 
@@ -1463,7 +1478,7 @@ void function TeslaTrap_SnapClientOnlyModel( entity player, entity weapon, entit
 		placementData.playerOrigin = player.GetOrigin()
 		placementData.playerForward = FlattenVec( player.GetViewForward() )
 
-		bool tacticalChargeActive = StatusEffect_HasSeverity( player, eStatusEffect.trophy_tactical_charge )
+		bool tacticalChargeActive = StatusEffect_GetSeverity( player, eStatusEffect.trophy_tactical_charge ) > 0
 		RuiSetBool( placementRui, "boostActive", tacticalChargeActive )
 
 		RuiSetBool( placementRui, "success", placementInfo.success )
@@ -1640,7 +1655,7 @@ void function TeslaTrap_PlacementProxy( entity weapon, entity player, asset mode
 		placementData.playerOrigin = player.GetOrigin()
 		placementData.playerForward = FlattenVec( player.GetViewForward() )
 
-		bool tacticalChargeActive = StatusEffect_HasSeverity( player, eStatusEffect.trophy_tactical_charge )
+		bool tacticalChargeActive = StatusEffect_GetSeverity( player, eStatusEffect.trophy_tactical_charge ) > 0
 		RuiSetBool( placementRui, "boostActive", tacticalChargeActive )
 
 		RuiSetBool( placementRui, "success", placementInfo.success )
@@ -1738,6 +1753,10 @@ void function TeslaTrap_PlacementProxy( entity weapon, entity player, asset mode
 	                                      
 	                                   
 	                                                                                                      
+
+	                                                                                                       
+	                        
+	                        
 
 	                
 	 
@@ -1848,17 +1867,12 @@ void function TeslaTrap_PlacementProxy( entity weapon, entity player, asset mode
 	                
 		                                                   
 
-	                
-		                                                             
-
 	                                                                   
 	                                                 
 
 	            
 		                                
 		 
-			                                                                                                                                     
-
 			                      
 			 
 				               
@@ -1906,6 +1920,17 @@ void function TeslaTrap_PlacementProxy( entity weapon, entity player, asset mode
 			                                         
 			                          
 			                                 
+
+			                       
+			 
+				                                                           
+				 
+					                                     
+					 
+						                               
+					 
+				 
+			 
 		 
 	 
 
@@ -1919,7 +1944,18 @@ void function TeslaTrap_PlacementProxy( entity weapon, entity player, asset mode
 	                                                     
 	                
 	 
+		                                     
 		                                          
+
+		                                                          
+		 
+			                                              
+			                             
+			 
+				                                          
+				                     
+			 
+		 
 	 
 
 	              
@@ -2304,7 +2340,7 @@ void function TeslaTrap_PlacementProxy( entity weapon, entity player, asset mode
 		                                   
 		                                   
 		              	                                    
-		              	                                                                                               
+		              	                                                                                                             
 
 		   	  	                                         
 				                                          
@@ -2360,7 +2396,7 @@ void function TeslaTrap_PlacementProxy( entity weapon, entity player, asset mode
                                                                                                      
  
 	                                                
-	                                                                                                                                                                                      
+	                                                                                                                                                                                                                             
 	                                                                                     
 	                                                        
 
@@ -2750,10 +2786,6 @@ void function TeslaTrap_PlacementProxy( entity weapon, entity player, asset mode
 						                    
 					                                                                                               
 						                                                                                                                                                       
-                     
-					                                                                                                                                                             
-						                                                                                                                                                             
-           
 					                                                                                                                                                        
 						                                                                                                                                                       
 					                                                         
@@ -2918,7 +2950,7 @@ entity function TeslaTrap_CalculateFocalTrap( entity player, entity trap )
 	}
 
 	                                           
-	if ( filteredTraps.len() == 0 )
+	if ( !filteredTraps.len() )
 	{
 		entity focalTrap
 		return focalTrap
@@ -4304,7 +4336,7 @@ bool function TeslaTrap_CanLink_ObjectPlacer( vector trapPos, vector trapUp, ent
 		return false
 
 	                                                               
-	int beamCount = TeslaTrap_GetLinkLOSBeamCount( trapPos, trapUp, otherOrigin, otherTrap.GetUpVector() )
+	int beamCount = TeslaTrap_GetLinkLOSBeamCount( trapPos, trapUp, otherOrigin, otherTrap.GetUpVector(), null, otherTrap )
 	if ( beamCount < TESLA_TRAP_LINK_FX_MIN )
 		return false
 
@@ -4360,7 +4392,7 @@ bool function TeslaTrap_CanLink( entity trap, vector trapPos, vector trapUp, ent
 		return false
 
 	                                                               
-	int beamCount = TeslaTrap_GetLinkLOSBeamCount( trapPos, trapUp, otherOrigin, otherTrap.GetUpVector() )
+	int beamCount = TeslaTrap_GetLinkLOSBeamCount( trapPos, trapUp, otherOrigin, otherTrap.GetUpVector(), trap, otherTrap )
 	if ( beamCount < TESLA_TRAP_LINK_FX_MIN )
 		return false
 
@@ -4389,7 +4421,7 @@ bool function TeslaTrap_CanDeploy( entity trap, vector testPos, vector testUp, e
 	return true
 }
 
-int function TeslaTrap_GetLinkLOSBeamCount( vector mainOrigin, vector mainUp, vector otherOrigin, vector otherUp )
+int function TeslaTrap_GetLinkLOSBeamCount( vector mainOrigin, vector mainUp, vector otherOrigin, vector otherUp, entity mainTrap, entity otherTrap )
 {
 	if ( IsValid( file.framePlacementInfo ) )
 	{
@@ -4400,6 +4432,10 @@ int function TeslaTrap_GetLinkLOSBeamCount( vector mainOrigin, vector mainUp, ve
 	array<entity> ignoreEnts = GetPlayerArray_Alive()
 	ignoreEnts.extend( GetAllPropDoors() )
 	ignoreEnts.extend( GetAllDeathBoxes() )
+	if( IsValid( mainTrap ) )
+		ignoreEnts.append( mainTrap )
+	if( IsValid( otherTrap ) )
+		ignoreEnts.append( otherTrap )
 
 	for ( int i = 1; i <= TESLA_TRAP_LINK_FX_COUNT; i++ )
 	{

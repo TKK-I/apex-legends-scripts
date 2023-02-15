@@ -16,7 +16,6 @@ global function MeleeSkin_GetMenuModelRotation
 global function MeleeSkin_GetCharacterFlavor
 global function MeleeSkin_GetSortOrdinal
 global function MeleeSkin_GetStoreImage
-global function MeleeSkin_GetEquipImage
 global function MeleeSkin_GetItemInspectScale
 global function MeleeSkin_GetItemInspectOffset
                                          
@@ -56,8 +55,6 @@ global function ClientCodeCallback_ShowMeleePrompt
                 
                 
                 
-const asset DEFAULT_MELEE_SKIN = $"settings/itemflav/melee_skin/default.rpak"
-
 const float MELEE_CONFIRMATION_SEVERITY_SCALE_WHEN_ENEMY = 1.0
 const float MELEE_CONFIRMATION_SEVERITY_SCALE_WHEN_NOT_ENEMY = 0.5
 
@@ -107,8 +104,6 @@ void function MeleeShared_Init()
 void function OnItemFlavorRegistered_Character( ItemFlavor characterClass )
 {
 	array<ItemFlavor> meleeSkinList = RegisterReferencedItemFlavorsFromArray( characterClass, "meleeSkins", "flavor" )
-	Assert( meleeSkinList[0] == GetItemFlavorByAsset( DEFAULT_MELEE_SKIN ) )
-
 	foreach ( ItemFlavor meleeSkin in meleeSkinList )
 	{
 		fileLevel.weaponClassNameMeleeSkinMap[MeleeSkin_GetOffhandWeaponClassname( meleeSkin )] <- meleeSkin
@@ -128,13 +123,20 @@ void function OnItemFlavorRegistered_Character( ItemFlavor characterClass )
 		entry.pdefSectionKey = "character " + ItemFlavor_GetGUIDString( characterClass )
 		entry.DEV_name       = ItemFlavor_GetCharacterRef( characterClass ) + " Melee Skin"
 	#endif
-	entry.defaultItemFlavor         = meleeSkinList[0]
-	entry.validItemFlavorList       = meleeSkinList
-	entry.isSlotLocked              = bool function( EHI playerEHI ) {
+	entry.defaultItemFlavor   = meleeSkinList[0]
+	entry.validItemFlavorList = meleeSkinList
+	entry.isSlotLocked        = bool function( EHI playerEHI ) {
 		return !IsLobby()
 	}
+<<<<<<< HEAD
 	entry.associatedCharacterOrNull = characterClass
-	entry.networkTo                 = eLoadoutNetworking.PLAYER_EXCLUSIVE
+	entry.networkTo                 = eLoadoutNetworking.PLAYER_GLOBAL
+	entry.networkVarName			= "MeleeSkin"
+	entry.stryderCharDataArrayIndex = ePlayerStryderCharDataArraySlots.MELEE_SKIN
+=======
+	entry.isActiveConditions  = { [Loadout_Character()] = { [characterClass] = true, }, }
+	entry.networkTo           = eLoadoutNetworking.PLAYER_EXCLUSIVE
+>>>>>>> parent of 044c095 (game update)
 	fileLevel.characterMeleeSkinLoadoutEntryMap[characterClass] <- entry
 
 	#if SERVER && DEV
@@ -159,16 +161,6 @@ asset function MeleeSkin_GetStoreImage( ItemFlavor flavor )
 	Assert( ItemFlavor_GetType( flavor ) == eItemType.melee_skin )
 
 	return GetGlobalSettingsAsset( ItemFlavor_GetAsset( flavor ), "storeImage" )
-}
-#endif
-
-
-#if SERVER || CLIENT || UI
-asset function MeleeSkin_GetEquipImage( ItemFlavor flavor )
-{
-	Assert( ItemFlavor_GetType( flavor ) == eItemType.melee_skin )
-
-	return GetGlobalSettingsAsset( ItemFlavor_GetAsset( flavor ), "equipImage" )
 }
 #endif
 
@@ -492,31 +484,35 @@ void function CodeCallback_OnMeleePressed( entity attacker, entity meleeInputWea
 			eyeTraceHitPos = eyeTrace.endPos
 
                 
-			if( !IsValid( lungeTarget ) )
+			TraceResults rebuiltDoorTrace = TraceLine(
+				attacker.EyePosition(), attacker.EyePosition() + 150.0 * attacker.GetViewVector(),
+				[ attacker ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE
+			)
+
+			if( rebuiltDoorTrace.fraction <= eyeTrace.fraction && IsValid( rebuiltDoorTrace.hitEnt ) && IsRebuiltDoor( rebuiltDoorTrace.hitEnt ) )
 			{
-				eyeTrace = TraceLine(
-					attacker.EyePosition(), attacker.EyePosition() + 150.0 * attacker.GetViewVector(),
-					[ attacker ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE
-				)
-				lungeTarget = eyeTrace.hitEnt
-				eyeTraceHitPos = eyeTrace.endPos
+				lungeTarget = rebuiltDoorTrace.hitEnt
+				eyeTraceHitPos = rebuiltDoorTrace.endPos
 			}
       
 		}
 
                   
-		if ( doorLungeEnabled && IsValid( lungeTarget ) && ( IsDoor( lungeTarget ) || lungeTarget.GetTargetName() == PASSIVE_REINFORCE_REBUILT_DOOR_SCRIPT_NAME ) )
+		if ( doorLungeEnabled && IsValid( lungeTarget ) && ( IsDoor( lungeTarget ) || IsRebuiltDoor( lungeTarget ) ) )
        
                                                                             
         
 		{
 			meleeAttackWeapon.AddMod( "proto_door_kick" )
 
-			if ( !meleeAttackWeapon.HasMod( "melee_crypto_drone" ) && !meleeAttackWeapon.HasMod( "melee_valk_helmet" ) && !meleeAttackWeapon.HasMod( "melee_loba_blunt" ) && !meleeAttackWeapon.HasMod( "melee_seer_heart" ) && !meleeAttackWeapon.HasMod( "melee_seer_kick" ) )
+<<<<<<< HEAD
+=======
+			if ( !meleeAttackWeapon.HasMod( "melee_crypto_drone" ) && !meleeAttackWeapon.HasMod( "melee_valk_helmet" ) && !meleeAttackWeapon.HasMod( "melee_loba_blunt" ))
 			{
 				meleeAttackWeapon.AddMod( "proto_door_kick_impact_table" )
 			}
 
+>>>>>>> parent of 044c095 (game update)
 			attacker.Lunge_SetTargetPosition( <eyeTraceHitPos.x, eyeTraceHitPos.y, lungeTarget.GetWorldSpaceCenter().z - 52 > )                             
 			attacker.Lunge_SetSmoothTime( 0.7 )
 			attacker.Lunge_EnableFlying()
@@ -524,9 +520,6 @@ void function CodeCallback_OnMeleePressed( entity attacker, entity meleeInputWea
 		else if ( meleeAttackWeapon.HasMod( "proto_door_kick" ) )
 		{
 			meleeAttackWeapon.RemoveMod( "proto_door_kick" )
-			
-			if ( meleeAttackWeapon.HasMod( "proto_door_kick_impact_table" ) )
-				meleeAttackWeapon.RemoveMod( "proto_door_kick_impact_table" )
 		}
 	}
 
@@ -590,7 +583,7 @@ void function CodeCallback_OnMeleeReleased( entity player, entity weapon )
 
 
 #if SERVER || CLIENT
-void function CodeCallback_OnMeleeAttackAnimEvent( entity attacker, entity meleeAttackWeapon )
+		void function CodeCallback_OnMeleeAttackAnimEvent( entity attacker, entity meleeAttackWeapon, int impactTableOverride )
 {
 	Assert( IsValid( attacker ) )
 
@@ -620,7 +613,7 @@ void function CodeCallback_OnMeleeAttackAnimEvent( entity attacker, entity melee
 	vector startPosition                  = expect vector(legacyTraceResults.startPosition)
 	bool shouldHitForward                 = expect bool(legacyTraceResults.hitWithFlatTrace)
 	vector hitNormal                      = Normalize( startPosition - endPosition )
-	int meleeAttackWeaponImpactTableIndex = meleeAttackWeapon.GetImpactTableIndex()
+	int meleeAttackWeaponImpactTableIndex = impactTableOverride >= 0 ? impactTableOverride : meleeAttackWeapon.GetImpactTableIndex()
 
 	#if SERVER
 		                                                           

@@ -159,7 +159,7 @@ void function ShadowRoyale_OnPlaying()
 		SetMapFeatureItem( 1000, "#SHADOWROYALE_SHADOW_SPAWN_FRIEND", "#SHADOWROYALE_SHADOW_SPAWN_FRIEND_DESC", ICON_SPAWN_SHADOW_FRIEND )
 	}
 
-	                                                                       
+	                        
 	DeathScreen_SetDataRuiAssetForGamemode( DEATH_SCREEN_RUI )
 }
 #endif         
@@ -1258,7 +1258,7 @@ void function ServerCallback_ModeShadowRoyale_AnnouncementSplash( int messageInd
 			break
 
 		default:
-			Assert( false, "Unhandled messageIndex: " + messageIndex )
+			Assert( 0, "Unhandled messageIndex: " + messageIndex )
 	}
 
 	AnnouncementMessageSweepShadowRoyale( style, player, messageText, subText, titleColor, soundAlias, duration, icon, leftIcon, rightIcon )

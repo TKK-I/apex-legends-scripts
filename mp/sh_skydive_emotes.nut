@@ -82,8 +82,8 @@ void function RegisterSkydiveEmotesForCharacter( ItemFlavor characterClass )
 		  		               
 		  	 
 		        
-		entry.associatedCharacterOrNull = characterClass
-		entry.networkTo                 = eLoadoutNetworking.PLAYER_EXCLUSIVE
+		entry.isActiveConditions = { [Loadout_Character()] = { [characterClass] = true, }, }
+		entry.networkTo = eLoadoutNetworking.PLAYER_EXCLUSIVE
 		fileLevel.loadoutCharacterSkydiveEmoteSlotMap[characterClass].append( entry )
 	}
 }
@@ -182,7 +182,6 @@ int function SkydiveEmote_GetSortOrdinal( ItemFlavor item )
 	 
 		                                     
 		                                                          
-		                                                                                          
 	 
  
 #endif

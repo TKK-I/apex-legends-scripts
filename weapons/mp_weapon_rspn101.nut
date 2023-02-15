@@ -12,6 +12,7 @@ void function OnWeaponActivate_R101( entity weapon )
 	OnWeaponActivate_weapon_basic_bolt( weapon )
 
 	OnWeaponActivate_RUIColorSchemeOverrides( weapon )
+	OnWeaponActivate_ReactiveKillEffects( weapon )
 
                        
 		#if SERVER
@@ -26,7 +27,7 @@ void function OnWeaponActivate_R101( entity weapon )
 
 void function OnWeaponDeactivate_R101( entity weapon )
 {
-
+	OnWeaponDeactivate_ReactiveKillEffects( weapon )
 }
 
 var function OnWeaponPrimaryAttack_R101( entity weapon, WeaponPrimaryAttackParams attackParams )

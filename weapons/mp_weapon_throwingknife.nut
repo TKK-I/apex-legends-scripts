@@ -63,7 +63,7 @@ void function OnProjectileCollision_weapon_throwingknife( entity projectile, vec
 		ignoreTarget = true
 
 	                                                  
-	if ( hitEnt.IsPlayer() && StatusEffect_GetTimeRemaining (hitEnt, eStatusEffect.death_totem_recall) > 0.0 )
+	if ( hitEnt.IsPlayer() && StatusEffect_GetTimeRemaining (hitEnt, eStatusEffect.death_totem_recall) )
 	{
 		ignoreTarget = true
 	}

@@ -33,12 +33,6 @@ global const string SNIPER_RECON_UI_START_SOUND = "Vantage_Passive_UI_1p"
 int dbg_TraceCount = 0
 #endif
 
-global struct PotentialTargetData
-{
-	entity target
-	float score
-}
-
 enum ePlayerLiveState
 {
 	None = -1,
@@ -279,18 +273,6 @@ bool function SniperRecon_IsTracking( entity owner )
 	            
  
 
-
-                                                                         
- 
-	                        
-		         
-	                             
-		        
-
-	        
- 
-
-
                                                                                                                                                                                                       
  
 	                                         
@@ -441,7 +423,7 @@ bool function SniperRecon_IsTracking( entity owner )
 		                                        
 		 
                    
-				                                                                                                                
+				                                                                                                                                                                                                         
 					        
          
 
@@ -643,7 +625,7 @@ void function CL_SniperRecon_UI_Thread( entity owner )
 		if ( IsValid( activeWeapon ) )
 			RuiSetBool( file.scopeRui, "isWeaponMelee", DoesWeaponTriggerMeleeAttack( activeWeapon ) )
 
-		bool isSilenced = StatusEffect_HasSeverity( owner, eStatusEffect.silenced )
+		bool isSilenced = StatusEffect_GetSeverity( owner, eStatusEffect.silenced ) > 0
 		bool isValidGameState =  GetGameState() >= eGameState.Playing && GetGameState() < eGameState.Resolution
 		bool isADS = owner.GetZoomFrac() > 0.99
 		RuiSetBool( file.scopeRui, "visible", !isSilenced && isValidGameState && isADS )

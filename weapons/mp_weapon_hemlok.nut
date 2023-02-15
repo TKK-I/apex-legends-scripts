@@ -6,6 +6,8 @@ const string HEMLOK_CLASS_NAME = "mp_weapon_hemlok"
 
 void function OnWeaponActivate_hemlok( entity weapon )
 {
+	OnWeaponActivate_ReactiveKillEffects( weapon )
+
 		if ( weapon.HasMod( "hopup_smart_reload" ) )
 		{
 			SmartReloadSettings settings
@@ -25,6 +27,7 @@ void function OnWeaponActivate_hemlok( entity weapon )
 
 void function OnWeaponDeactivate_hemlok( entity weapon )
 {
+	OnWeaponDeactivate_ReactiveKillEffects( weapon )
 	OnWeaponDeactivate_Smart_Reload ( weapon )
 }
 

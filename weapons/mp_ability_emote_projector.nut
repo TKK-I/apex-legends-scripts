@@ -86,8 +86,13 @@ void function MpWeaponEmoteProjector_Init()
 
 bool function OnWeaponAttemptOffhandSwitch_WeaponEmoteProjector( entity weapon )
 {
+	int ammoReq = weapon.GetAmmoPerShot()
+	int currAmmo = weapon.GetWeaponPrimaryClipCount()
+	if ( currAmmo < ammoReq )
+		return false
+
 	entity player = weapon.GetWeaponOwner()
-	if ( !IsValid( player ) )
+	if ( player.IsPhaseShifted() )
 		return false
 
 	array <entity> activeWeapons = player.GetAllActiveWeapons()

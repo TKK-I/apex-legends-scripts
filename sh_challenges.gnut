@@ -157,19 +157,25 @@ enum eChallengeCategory
 	FAVORITES,
 }
 
-                                                                                             
+                                                                                       
 
 const table<int, string> GAME_MODE_NAME =
 {
 	[eChallengeGameMode.ANY] = "#GAME_MODE_ANY",
 	[eChallengeGameMode.BATTLE_ROYALE] = "#GAME_MODE_BR",
-	[eChallengeGameMode.ARENAS] = "#GAME_MODE_ARENAS",
+                        
+		[eChallengeGameMode.ARENAS] = "#GAME_MODE_ARENAS",
+       
 	[eChallengeGameMode.NON_MODE] = "",                                                         
-	[eChallengeGameMode.CONTROL] = "#GAME_MODE_CONTROL",
+                         
+		[eChallengeGameMode.CONTROL] = "#GAME_MODE_CONTROL",
+       
                   
 		[eChallengeGameMode.EXCEPT_BR] = "#GAME_MODE_EXCEPT_BR",
        
-	[eChallengeGameMode.GUNGAME] = "#GAME_MODE_GUNGAME",
+                         
+		[eChallengeGameMode.GUNGAME] = "#GAME_MODE_GUNGAME",
+       
 }
 
 
@@ -177,26 +183,38 @@ const table<int, string> GAME_MODE_TAG =
 {
 	[eChallengeGameMode.ANY] = "",
 	[eChallengeGameMode.BATTLE_ROYALE] = "#GAMEMODE_TAG_BATTLE_ROYAL",
-	[eChallengeGameMode.ARENAS] = "#GAMEMODE_TAG_ARENAS",
+                        
+		[eChallengeGameMode.ARENAS] = "#GAMEMODE_TAG_ARENAS",
+       
 	[eChallengeGameMode.NON_MODE] = "",                                                         
-	[eChallengeGameMode.CONTROL] = "#GAMEMODE_TAG_CONTROL",
+                         
+		[eChallengeGameMode.CONTROL] = "#GAMEMODE_TAG_CONTROL",
+       
                   
 		[eChallengeGameMode.EXCEPT_BR] = "#GAMEMODE_TAG_EXCEPT_BR",
        
-	[eChallengeGameMode.GUNGAME] = "#GAMEMODE_TAG_GUNGAME",
+                         
+		[eChallengeGameMode.GUNGAME] = "#GAMEMODE_TAG_GUNGAME",
+       
 }
 
 const table<int, vector> GAME_MODE_TAG_COLOR =
 {
 	[eChallengeGameMode.ANY] =  <0,0,0>,
 	[eChallengeGameMode.BATTLE_ROYALE] = < 64, 148, 158 >,
-	[eChallengeGameMode.ARENAS] = < 108,79,198 >,
+                        
+		[eChallengeGameMode.ARENAS] = < 108,79,198 >,
+       
 	[eChallengeGameMode.NON_MODE] = <0,0,0>,                                                         
-	[eChallengeGameMode.CONTROL] = < 215,154,8 >,
+                         
+		[eChallengeGameMode.CONTROL] = < 215,154,8 >,
+       
                   
 		[eChallengeGameMode.EXCEPT_BR] = < 0,71,115 >,
        
-	[eChallengeGameMode.GUNGAME] = < 50,150,50 >,
+                         
+		[eChallengeGameMode.GUNGAME] = < 50,150,50 >,
+       
 }
 
 global enum eChallegeDifficulty
@@ -304,7 +322,7 @@ struct ChallengeSortStruct
 #endif
 
                         
-                                                                
+const string CHALLENGE_REROLL_SOUND = "UI_Menu_Challenge_ReRoll"
       
 
                  
@@ -312,7 +330,7 @@ global const int PRIMARY_CHALLENGE_INDEX = 0
 global const int ALT_CHALLENGE_INDEX = 1
       
 
-                                                         
+                                                   
 global const bool BOTS_HAVE_CHALLENGES = false
 
                        
@@ -399,7 +417,6 @@ struct FileStruct_LifetimeLevel
 		array<ItemFlavor>     favoriteChallengeCache
 		#if UI
 			bool haveEventChallengesRefreshedOnUI = false
-			float lastRerollTime = 0
 		#endif
 	#endif
 
@@ -408,9 +425,6 @@ struct FileStruct_LifetimeLevel
 FileStruct_LifetimeLevel& fileLevel
 
 global const array<int> CHALLENGE_REROLL_COSTS = [ 0, 2, 5, 10 ]
-#if UI
-const float REROLL_MIN_RETRY_TIME_SEC = 1
-#endif
 #endif
 
 #if SERVER || CLIENT || UI
@@ -494,7 +508,7 @@ void function ShChallenges_LevelInit_PreStats()
 	#endif
 
                            
-	BeginnerChallenges_Init()
+                          
                                 
 
 	file.initialized = true
@@ -594,7 +608,7 @@ void function ShChallenges_LevelInit_PostStats()
 				{
 					if ( !IsValidStatEntryRef( statRef ) )
 					{
-						Assert( false, format( "Challenge '%s' tier %d refers to non-existent stat: '%s'", string(ItemFlavor_GetAsset( challenge )), i, statRef ) )
+						Assert( 0, format( "Challenge '%s' tier %d refers to non-existent stat: '%s'", string(ItemFlavor_GetAsset( challenge )), i, statRef ) )
 						continue
 					}
 
@@ -602,13 +616,13 @@ void function ShChallenges_LevelInit_PostStats()
 
 					if ( (StatEntry_GetFlags( stat ) & eStatFlags.STORE_START_OF_PREVIOUS_MATCH) == 0 )
 					{
-						Assert( false, format( "Challenge '%s' refers to stat that does not have the STORE_END_OF_PREVIOUS_MATCH flag: '%s'", string(ItemFlavor_GetAsset( challenge )), statRef ) )
+						Assert( 0, format( "Challenge '%s' refers to stat that does not have the STORE_END_OF_PREVIOUS_MATCH flag: '%s'", string(ItemFlavor_GetAsset( challenge )), statRef ) )
 						continue
 					}
 
 					if ( (StatEntry_GetFlags( stat ) & eStatFlags.PERSISTENCE_WRITE_IMMEDIATELY) == 0 )
 					{
-						Assert( false, format( "Challenge '%s' refers to stat that does not have the PERSISTENCE_WRITE_IMMEDIATELY flag: '%s'", string(ItemFlavor_GetAsset( challenge )), statRef ) )
+						Assert( 0, format( "Challenge '%s' refers to stat that does not have the PERSISTENCE_WRITE_IMMEDIATELY flag: '%s'", string(ItemFlavor_GetAsset( challenge )), statRef ) )
 						continue
 					}
 
@@ -648,7 +662,7 @@ void function ShChallenges_LevelInit_PostStats()
                                                     
           
 				{
-					Assert( false, format( "Challenge '%s' has invalid goal val: %d", string(ItemFlavor_GetAsset( challenge )), Challenge_GetGoalVal( challenge, i ) ) )
+					Assert( 0, format( "Challenge '%s' has invalid goal val: %d", string(ItemFlavor_GetAsset( challenge )), Challenge_GetGoalVal( challenge, i ) ) )
 					continue
 				}
 			}
@@ -758,7 +772,7 @@ void function OnChallengeRegistered( ItemFlavor challenge )
 	                                                                                      
 	                                   
 	                                         
-	                                                                                  
+	                                                                                             
 	                                        
                   
 	                                                                       
@@ -789,17 +803,13 @@ void function OnChallengeRegistered( ItemFlavor challenge )
 
 	                                                                                   
 
-	                                                                               
+	                                                                                          
 	                                                          
 	 
 		                                                                                
-		                                                                                                                               
-		                                                                 
-		 
-			                                                                  
+		                                 
 			                                                
 		 
-	 
 
 	                           
  
@@ -1015,23 +1025,6 @@ void function UpdateLobbyChallengeMenu()
 	Hud_Show( challengeCatergorySelection )
 	Hud_Show( challengeCatergoryRight )
 	Hud_Show( challengesBlur )
-
-	                                                  
-	  
-	                                
-	                                                                                             
-	   
-	 	                                                  
-	 	 
-	 		                                                      
-	 		 
-	 			                        
-	 			     
-	 		 
-	 	 
-	  
-	                                                      
-          
 }
 
 bool function ShouldChallengeCountTowardsNewness( ItemFlavor challenge )
@@ -1529,6 +1522,12 @@ array<int> function GetChallengeCategoryIDArray( bool hideStories = false )
 {
 	array<int> categoryIDtoStringArray = []
 
+	                     
+                            
+                                     
+                                                                
+       
+
 	        
 	int eventIdx                       = eChallengeCategory.EVENT_00
 	foreach ( event in fileLevel.currentEvents )
@@ -1543,8 +1542,7 @@ array<int> function GetChallengeCategoryIDArray( bool hideStories = false )
 		int storyIdx                       = eChallengeCategory.STORY_00
 		foreach ( story in fileLevel.currentStories )
 		{
-			if( StoryEvent_GetShowInChallengeBoxBool( story ) )
-			{
+			if( StoryEvent_GetShowInChallengeBoxBool( story ) ){
 				Assert( IsStoryCategory( storyIdx ) )
 				categoryIDtoStringArray.append( storyIdx++ )
 			}
@@ -1578,6 +1576,10 @@ void function UpdateChallengeCategorySelection( var rui, bool longName = false, 
 	RuiSetInt( rui, "selectionID", newSelectionIndex )                         
 	RuiSetString( rui, "selectionText", category )                                            
 
+	#if CLIENT
+		RuiSetBool( rui, "isObserver", GetLocalClientPlayer().IsObserver() && GetLocalClientPlayer().GetTeam() == TEAM_SPECTATOR )
+	#endif
+
 	#if UI
 		int currCat = GetChallengeDisplayCategory( hideStories )
 		if ( IsEventCategory( currCat ) )
@@ -1585,7 +1587,7 @@ void function UpdateChallengeCategorySelection( var rui, bool longName = false, 
 			int timestamp                  = GetUnixTimestamp()
 			ItemFlavor ornull currentEvent = GetActiveBuffetEventForCategory( timestamp, currCat )
 
-			                                                                                                                                
+			                                                                                                                          
 			if ( currentEvent == null )
 			{
 				RuiSetGameTime( rui, "expireTime", RUI_BADGAMETIME )
@@ -1608,7 +1610,7 @@ void function UpdateChallengeCategorySelection( var rui, bool longName = false, 
 			int timestamp                  = GetUnixTimestamp()
 			ItemFlavor ornull currentEvent = GetActiveStoryEventForCategory( timestamp, currCat )
 
-			                                                                                                                                
+			                                                                                                                          
 			if ( currentEvent == null )
 			{
 				RuiSetGameTime( rui, "expireTime", RUI_BADGAMETIME )
@@ -1635,10 +1637,10 @@ void function UpdateChallengeCategorySelection( var rui, bool longName = false, 
 			switch( currCat )
 			{
                               
-				case eChallengeCategory.BEGINNER:
-					string beginnerChallengeCount = ( BeginnerChallenges_GetPlayerCurrentChallengeIndex( GetLocalClientPlayer() ) + 1 ) + " / " + BeginnerChallenges_GetBeginnerChallengesCount()
-					RuiSetString( rui, "beginnerChallengeCount", beginnerChallengeCount )
-					break
+                                     
+                                                                                                                                                                                  
+                                                                          
+          
          
 				case eChallengeCategory.DAILY:
 					int remainingDuration = GetPersistentVarAsInt( "dailyExpirationTime" ) - Daily_GetCurrentTime()
@@ -1903,12 +1905,11 @@ array<ChallengeGroupData> function GetPlayerChallengeGroupData( entity player )
 	array<ItemFlavor> challenges = []
 
                             
-		if( BeginnerChallenges_IsActive() )
-		{
-			challenges = GetAssignedChallengesByTimeSpan( player, eChallengeTimeSpanKind.BEGINNER )
-			if( challenges.len() > 0 )
-				groupData.append( CreateChallengeGroup( player, Localize( "#CHALLENGE_GROUP_BEGINNER" ), challenges, eChallengeTimeSpanKind.BEGINNER ) )
-		}
+                                     
+   
+                                                                                          
+                                                                                                                                           
+   
        
 
 	        
@@ -2122,7 +2123,7 @@ array<ItemFlavor> function GetPinnedChallenges()
 		        
 
                            
-	                                  
+                                   
                                 
 	                                                                                                         
 
@@ -2181,8 +2182,6 @@ array<ItemFlavor> function GetPinnedChallenges()
 			                                                
 			               
 		 
-
-		                                                                   
 
 		                                                                                                                    
 		                                                                                                                            
@@ -2400,46 +2399,35 @@ bool function Challenge_IsChallengesStateInititated( entity player )
                                                        
  
                            
-	                                      
-		      
+                                                        
+        
 
-	                                                       
-		      
+                                     
+        
 
-	                                    
-		      
+        
+                                      
+         
+       
 
-	       
-		                                    
-			      
-	      
+                       
+                       
+                                                                                                                   
+  
+                                                                                 
 
-	                      
-	                                                                          
-	                          
+                                                                  
 
-	                                                                         
-	 
-		                                                                
+                                                               
+                      
+   
+                                               
+                   
+   
+  
 
-		                                                             
-
-		                              
-		 
-			                                            
-			                
-		 
-		                                      
-		 
-			                                            
-			                
-		 
-	 
-
-	                                                         
-
-	                
-		                                                                                     
+                 
+                                                                                       
       
  
 
@@ -2477,13 +2465,22 @@ bool function Challenge_IsChallengesStateInititated( entity player )
 			                                                                                                       
 			                                                             
 
+			                                                                                           
+			                  
+			                                           
+			 
+				                                                  
+					            
+			 
+			                                                    
+
 			                      
-			                                  
+			                                                    
 			 
 				                                            
 				                
 			 
-			                                       
+			                                                           
 			 
 				                                            
 				                
@@ -2811,7 +2808,7 @@ bool function Challenge_IsChallengesStateInititated( entity player )
 
 		                                                       
 		 
-			                                                                                                                     
+			                                                                                                               
 			                                                                                                                                           
 			 
 				        
@@ -3751,7 +3748,7 @@ void function PrintChallengePersistence( entity player )
 #if DEV
 void function DEV_PrintAllChallenges( bool assigned = false, bool currentBPOnly = true )
 {
-	                                                                             
+	                                             
 	array<ItemFlavor> allChallenges = GetAllChallenges()
 	string challengeDump = ""
 
@@ -3911,28 +3908,14 @@ void function DEV_PrintAllChallenges( bool assigned = false, bool currentBPOnly 
         
 
 			array<string> statRefs = Challenge_GetStatRefs( challenge, i )
-			string _stat = statRefs[0]
-			if ( _stat.find( "SAID" ) != -1 )
-			{
-				int saidPos  = _stat.find( "SAID" )
-				string start = _stat.slice( 0, saidPos )
-				string end   = _stat.slice( saidPos + GUID_SAMPLE_STRING.len() )
-				_stat = start + "x" + statRefs.len() + end
-			}
+			string _stat = DEV_RegexpReplace( statRefs[0] , "SAID\\d+", "x" + statRefs.len() )
 			_stat = _stat.slice( 6 )                  
 
                     
 				if ( Challenge_IsEitherOr( challenge ) )
 				{
 					array<string> statRefsAlt = Challenge_GetStatRefs( challenge, i, true )
-					string _statAlt = statRefsAlt[0]
-					if ( _statAlt.find( "SAID" ) != -1 )
-					{
-						int saidPos  = _statAlt.find( "SAID" )
-						string start = _statAlt.slice( 0, saidPos )
-						string end   = _statAlt.slice( saidPos + GUID_SAMPLE_STRING.len() )
-						_statAlt = start + "x" + statRefsAlt.len() + end
-					}
+					string _statAlt = DEV_RegexpReplace( statRefsAlt[0] , "SAID\\d+", "x" + statRefsAlt.len() )
 					_statAlt = _statAlt.slice( 6 )                  
 
 					_stat = _stat + " OR " + _statAlt
@@ -4052,20 +4035,6 @@ array<ItemFlavor> function GetAssignedChallengesByTimeSpan( entity player, int t
 {
 	Assert( timeSpan >= 0 && timeSpan < eChallengeTimeSpanKind.len() )
 	Assert( (timeSpan == eChallengeTimeSpanKind.SEASON_WEEKLY) == (weekIndex > 0) )
-
-                           
-	if( timeSpan == eChallengeTimeSpanKind.BEGINNER )
-	{
-		                                                                                                                       
-		array<ItemFlavor> results
-		foreach( ItemFlavor challengeFlav in BeginnerChallenges_GetChallengeList() )
-		{
-			if( Challenge_IsAssigned( player, challengeFlav ) )
-				results.append( challengeFlav )
-		}
-		return results
-	}
-                                     
 
 	PlayerChallengesState pcs = GetPlayerChallengesState( player )
 
@@ -4590,7 +4559,7 @@ void function UpdateChallengeTags( var panel )
 
 	foreach(int gameMode, string name in GAME_MODE_NAME)
 	{
-		if(gameMode != eChallengeGameMode.ANY && gameMode != eChallengeGameMode.NON_MODE && gameMode != eChallengeGameMode.CONTROL && modeNumber < MaxShownModeTags)
+		if( (gameMode == eChallengeGameMode.BATTLE_ROYALE || gameMode == eChallengeGameMode.EXCEPT_BR ) && modeNumber < MaxShownModeTags )
 		{
 			RuiSetString( rui, "challengeModeTag" + modeNumber, name )
 			RuiSetFloat3( rui, "challengeModeTagColor" + modeNumber, GAME_MODE_TAG_COLOR[gameMode] )
@@ -5267,24 +5236,12 @@ void function MaybeAddChallengeClickEventToButton( var menu, var button, ItemFla
 			if ( !GRX_AreOffersReady() )
 				return
 
-			if ( fileLevel.lastRerollTime > UITime() - REROLL_MIN_RETRY_TIME_SEC )
-				return
-
-			fileLevel.lastRerollTime = UITime()
-
 			expect ItemFlavor( activeBattlePass )
 			ItemFlavor rerollFlav = BattlePass_GetRerollFlav( activeBattlePass )
 
 			if ( !IsDialog( GetActiveMenu() ) )
 			{
-				if ( !Reroll_ShouldDoGameModeSplit( challenge ) )
-				{
-					OpenPurchaseRerollDialog( challenge, button, menu )
-				}
-				else
-				{
-					OpenRerollDialog( challenge, button, menu )
-				}
+				OpenPurchaseRerollDialog( challenge, button, menu )
 			}
 		})
 
@@ -5433,7 +5390,7 @@ string function Challenge_GetDescription( ItemFlavor challenge, int tier, bool g
 			break
 
 		default:
-			Assert( false, "Invalid number of character flavors referened in challenge " + string(ItemFlavor_GetAsset( challenge )) + " tier " + tier )
+			Assert( 0, "Invalid number of character flavors referened in challenge " + string(ItemFlavor_GetAsset( challenge )) + " tier " + tier )
 			break
 	}
 
@@ -5490,10 +5447,6 @@ bool function DoesPlayerHaveChallenge( entity player, ItemFlavor flavor )
 	      
 
 	                                                                                                   
-                  
-	                                                    
-	                                                                                                            
-       
 	                                            
 	                        
 
@@ -5529,7 +5482,7 @@ bool function DoesPlayerHaveChallenge( entity player, ItemFlavor flavor )
 		 
 			                            
 
-			                                                            
+			                                                  
                     
 				                                                        
          
@@ -6303,7 +6256,6 @@ int function Challenge_GetCurrentTier( entity player, ItemFlavor flavor )
 	PlayerChallengesState pcs = GetPlayerChallengesState( player )
 	Assert( flavor in pcs.challengeStateMap, "Called Challenge_GetCurrentTier for challenge " + string(ItemFlavor_GetAsset( flavor )) + " but it was not assigned to the player " + string(player) )
 
-	                            
 	if ( !Challenge_IsAssigned( player, flavor ) )
 	{
 		                                                                                                                                                                                     
@@ -6590,7 +6542,6 @@ int function Challenge_GetProgressValue( entity player, ItemFlavor challengeFlav
 	PlayerChallengesState pcs = GetPlayerChallengesState( player )
 	Assert( challengeFlav in pcs.challengeStateMap, "Called Challenge_GetActiveTier for challenge " + string(ItemFlavor_GetAsset( challengeFlav )) + " but it was not assigned to the player " + player )
 
-	                            
 	if ( !Challenge_IsAssigned( player, challengeFlav ) )
 	{
 		                                                                                                                                                                                     

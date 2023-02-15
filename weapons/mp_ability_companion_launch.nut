@@ -18,11 +18,6 @@ global function CodeCallback_OnJetDriveWindowBegin
 global function CodeCallback_OnJetDriveDuckCancel
 global function CodeCallback_OnJetDrivePlayerStuck
 
-#if CLIENT
-global function ServerToClient_JetDriveDuckCancel
-global function ServerToClient_JetDriveWindowBegin
-#endif
-
                                                 
 
         
@@ -139,9 +134,6 @@ void function Companion_Launch_Init()
 	RegisterSignal( "JetDrive_EndPrelaunch" )
 	RegisterSignal( "Vantage_RemoveAllTacMods" )
 
-	Remote_RegisterClientFunction( "ServerToClient_JetDriveDuckCancel" )
-	Remote_RegisterClientFunction( "ServerToClient_JetDriveWindowBegin" )
-
 	AddCallback_OnPassiveChanged( ePassives.PAS_VANTAGE, OnPassiveChangedVantageCompanionLaunch )
 }
 
@@ -166,6 +158,11 @@ void function OnPassiveChangedVantageCompanionLaunch( entity player, int passive
 	else if ( nowHas && !didHave )
 	{
 		#if SERVER
+			                                                        
+			                       
+			 
+				                                         
+			 
 			                                                                                   
 		#endif
 	}
@@ -179,6 +176,12 @@ bool function OnWeaponAttemptOffhandSwitch_companion_launch( entity weapon )
 
 	                                             
 	  	            
+
+	if ( player.IsInputCommandHeld( IN_PING ) || player.IsInputCommandPressed( IN_PING ) )
+	{
+		                                                   
+		return false
+	}
 
 	if ( VantageCompanion_GetPlayerLaunchState( player ) != ePlayerLaunchState.NONE )
 		return false
@@ -199,6 +202,7 @@ void function OnWeaponActivate_companion_launch( entity weapon )
 	entity player = weapon.GetWeaponOwner()
 	if ( !IsValid( player ) )
 		return
+		
 	VantageCompanion_SetPlayerLaunchState( player, ePlayerLaunchState.NONE )
 	RemoveAllTacMods( weapon )
 
@@ -210,6 +214,20 @@ void function OnWeaponActivate_companion_launch( entity weapon )
 		if ( InPrediction() )
 	#endif          
 			weapon.AddMod( FROM_PERCHED_MOD )
+
+	#if CLIENT
+		entity localClient = GetLocalClientPlayer()
+		entity localView = GetLocalViewPlayer()
+		if ( player == GetLocalViewPlayer() )
+		{
+			entity companionEnt = VantageCompanion_GetEnt( player )
+
+			if ( IsValid( companionEnt ) )
+			{
+				EmitSoundOnEntity( companionEnt, JET_DRIVE_DEPLOY_ECHO_VOICE )
+			}
+		}
+	#endif
 	}
 
 	thread CheckForHoldInput_Thread( player, weapon )
@@ -227,10 +245,17 @@ var function OnWeaponPrimaryAttack_companion_launch( entity weapon, WeaponPrimar
 	int currAmmo = tacWeapon.GetWeaponPrimaryClipCount()
 	int ammoUsed = -1
 
+	if ( player.IsInputCommandHeld( IN_PING ) || player.IsInputCommandPressed( IN_PING ) )
+	{
+		                                                
+		return 0
+	}
+
 	int companionState = player.GetPlayerNetInt( VANTAGE_COMPANION_STATE_NETINT )
 	if ( JET_DRIVE_DEBUG_DRAW_FLOW_PRINTS )
 		printt( "VANTAGE TAC: PRIMATK" )
 
+<<<<<<< HEAD
 #if CLIENT
 	if ( companionState == eCompanionState.PERCHED )
 	{
@@ -248,7 +273,10 @@ var function OnWeaponPrimaryAttack_companion_launch( entity weapon, WeaponPrimar
 	}
 #endif
 
+	if ( (player in file.isButtonHeld) && file.isButtonHeld[player] == true )                                     
+=======
 	if ( file.isButtonHeld[player] == true )                                     
+>>>>>>> parent of 044c095 (game update)
 	{
 		if ( currAmmo >= ammoReq )
 		{
@@ -276,7 +304,7 @@ var function OnWeaponPrimaryAttack_companion_launch( entity weapon, WeaponPrimar
 			entity mainHandWeapon = player.GetActiveWeapon( eActiveInventorySlot.mainHand )
 			if ( IsValid( mainHandWeapon) )
 			{
-				if ( !IsBitFlagSet( mainHandWeapon.GetWeaponTypeFlags(), WPT_ULTIMATE ) )
+				if ( ( mainHandWeapon.GetWeaponTypeFlags() & WPT_ULTIMATE) == 0 )
 					file.cachedLastWeaponName[player] <- mainHandWeapon.GetWeaponClassName()
 				
 				                                                                                                                                                       
@@ -294,7 +322,6 @@ var function OnWeaponPrimaryAttack_companion_launch( entity weapon, WeaponPrimar
 			#endif
 			weapon.DoDryfire()
 			                                                            
-			RemoveAllTacMods( weapon )
 			weapon.AddMod( FROM_PERCHED_MOD )
 			ammoUsed = 0                              
 		}
@@ -304,7 +331,7 @@ var function OnWeaponPrimaryAttack_companion_launch( entity weapon, WeaponPrimar
 		if ( JET_DRIVE_DEBUG_DRAW_FLOW_PRINTS )
 			printt( "--VANTAGE TAC: PRIMATK REG CACHE ORDER" )
 
-
+		                                                                                                                              
 		#if CLIENT
 		if ( InPrediction() && IsFirstTimePredicted() )
 		{
@@ -403,12 +430,14 @@ var function OnWeaponPrimaryAttackAnimEvent_companion_launch( entity weapon, Wea
 			 
 			    
 			 
+				                                       
+					                                         
+
 				                          
 				                               
 
 				                
 
-				                                                
 				                                                                                       
 
 				                                          
@@ -424,9 +453,10 @@ var function OnWeaponPrimaryAttackAnimEvent_companion_launch( entity weapon, Wea
 	}
 	else
 	{
-
 		if ( JET_DRIVE_DEBUG_DRAW_FLOW_PRINTS )
 			printt( "--VANTAGE TAC: ATK ANIM REG SEND ORDER" )
+
+		                                                                                                                              
 
 		if ( player in file.cachedOrderPos )
 		{
@@ -511,6 +541,9 @@ void function RemoveAllTacMods( entity weapon, bool instant = true )
 	{
 		weapon.Signal( "Vantage_RemoveAllTacMods" )
 
+		if ( JET_DRIVE_DEBUG_DRAW_FLOW_PRINTS )
+					printt( "--VANTAGE TAC: RemoveAllTacMods" )
+
 		weapon.RemoveMod( IS_LAUNCHING_MOD )
 		weapon.RemoveMod( FAILED_LOS_MOD )
 		if ( instant )
@@ -585,6 +618,11 @@ void function CheckForHoldInput_Thread( entity player, entity weapon )
 
 	while ( player.IsInputCommandHeld( IN_OFFHAND1 ) )
 	{
+		if ( player.IsInputCommandHeld( IN_PING ) || player.IsInputCommandPressed( IN_PING ) )
+		{
+			                                           
+			return
+		}
 		WaitFrame()
 	}
 }
@@ -758,7 +796,6 @@ void function PreLaunch_Thread( entity player )
 
 	                                                           
 	                                                                      
-	                                                                    
 	                                           
 	                                                                  
 	                       
@@ -969,23 +1006,13 @@ void function CodeCallback_OnJetDriveDuckCancel( entity player )
 	#endif
 
 	#if SERVER
-		                                                                         
 		                                                                             
+		                                                
+
+		                                                                                             
 		                                                
 	#endif
 }
-
-#if CLIENT
-void function ServerToClient_JetDriveDuckCancel( )
-{
-	if ( GetLocalViewPlayer() != GetLocalClientPlayer() )                 
-	{
-		                                                     
-		EmitSoundOnEntity( GetLocalViewPlayer(), JET_DRIVE_LAUNCH_CANCEL_1P )
-		StopSoundOnEntity( GetLocalViewPlayer(), JET_DRIVE_LAUNCH_1P )
-	}
-}
-#endif
 
 void function CodeCallback_OnJetDrivePlayerStuck( entity player, float fracCompleted )
 {
@@ -1029,7 +1056,7 @@ void function CodeCallback_OnJetDriveWindowBegin( entity player, float windowTim
 {
 	#if SERVER
 		                                                                          
-		                                                                          
+		                                                                                          
 	#endif
 
 	#if CLIENT
@@ -1044,17 +1071,6 @@ void function CodeCallback_OnJetDriveWindowBegin( entity player, float windowTim
 		}
 	#endif
 }
-
-#if CLIENT
-void function ServerToClient_JetDriveWindowBegin( )
-{
-	if ( GetLocalViewPlayer() != GetLocalClientPlayer() )                 
-	{
-		EmitSoundOnEntity( GetLocalViewPlayer(), JET_DRIVE_LAUNCH_END_1P )
-	}
-}
-#endif
-
 
 #if CLIENT
 void function JetDriveClientThread( entity player )
@@ -1110,9 +1126,6 @@ void function OnClientAnimEvent_companion_launch( entity weapon, string name )
 
 void function PlayJetDriveDoubleJumpWindowSound(  entity player, float timeout )
 {
-	if ( !IsValid(player) )
-		return
-
 	if ( InPrediction() && IsFirstTimePredicted() )
 	{
 		EmitSoundOnEntity(player, JET_DRIVE_JUMP_WINDOW_SOUND_1P )
@@ -1120,8 +1133,7 @@ void function PlayJetDriveDoubleJumpWindowSound(  entity player, float timeout )
 		OnThreadEnd(
 			function() : ( player)
 			{
-				if ( IsValid(player) )
-					StopSoundOnEntity( player, JET_DRIVE_JUMP_WINDOW_SOUND_1P )
+				StopSoundOnEntity( player, JET_DRIVE_JUMP_WINDOW_SOUND_1P )
 			}
 		)
 		while ( Time() < timeout )

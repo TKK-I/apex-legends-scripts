@@ -35,6 +35,8 @@ global function CharacterSkin_HasMenuCustomLighting
 global function CharacterSkin_GetCharacterSelectLabelColorOverride
 global function CharacterSkin_HasStoryBlurb
 global function CharacterSkin_GetStoryBlurbBodyText
+global function HoloSpray_HasStoryBlurb
+global function HoloSpray_GetStoryBlurbBodyText
 global function CharacterSkin_GetSubQuality
 global function CharacterKillQuip_GetCharacterFlavor
 global function CharacterEmoteIcon_GetCharacterFlavor
@@ -48,7 +50,10 @@ global function CharacterIntroQuip_GetSortOrdinal
 #if SERVER || CLIENT
 global function CharacterSkin_Apply
 global function CharacterSkin_WaitForAndApplyFromLoadout
+#endif
 
+#if CLIENT
+global function CharacterSkin_CheckBloodhoundRavenSkin
 #endif
 
 #if CLIENT || UI
@@ -147,9 +152,9 @@ void function OnItemFlavorRegistered_Character( ItemFlavor characterClass )
 			#endif          
 				return !IsLobby()
 		}
-		entry.associatedCharacterOrNull = characterClass
-		entry.networkTo                 = eLoadoutNetworking.PLAYER_GLOBAL
-		entry.networkVarName            = "CharacterSkin"
+		entry.isActiveConditions = { [Loadout_Character()] = { [characterClass] = true, }, }
+		entry.networkTo = eLoadoutNetworking.PLAYER_GLOBAL
+		entry.networkVarName = "CharacterSkin"
 		#if CLIENT
 			if ( IsLobby() )
 			{
@@ -173,18 +178,18 @@ void function OnItemFlavorRegistered_Character( ItemFlavor characterClass )
 			entry.pdefSectionKey = "character " + ItemFlavor_GetGUIDString( characterClass )
 			entry.DEV_name       = ItemFlavor_GetCharacterRef( characterClass ) + " Execution"
 		#endif
-		entry.defaultItemFlavor         = executionsList[0]
-		entry.validItemFlavorList       = executionsList
-		entry.isSlotLocked              = bool function( EHI playerEHI ) {
+		entry.defaultItemFlavor    = executionsList[0]
+		entry.validItemFlavorList  = executionsList
+		entry.isSlotLocked         = bool function( EHI playerEHI ) {
 			return !IsLobby()
 		}
-		entry.isItemFlavorUnlocked      = (bool function( EHI playerEHI, ItemFlavor execution, bool shouldIgnoreGRX = false, bool shouldIgnoreOtherSlots = false ) {
+		entry.isItemFlavorUnlocked = (bool function( EHI playerEHI, ItemFlavor execution, bool shouldIgnoreGRX = false, bool shouldIgnoreOtherSlots = false ) {
 			if( GetGlobalSettingsBool( ItemFlavor_GetAsset( execution ) , "isNotEquippable" ) )
 				return false
 			return IsItemFlavorGRXUnlockedForLoadoutSlot( playerEHI, execution, shouldIgnoreGRX, shouldIgnoreOtherSlots )
 		})
-		entry.associatedCharacterOrNull = characterClass
-		entry.networkTo                 = eLoadoutNetworking.PLAYER_EXCLUSIVE
+		entry.isActiveConditions = { [Loadout_Character()] = { [characterClass] = true, }, }
+		entry.networkTo = eLoadoutNetworking.PLAYER_EXCLUSIVE
 		fileLevel.loadoutCharacterExecutionSlotMap[characterClass] <- entry
 	}
 
@@ -207,7 +212,7 @@ void function OnItemFlavorRegistered_Character( ItemFlavor characterClass )
 		entry.isSlotLocked              = bool function( EHI playerEHI ) {
 			return !IsLobby()
 		}
-		entry.associatedCharacterOrNull = characterClass
+		entry.isActiveConditions        = { [Loadout_Character()] = { [characterClass] = true, }, }
 		entry.networkTo                 = eLoadoutNetworking.PLAYER_GLOBAL
 		entry.networkVarName            = "IntroQuip"
 		fileLevel.loadoutCharacterIntroQuipSlotMap[characterClass] <- entry
@@ -226,14 +231,14 @@ void function OnItemFlavorRegistered_Character( ItemFlavor characterClass )
 			entry.pdefSectionKey = "character " + ItemFlavor_GetGUIDString( characterClass )
 			entry.DEV_name       = ItemFlavor_GetCharacterRef( characterClass ) + " Kill Quip"
 		#endif
-		entry.defaultItemFlavor         = quipList[0]
-		entry.validItemFlavorList       = quipList
-		entry.isSlotLocked              = bool function( EHI playerEHI ) {
+		entry.defaultItemFlavor   = quipList[0]
+		entry.validItemFlavorList = quipList
+		entry.isSlotLocked        = bool function( EHI playerEHI ) {
 			return !IsLobby()
 		}
-		entry.associatedCharacterOrNull = characterClass
-		entry.networkTo                 = eLoadoutNetworking.PLAYER_GLOBAL
-		entry.networkVarName            = "KillQuip"
+		entry.isActiveConditions  = { [Loadout_Character()] = { [characterClass] = true, }, }
+		entry.networkTo           = eLoadoutNetworking.PLAYER_GLOBAL
+		entry.networkVarName      = "KillQuip"
 		fileLevel.loadoutCharacterKillQuipSlotMap[characterClass] <- entry
 
 		allEmotes.extend( quipList )
@@ -437,17 +442,6 @@ void function CharacterSkin_Apply( entity ent, ItemFlavor skin )
 
 	ent.SetSkin( skinIndex )
 	ent.SetCamo( camoIndex )
-
-	if ( bodyModel == $"mdl/humans/class/medium/pilot_medium_bloodhound.rmdl" )
-	{
-		foreach ( entity child in ent.GetChildren() )
-		{
-			if ( child.GetModelName() == BLOODHOUND_BIRD_MDL )
-			{
-				child.SetSkin ( skinIndex == 22 ? 2 : 0 )
-			}
-		}
-	}
 
 	#if SERVER
 		                     
@@ -839,6 +833,36 @@ bool function CharacterSkin_ShouldHideIfLocked( ItemFlavor flavor )
 	return GetGlobalSettingsBool( ItemFlavor_GetAsset( flavor ), "shouldHideIfLocked" )
 }
 #endif
+
+<<<<<<< HEAD
+bool function HoloSpray_HasStoryBlurb( ItemFlavor flavor )
+{
+	Assert( ItemFlavor_GetType( flavor ) == eItemType.emote_icon )
+
+	return ( HoloSpray_GetStoryBlurbBodyText( flavor ) != "" )
+}
+
+
+string function HoloSpray_GetStoryBlurbBodyText( ItemFlavor flavor )
+{
+	Assert( ItemFlavor_GetType( flavor ) == eItemType.emote_icon )
+
+	return GetGlobalSettingsString( ItemFlavor_GetAsset( flavor ), "customSkinMenuBlurb" )
+}
+=======
+#if CLIENT
+void function CharacterSkin_CheckBloodhoundRavenSkin ( entity child, entity model )
+{
+	if ( IsValid( model ) )
+	{
+		if ( child.GetModelName() == BLOODHOUND_BIRD_MDL && ( IsLobby() || IsEmoteEnabledForPodiumScreen() || CharacterSelect_MenuIsOpen()) )
+		{
+			child.SetSkin ( model.GetSkin() == 22 ? 2 : 0 )
+		}
+	}
+}
+#endif
+>>>>>>> parent of 044c095 (game update)
 
 #if DEV && CLIENT
 void function DEV_TestCharacterSkinData()

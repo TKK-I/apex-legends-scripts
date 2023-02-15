@@ -22,7 +22,6 @@ const asset PLAYER_WIND_FX 	= $"P_wind_cruising"
 global const string JUMPTOWER_PING_NAME = "jump_tower"
 
 
-
 #if SERVER
 	                                                        
 	                                                      
@@ -532,6 +531,15 @@ SkyDiveTrailPackage function GetSkyDiveTrailPackageForPlayerWithOverrides( entit
 	                                               
 		                                                                                       
 
+                              
+                                                                              
+  
+                                                                                        
+                                             
+                                                            
+  
+     
+       
 	                                                          
 
 	                                                                                 
@@ -668,8 +676,7 @@ SkyDiveTrailPackage function GetSkyDiveTrailPackageForPlayerWithOverrides( entit
 				    
 				 
 					                    
-					                            
-						                                                                                 
+					                                                                                 
 				 
 
 				                                                            
@@ -688,17 +695,18 @@ SkyDiveTrailPackage function GetSkyDiveTrailPackageForPlayerWithOverrides( entit
 
 				                              
 
-				                                                                                    
-				                                          
-				 
-					                                                                               
-					                                                                                 
-				 
-				    
-				 
-					                                                                               
-					                                                                                 
-				 
+
+					                                                                                    
+					                                          
+					 
+						                                                                               
+						                                                                                 
+					 
+					    
+					 
+						                                                                               
+						                                                                                 
+					 
 
 				                                       
 				                                   
@@ -1797,7 +1805,7 @@ void function PlayerFreefallActiveChanged( entity player, bool isFreefallActive 
 		file.skydiveRui = null
 	}
 
-	                                                                                                
+	                                                                                      
 	UpdateValkFlightRui( player, isFreefallActive )                   
 
 	                               

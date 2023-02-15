@@ -78,7 +78,7 @@ bool function HasRoundScoreLimitBeenReached()
 
 	int roundLimit = GetRoundScoreLimit_FromPlaylist()
 
-	if ( roundLimit == 0 )
+	if ( !roundLimit )
 		return false
 
 	int militiaScore = GameRules_GetTeamScore2( TEAM_MILITIA )

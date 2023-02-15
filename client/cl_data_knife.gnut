@@ -496,7 +496,7 @@ void function DataKnife_TopoPositionThink( entity knife, DataKnifeTopoInfo topoI
 	float lastFrameTime = -1
 	float targetMoveDuration = -1
 
-	while ( true )
+	while ( 1 )
 	{
 		                             
 		vector attachOrg = knife.GetAttachmentOrigin( topoInfo.attachID )

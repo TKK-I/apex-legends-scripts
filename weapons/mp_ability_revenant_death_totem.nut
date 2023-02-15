@@ -3,6 +3,7 @@ global function DeathTotem_PlayerCanRecall
 global function OnWeaponAttemptOffhandSwitch_ability_revenant_death_totem
 global function OnWeaponActivate_ability_revenant_death_totem
 global function OnWeaponDeactivate_ability_revenant_death_totem
+global function DoesPlayerHaveDeathProtection
                          
 global function OnWeaponPrimaryAttack_ability_revenant_death_totem
 const string ABILITY_USED_MOD = "ability_used_mod"
@@ -170,10 +171,6 @@ void function MpAbilityRevenantDeathTotem_Init()
 		AddCreateCallback( "prop_script", DeathTotem_OnTotemCreated )
 	#endif         
 
-	#if SERVER
-		                                                                             
-	#endif
-
 	file.deathTotemBuffDuration = GetCurrentPlaylistVarFloat( "revenant_totem_buff_duration", DEATH_TOTEM_EFFECT_DURATION_DEFAULT )
 	file.showEndOfBuffFX = GetCurrentPlaylistVarBool( "revenant_totem_buff_use_ending_fx", true )
 }
@@ -181,6 +178,25 @@ void function MpAbilityRevenantDeathTotem_Init()
 
 bool function OnWeaponAttemptOffhandSwitch_ability_revenant_death_totem( entity weapon )
 {
+	entity player = weapon.GetWeaponOwner()
+
+	if ( player.IsTraversing() )
+		return false
+
+	if ( player.ContextAction_IsActive() )                                                                                                     
+		return false
+
+	if ( player.IsPhaseShifted() )
+		return false
+
+                     
+	if ( HoverVehicle_IsPlayerInAnyVehicle( player ) && !HoverVehicle_PlayerIsDriving( player ) )
+		return true
+
+	if ( EntIsHoverVehicle( player.GetGroundEntity() ) )
+		return false
+                           
+
 	return true
 }
 
@@ -257,10 +273,10 @@ void function DeathTotem_DisableWallClimbWhileDeployingTotem( entity ownerPlayer
 
 			if ( serverOrPredicted )
 			{
-				if ( StatusEffect_HasSeverity( ownerPlayer, eStatusEffect.disable_wall_run_and_double_jump ) )
+				if( StatusEffect_GetSeverity( ownerPlayer, eStatusEffect.disable_wall_run_and_double_jump ) > 0 )
 					StatusEffect_Stop( ownerPlayer, wallClimbID )
 
-				if ( StatusEffect_HasSeverity( ownerPlayer, eStatusEffect.disable_automantle_hang ) )
+				if( StatusEffect_GetSeverity( ownerPlayer, eStatusEffect.disable_automantle_hang ) > 0 )
 					StatusEffect_Stop( ownerPlayer, wallHangID )
 			}
 		}
@@ -479,19 +495,6 @@ void function DeathTotem_DisableWallClimbWhileDeployingTotem( entity ownerPlayer
 	 
  
 
-                                                                 
- 
-	                        
-		      
-
-	                                                                       
-	                                                                                                      
-	 
-		                                                        
-		                         
-	 
- 
-
                                                                 
  
 	                                                 
@@ -684,7 +687,7 @@ void function DeathTotem_DisableWallClimbWhileDeployingTotem( entity ownerPlayer
 	 
 
 	                                                              
-	                                                                    
+	                                                        
 	 
 		                                                                                                 
 			                                                                
@@ -770,6 +773,9 @@ void function DeathTotem_DisableWallClimbWhileDeployingTotem( entity ownerPlayer
 
 	                                
 		                         
+
+	                                   
+		                       
 
 	                                           
 
@@ -1436,7 +1442,7 @@ bool function DeathTotem_CanUseTotem( entity player, entity ent, int useFlags )
 		entity activeWeapon = activeWeapons[0]
 		if ( IsValid( activeWeapon ) )
 		{
-			if ( IsBitFlagSet( activeWeapon.GetWeaponTypeFlags(), WPT_CONSUMABLE ) )
+			if ( activeWeapon.GetWeaponTypeFlags() & WPT_CONSUMABLE )
 				return false
 		}
 	}
@@ -1447,7 +1453,7 @@ bool function DeathTotem_CanUseTotem( entity player, entity ent, int useFlags )
 
 void function DeathTotem_OnTotemUse( entity totemProxy, entity player, int useInputFlags )
 {
-	if ( IsBitFlagSet( useInputFlags, USE_INPUT_DEFAULT ) )
+	if ( useInputFlags & USE_INPUT_DEFAULT )
 	{
 		bool canPlayerRecall = DeathTotem_PlayerCanRecall( player )
 
@@ -1534,12 +1540,8 @@ void function DeathTotem_OnTotemDestroyed( entity totem )
                                                                                                                                                      
  
 
-                                              
+                                  
  
-                                                                                    
-                                                               
-                                                                                                                                          
-                                                                                                                                                     
                                                                 
  
       
@@ -1563,14 +1565,14 @@ void function DeathTotem_StartVisualEffect( entity ent, int statusEffect, bool a
 	file.deathProtectionStatusRui = CreateFullscreenRui( $"ui/death_protection_status.rpak" )
 
                         
-                                                                   
+                                                                       
+   
+                       
+   
+                                                                               
    
                             
    
-                                                                             
-     
-                              
-     
       
    
                                                                                            
@@ -1607,7 +1609,7 @@ void function RefreshTeamDeathTotemHUD()
 	array<entity> teammates = GetPlayerArrayOfTeam( localViewPlayer.GetTeam() )
 	foreach ( ent in teammates )
 	{
-		if ( !StatusEffect_HasSeverity( ent, eStatusEffect.death_totem_visual_effect ) )
+		if ( StatusEffect_GetSeverity( ent, eStatusEffect.death_totem_visual_effect ) == 0.0 )
 			continue
 
 		if ( ent == localViewPlayer )
@@ -1775,10 +1777,7 @@ void function OnWeaponDeactivate_ability_revenant_death_totem( entity weapon )
       
 	#if SERVER
 		                       
-		 
 			                                                             
-			                         
-		 
 	#endif
 }
 
@@ -1790,6 +1789,10 @@ void function OnWeaponDeactivate_ability_revenant_death_totem( entity weapon )
  
 #endif
 
+bool function DoesPlayerHaveDeathProtection( entity player )
+{
+	return StatusEffect_HasSeverity( player, eStatusEffect.death_totem_visual_effect )
+}
 
                                                                                                             
 DeathTotemPlacementInfo function CalculateDeathTotemPosition( entity weaponOwner, entity totemProxy )

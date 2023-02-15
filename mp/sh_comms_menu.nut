@@ -21,7 +21,6 @@ global function CommsMenu_ExecuteSelection
 global function CommsMenu_GetCurrentCommsMenu
 global function CommsMenu_GetMenuRui
 global function CommsMenu_RefreshData
-global function CommsMenu_SetCurrentChoiceForCrafting
                         
                                            
       
@@ -99,17 +98,13 @@ global enum eChatPage
 
                 
 	CRAFTING,
-                                  
+                   
 	               
         
       
                       
            
       
-
-                
-              
-       
 
 	_count
 }
@@ -233,7 +228,7 @@ void function ChatMenuButton_Down( entity player )
 		if ( ms < ePlayerMatchState.SKYDIVE_PRELAUNCH )
 			return
 	}
-	else if ( FiringRange_IsPlayerInFinale() )
+	else if ( IsEventFinale() )
 	{
 		return
 	}
@@ -338,7 +333,6 @@ void function CommsMenu_OpenMenuForPingReply( entity player, entity wp )
 
 void function CommsMenu_OpenMenuTo( entity player, int chatPage, int commsMenuStyle, bool debounce = true )
 {
-	printf("CRAFTING TEST TEST TEST")
 	                             
 	CommsMenu_Shutdown( true )
 
@@ -447,9 +441,6 @@ enum eOptionType
                       
            
       
-                
-              
-       
 	_count
 }
 
@@ -566,16 +557,6 @@ CommsMenuOptionData function MakeOption_CraftItem( int itemIndex )
  
       
 
-               
-                                                                    
- 
-                       
-                                         
-                             
-          
- 
-      
-
 array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
 {
 	array<CommsMenuOptionData> results
@@ -647,29 +628,46 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
 
 		case eChatPage.BLEEDING_OUT:
 		{
-			results.append( MakeOption_CommsAction( eCommsAction.QUICKCHAT_BLEEDOUT_HELP ) )
-                                
-				results.append( MakeOption_Ping( ePingType.I_GO ) )
-         
-			results.append( MakeOption_Ping( ePingType.ENEMY_GENERAL ) )
-			                                                                                      
                                
-                                  
+<<<<<<< HEAD
+                                                                               
      
+                                                                                     
+                                                                 
                                                                         
                                                                   
                                                                
      
+                                                                                    
+     
+                                                            
+                                                                        
+                                                                  
+                                                                                     
+                                                                 
+     
+        
+				results.append( MakeOption_CommsAction( eCommsAction.QUICKCHAT_BLEEDOUT_HELP ) )
+				results.append( MakeOption_Ping( ePingType.I_GO ) )
+				results.append( MakeOption_Ping( ePingType.ENEMY_GENERAL ) )
+=======
+                                                                       
+                                                                
+                                                             
                                                                                          
+>>>>>>> parent of 044c095 (game update)
          
-
 		}
 			break
 
 		case eChatPage.PING_MAIN_1:
 		{
                                
-                                                                             
+<<<<<<< HEAD
+                                                                               
+=======
+                                                                          
+>>>>>>> parent of 044c095 (game update)
      
                                                              
                                                                       
@@ -680,7 +678,11 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
                                                                     
                                                                    
      
-                                                                                                                                                                                                               
+<<<<<<< HEAD
+                                                                                                                                                                                                                 
+=======
+                                                                                                                                                                                                            
+>>>>>>> parent of 044c095 (game update)
      
                                                                  
                                                                   
@@ -691,7 +693,8 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
                                                                   
                                                                     
      
-                                                                                                                                                                                                               
+<<<<<<< HEAD
+                                                                                                                                                                                                                 
      
                                                                  
                                                                   
@@ -702,7 +705,21 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
                                                                   
                                                                     
      
-                                                                                                                                                                                                     
+                                                                                                                                                                                                                 
+     
+                                                                
+                                                                    
+                                                                 
+                                                                 
+                                                                  
+                                                                  
+                                                                  
+                                                                    
+     
+                                                                                                                                                                                                       
+=======
+                                                                                                                                                                                                  
+>>>>>>> parent of 044c095 (game update)
      
                                                              
                                                                      
@@ -728,14 +745,29 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
 
 		case eChatPage.PING_SKYDIVE:
 		{
-			results.append( MakeOption_Ping( ePingType.ENEMY_GENERAL ) )
-			results.append( MakeOption_Ping( ePingType.I_GO ) )
                                
-                                  
+<<<<<<< HEAD
+                                                                               
      
+                                                                 
+                                                        
                                                               
                                                             
      
+                                                                                    
+     
+                                                            
+                                                              
+                                                        
+                                                                 
+     
+        
+				results.append( MakeOption_Ping( ePingType.ENEMY_GENERAL ) )
+				results.append( MakeOption_Ping( ePingType.I_GO ) )
+=======
+                                                             
+                                                           
+>>>>>>> parent of 044c095 (game update)
          
 		}
 			break
@@ -815,7 +847,7 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
 			int counter = 0
 			foreach( data in Crafting_GetCraftingDataArray() )
 			{
-				                                  
+				                   
 				                                                                  
 				 
 					                                         
@@ -828,6 +860,16 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
 				for ( int i = 0; i < data.numSlots; i++ )
 				{
                         
+<<<<<<< HEAD
+					if( data.category == "banner" )
+					{
+						if ( Perk_CanBuyExpiredBanners( player ) || Perks_DoesPlayerHavePerk( player, ePerkIndex.BANNER_CRAFTING ) )
+						{
+							results.append( MakeOption_CraftItem( counter ) )
+						}
+					}
+					else
+=======
                                     
       
                                                                                                                  
@@ -838,12 +880,13 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
                                                
       
                                                                                                                                                          
-                                                             
+                                                                                       
        
                                                         
        
       
          
+>>>>>>> parent of 044c095 (game update)
            
 					results.append( MakeOption_CraftItem( counter ) )
 					counter++
@@ -851,7 +894,7 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
 			}
 			break
 		}
-		                                  
+		                   
 		                              
 		 
 			                
@@ -876,17 +919,6 @@ array<CommsMenuOptionData> function BuildMenuOptions( int chatPage )
                                    
     
                                                      
-    
-   
-        
-                 
-                              
-   
-                                                                           
-
-                                                            
-    
-                                                      
     
    
         
@@ -999,16 +1031,16 @@ string[2] function GetPromptsForMenuOption( int index )
 					}
 				}
                        
-                                                  
-     
-                               
-                                                            
-     
-                                                                 
-     
-                                            
-                                                                                                          
-     
+				else if ( validItems[0] == "expired_banners" )
+				{
+					promptTexts[0] = Localize( "#BANNER" )
+					promptTexts[1] = Localize( "#REPLICATER_CRAFT_BANNER_DESCRIPTION" )
+				}
+				else if( validItems[0] == "next_care_package_drop_location" )
+				{
+					promptTexts[0] = "Future Care Packages"
+					promptTexts[1] = "Reveals the drop locations of the next available round of care packages on the map"
+				}
           
 				else
 				{
@@ -1037,16 +1069,12 @@ string[2] function GetPromptsForMenuOption( int index )
                                                
                       
         
-                 
-                                
-                                                                                 
-                                                                                
-        
 	}
 
 	return promptTexts
 }
 
+<<<<<<< HEAD
 LootData function GetLootdataForMenuOption( int index )
 {
 	LootData toReturn
@@ -1069,7 +1097,7 @@ LootData function GetLootdataForMenuOption( int index )
 			if ( validItems[0] != "evo_points" )
 			{
                    
-                                                                                                    
+				if ( validItems[0] != "expired_banners" &&  validItems[0] != "next_care_package_drop_location" )
        
 				 {
 
@@ -1083,6 +1111,8 @@ LootData function GetLootdataForMenuOption( int index )
 	return toReturn
 }
 
+=======
+>>>>>>> parent of 044c095 (game update)
 bool function ShouldPopulateRuiForIndex( int index )
 {
 	CommsMenuOptionData op = s_currentMenuOptions[index]
@@ -1123,13 +1153,6 @@ var function GetRuiForMenuOption( var mainRui, int index )
 			                                       
 			asset weaponAsset = $"ui/comms_menu_icon_weapon_inspect.rpak"
 			return RuiCreateNested( mainRui, "iconHandle" + index, weaponAsset )
-
-                 
-                                
-                                                                   
-                                                                            
-        
-
 	}
 
 	return RuiCreateNested( mainRui, "iconHandle" + index, $"ui/comms_menu_icon_default.rpak" )
@@ -1204,13 +1227,6 @@ asset function GetIconForMenuOption( int index )
                              
    
                                                
-   
-        
-                 
-                                
-   
-                                                                       
-              
    
         
 	}
@@ -1475,7 +1491,7 @@ void function SetRuiOptionsForChatPage( var rui, int chatPage )
 			labelText = "#CRAFTING_WORKBENCH"
 			promptText = "#CRAFTING_USE"
 
-			                                  
+			                   
 			                                                                                       
 			 
 				                                                           
@@ -1489,7 +1505,7 @@ void function SetRuiOptionsForChatPage( var rui, int chatPage )
 			outerCircleColor = <25, 0, 15>
 			break
 
-			                                  
+			                   
 		                              
 			                                                                                                                                           
 			                                                                           
@@ -1517,16 +1533,6 @@ void function SetRuiOptionsForChatPage( var rui, int chatPage )
                              
                               
         
-        
-
-               
-                              
-                                 
-                                
-                        
-                                             
-        
-      
 	}
 
 	RuiSetString( rui, "labelText", labelText )
@@ -1554,16 +1560,8 @@ void function ShowCommsMenu( int chatPage )
 
 	int optionCount = options.len()
 
-	if ( optionCount <= 0 )
-	{
-		Warning( "Tried to open a comms menu with no options." )
-		return
-	}
-
 	for ( int idx = 0; idx < MAX_COMMS_MENU_OPTIONS; ++idx )
 	{
-
-		                               
 		RuiDestroyNestedIfAlive( rui, "iconHandle" + idx )
 
 		if ( idx >= s_currentMenuOptions.len() )
@@ -1596,7 +1594,7 @@ void function ShowCommsMenu( int chatPage )
 				countText = "%$models/weapons/attachments/infinity_symbol%"
 
                   
-				if ( StatusEffect_HasSeverity( GetLocalViewPlayer(), eStatusEffect.healing_denied ) )
+				if ( StatusEffect_GetSeverity( GetLocalViewPlayer(), eStatusEffect.healing_denied ) )
 				{
 					bool isBlocked = Consumable_IsShieldItem( options[idx].healType )
 					RuiSetBool( nestedRui, "isBlocked", isBlocked )
@@ -1641,22 +1639,13 @@ void function ShowCommsMenu( int chatPage )
 			int index = options[idx].craftingIndex
 			Crafting_PopulateItemRuiAtIndex( nestedRui, index )
 		}
-		                                  
+		                   
 		                                                
 		 
 			                                      
 			                                                   
 		 
 		        
-        
-                 
-                                                
-   
-                                                                                                   
-                                                 
-                                    
-                                             
-   
         
 	}
 
@@ -1741,8 +1730,11 @@ bool function CommsMenu_HandleKeyInput( int key )
 {
 	Assert( IsCommsMenuActive() )
 
-	if ( IsSpectating() )
+<<<<<<< HEAD
+	if ( GetLocalClientPlayer() != GetLocalViewPlayer() )
 		return false
+=======
+>>>>>>> parent of 044c095 (game update)
 
 	if ( PingSecondPageIsEnabled() )
 	{
@@ -1781,7 +1773,7 @@ bool function CommsMenu_HandleKeyInput( int key )
 				}
 			}
 		}
-		                                  
+		                   
 		                                                                                       
 		 
 			                                                           
@@ -1977,14 +1969,6 @@ void function ResetViewInput()
 
 	ResetMouseInput()
 }
-void function CommsMenu_SetCurrentChoiceForCrafting( int choice )
-{
-	if ( s_currentChatPage == eChatPage.CRAFTING )
-	{
-		SetCurrentChoice( choice )
-	}
-}
-
 void function SetCurrentChoice( int choice )
 {
 	if ( file.menuRui != null )
@@ -2046,6 +2030,7 @@ void function SetCurrentChoice( int choice )
 			}
 		}
 	}
+<<<<<<< HEAD
 
 	RuiDestroyNestedIfAlive( file.menuRui, "compatibleWeaponsHandle" )
 	var nestedCompatibleWeaponsRui = RuiCreateNested( file.menuRui, "compatibleWeaponsHandle", $"ui/loot_pickup_tag_text_crafting.rpak" )
@@ -2104,7 +2089,7 @@ void function SetCurrentChoice( int choice )
 					if ( exceptionIndex < attachmentTagData.exceptionToTheRuleForThisWeaponClass.len() - 1 && tagIndex < MAX_ATTACHMENT_TAGS - 1 )
 						exceptionName += ","
 
-					                                                                                                                                                         
+					                                                                                                                                                   
 					                                                                                                                                                              
 					                      
 					  	            
@@ -2119,8 +2104,9 @@ void function SetCurrentChoice( int choice )
 	}
 
 
+=======
+>>>>>>> parent of 044c095 (game update)
 }
-
 bool function IsValidChoice( int choice )
 {
 	                                                               
@@ -2169,9 +2155,12 @@ bool function CommsMenu_HandleMoveInputControllerOnly( float x, float y )
 
 bool function CommsMenu_HandleViewInput( float x, float y )
 {
-	if ( IsSpectating() )
+<<<<<<< HEAD
+	if ( GetLocalClientPlayer() != GetLocalViewPlayer() )
 		return false
 
+=======
+>>>>>>> parent of 044c095 (game update)
 	                                              
 	{
 		float lockoutTime            = IsControllerModeActive() ? 0.0 : 0.01
@@ -2335,14 +2324,6 @@ bool function MakeCommMenuSelection( int choice, int wheelInputType )
                              
    
                                                                                   
-                                                                      
-              
-   
-       
-                
-                                
-   
-                                                                                      
                                                                       
               
    
@@ -2633,8 +2614,9 @@ bool function IsCommsMenuActive()
 
 bool function CommsMenu_CanUseMenu( entity player, int menuType = eChatPage.DEFAULT)
 {
+<<<<<<< HEAD
                  
-	if ( menuType == eChatPage.CRAFTING && IsSpectating() )
+	if ( menuType == eChatPage.CRAFTING && GetLocalClientPlayer() != GetLocalViewPlayer() )
 	{
 		                      
 	}
@@ -2643,10 +2625,13 @@ bool function CommsMenu_CanUseMenu( entity player, int menuType = eChatPage.DEFA
 	{
 		if ( IsWatchingReplay() )
 			return false
+=======
+	if ( IsWatchingReplay() )
+		return false
+>>>>>>> parent of 044c095 (game update)
 
-		if ( !IsAlive( player ) )
-			return false
-	}
+	if ( !IsAlive( player ) )
+		return false
 
 	if ( IsScoreboardShown() )
 		return false
@@ -2678,7 +2663,7 @@ bool function CommsMenu_CanUseMenu( entity player, int menuType = eChatPage.DEFA
 	if ( IsPlayerInCryptoDroneCameraView( player ) )
 		return false
 
-	if ( FiringRange_IsPlayerInFinale() )
+	if ( IsEventFinale() )
 		return false
 
 	return true
@@ -2734,7 +2719,7 @@ var function CommsMenu_GetMenuRui()
 			      
 
 		        
-			                                                                 
+			                                                             
 			      
 	 
 

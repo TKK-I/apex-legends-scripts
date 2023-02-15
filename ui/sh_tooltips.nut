@@ -114,9 +114,9 @@ void function Sh_InitToolTips()
 	file.tooltipInfos[ style ].hasActionText = true
 
                        
-	style = eTooltipStyle.ARENAS_SHOP_WEAPON
-	file.tooltipInfos[ style ].ruiAsset = $"ui/arenas_weapon_tooltip.rpak"
-	file.tooltipInfos[ style ].hasActionText = false
+                                         
+                                                                       
+                                                 
       
 
 	style = eTooltipStyle.CLUB_MEMBER
@@ -251,7 +251,7 @@ void function OnToolTipMenuThink( var menu )
 {
 	ToolTipMenuData menuData = file.menusWithToolTips[string(menu)]
 
-	if ( IsBitFlagSet( menuData.toolTipFlags, eToolTipFlag.HIDDEN ) )
+	if ( menuData.toolTipFlags & eToolTipFlag.HIDDEN )
 	{
 		s_hideElement = null
 		HideTooltipRui();
@@ -363,7 +363,7 @@ void function UpdateToolTipElement( var toolTipElement, var focusElement )
 		UpdateTooltipRui( ruiAsset )
 		ShowTooltipRui()
 
-		if ( IsBitFlagSet( dt.tooltipFlags, eToolTipFlag.CLIENT_UPDATE ) )
+		if ( dt.tooltipFlags & eToolTipFlag.CLIENT_UPDATE )
 		{
 			if ( IsFullyConnected() )
 				RunClientScript( "UpdateToolTipElement", toolTipElement, focusElement )
@@ -371,7 +371,7 @@ void function UpdateToolTipElement( var toolTipElement, var focusElement )
 		}
 	#endif
 
-	if ( IsBitFlagSet( dt.tooltipFlags, eToolTipFlag.HIDDEN ) )
+	if ( dt.tooltipFlags & eToolTipFlag.HIDDEN )
 	{
 		HideTooltipRui()
 		return
@@ -392,7 +392,7 @@ void function UpdateToolTipElement( var toolTipElement, var focusElement )
 	}
 
 	string commsPrompt = dt.commsPromptDefault
-	if ( IsBitFlagSet( dt.tooltipFlags, eToolTipFlag.EMPTY_SLOT ) || ( dt.commsAction != eCommsAction.BLANK ) && commsPrompt == "" )
+	if ( (dt.tooltipFlags & eToolTipFlag.EMPTY_SLOT) || (dt.commsAction != eCommsAction.BLANK) && commsPrompt == "" )
 		commsPrompt = IsControllerModeActive() ? "#PING_PROMPT_REQUEST_GAMEPAD" : "#PING_PROMPT_REQUEST"
 
 	var rui = GetTooltipRui()
@@ -444,7 +444,7 @@ void function UpdateToolTipElement( var toolTipElement, var focusElement )
 
 	if ( dt.tooltipStyle == eTooltipStyle.STORE_CONFIRM )
 	{
-		RuiSetFloat3( rui, "descTextAltColor", dt.storeTooltipData.tooltipAltDescColor )
+		RuiSetFloat3( rui, "descTextAltColor", dt.storeTooltipData.tooltipAltDescColor)
 	}
 }
 

@@ -334,6 +334,18 @@ var function OnWeaponPrimaryAttack_weapon_mounted_turret_placeable( entity weapo
 
 bool function OnWeaponAttemptOffhandSwitch_weapon_mounted_turret_placeable( entity weapon )
 {
+	int ammoReq = weapon.GetAmmoPerShot()
+	int currAmmo = weapon.GetWeaponPrimaryClipCount()
+	if ( currAmmo < ammoReq )
+		return false
+
+	entity player = weapon.GetWeaponOwner()
+	if ( player.IsPhaseShifted() )
+		return false
+
+	if ( player.IsZiplining() )
+		return false
+
 	return true
 }
 
@@ -656,7 +668,7 @@ bool function OnWeaponAttemptOffhandSwitch_weapon_mounted_turret_placeable( enti
 		                                       
 			        
 
-		                                                                                                                                                             
+		                                                                 
 			        
 
 		                                                               
@@ -916,9 +928,9 @@ bool function OnWeaponAttemptOffhandSwitch_weapon_mounted_turret_placeable( enti
 	                                                              
 
 	                                    
-	                                                                                         
+	                                                           
 	 
-		                                                
+		                                 
 		 
 			                                                                               
 
@@ -938,7 +950,7 @@ bool function OnWeaponAttemptOffhandSwitch_weapon_mounted_turret_placeable( enti
 			 
 		 
 
-		                                            
+		                             
 		 
 			                                                                           
 			                                                         
@@ -972,7 +984,7 @@ bool function OnWeaponAttemptOffhandSwitch_weapon_mounted_turret_placeable( enti
 	                                        
 		                                                                    
 
-	                                                                                                                       
+	                                                                                                 
 	 
 		                                                                                                                                   
 			                                                                
@@ -1310,7 +1322,7 @@ bool function IsTurretEnabled( entity turret )
 		                                     
 			                                     
 		    
-			                                                                                    
+			                                                                                
 			            
 	#endif
 

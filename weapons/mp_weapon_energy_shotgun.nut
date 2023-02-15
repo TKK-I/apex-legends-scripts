@@ -16,6 +16,8 @@ struct
 
 void function OnWeaponActivate_weapon_energy_shotgun( entity weapon )
 {
+	OnWeaponActivate_ReactiveKillEffects( weapon )
+
 		if ( weapon.HasMod( KINETIC_LOADER_HOPUP ) )
 		{
 #if SERVER
@@ -51,7 +53,7 @@ void function OnWeaponActivate_weapon_energy_shotgun( entity weapon )
 
 void function OnWeaponDeactivate_weapon_energy_shotgun( entity weapon )
 {
-
+	OnWeaponDeactivate_ReactiveKillEffects( weapon )
 }
 
 var function OnWeaponPrimaryAttack_weapon_energy_shotgun( entity weapon, WeaponPrimaryAttackParams attackParams)

@@ -34,7 +34,6 @@ global function RespawnBeacon_ShouldUseBlockReload
                                        
                               
                                                                 
-                                                   
                    
                                         
       
@@ -79,7 +78,7 @@ global function UpdateRespawnChamberRuis
 
 global const string RESPAWN_CHAMBER_TARGETNAME = "respawn_chamber"
                    
-                                                                  
+global const string RESPAWN_CHAMBER_SCRIPTNAME = "respawn_chamber"
       
 
 global const string RESPAWN_DNA_TARGETNAME = "respawn_dna"
@@ -118,7 +117,7 @@ const string ANIM_FLYIN_MOVE = "dropship_classic_mp_flyin"
 const float MOBILE_RESPAWN_BEACON_ICON_FADE_DIST_ZERO = 0.0
 global const string MOBILE_RESPAWN_BEACON_TARGETNAME = "respawn_chamber_mobile"
                    
-                                                                               
+global const string MOBILE_RESPAWN_BEACON_SCRIPTNAME = "respawn_chamber_mobile"
       
 
                          
@@ -223,7 +222,6 @@ void function Sh_RespawnBeacon_Init()
 		                                                             
 		                             
 		                                                
-		                                                 
 
 		                                          
 
@@ -273,7 +271,7 @@ void function Sh_RespawnBeacon_Init()
 		                                                          
 		 
 			                                                  
-			                                                                          
+			                                                            
 			                                            
 		 
 
@@ -533,7 +531,7 @@ void function RespawnEntitySpawned( entity ent )
 	                                                                                    
 	                                                           
                     
-                                                           
+	                                                          
        
 	                                      
 
@@ -606,9 +604,13 @@ void function RespawnEntitySpawned( entity ent )
 
 	                                                                                                 
 
-	                                                                                    
+<<<<<<< HEAD
+	                                               
 
 	                                                                                                                            
+=======
+	                                                                                                        
+>>>>>>> parent of 044c095 (game update)
  
 
                                                                                                                                                                                                                                                            
@@ -772,13 +774,24 @@ void function RespawnEntitySpawned( entity ent )
 	                                                                       
  
 
-                                                                              
+                                                             
  
 	                            
 
 	                              
                     
-                                                     
+<<<<<<< HEAD
+	                                                    
+=======
+                                                                                                                      
+
+              
+                       
+    
+                         
+                  
+     
+>>>>>>> parent of 044c095 (game update)
        
 	             
 
@@ -789,48 +802,54 @@ void function RespawnEntitySpawned( entity ent )
 		 
 			                      
 		 
+<<<<<<< HEAD
 
                      
-                                                                        
-                                                                                    
-                                            
-   
-                              
+		                                                                      
+		                                                                                  
+		                                          
+		 
+			                           
 
-                                                         
-                                           
-    
-                                                                          
-     
-                                                                 
-           
-     
-    
-   
+			                                                      
+			                                        
+			 
+				                                                                       
+				 
+					                                                            
+					      
+				 
+			 
+		 
         
+=======
+>>>>>>> parent of 044c095 (game update)
 	 
 
 	             
  
 
+<<<<<<< HEAD
                    
                                                                          
  
-                              
-                                                                                                                     
+	                             
+	                                                                                                                    
 
-             
-                      
-   
-                        
-                 
-   
-  
+	            
+		                    
+		 
+			                     
+				             
+		 
+	 
 
-              
+	             
  
       
 
+=======
+>>>>>>> parent of 044c095 (game update)
                                                                                        
  
 	                                                                                                                                                             
@@ -871,7 +890,7 @@ bool function IsNotBusy( entity player, entity ent, int useFlags )
 	if ( ent.e.isBusy )
 		return false
 
-	if ( StatusEffect_HasSeverity( player, eStatusEffect.interrupted ) )
+	if ( StatusEffect_GetSeverity( player, eStatusEffect.interrupted ) > 0.0 )
 		return false
 
 	return true
@@ -982,8 +1001,8 @@ void function MinimapPackage_RespawnChamber( entity ent, var rui )
 string function RespawnChamber_TextOverride( entity ent )
 {
                     
-                                     
-                                   
+	if ( ent.GetScriptPropFlags() == 1 )
+		ent.e.munitionsDropSpawned = true
        
 
 	if ( file.mobileRespawnSpawnInProgress )
@@ -997,9 +1016,9 @@ string function RespawnChamber_TextOverride( entity ent )
 			!HasTeammatesToRespawn( team ) )
 	{
                      
-                                                    
-                                
-      
+		if ( ShouldDoMunitionsDropFromEnt( ent, player ) )
+			return "#BEACON_PASSIVE_HINT"
+		else
         
 			return "#HINT_RESPAWN_NEED"
 
@@ -1029,21 +1048,21 @@ float function GetRespawnStationUseTime( entity ent )
 void function RespawnChamberOnUse( entity pickup, entity player, int pickupFlags )
 {
                                                
-                                                            
-  
-                        
-        
-  
+	if ( GetCurrentPlaylistVarBool( "is_loadsa_mode", false ) )
+	{
+		                      
+		return
+	}
       
 
-	if ( !IsBitFlagSet( pickupFlags, USE_INPUT_LONG ) )
+	if ( !(pickupFlags & USE_INPUT_LONG) )
 		return
                    
-                                                                                                                                                                
-        
-     
-	if ( !HasTeammatesToRespawn( player.GetTeam() ) )
+	if ( CountTeammatesWaitingToBeRespawned( player.GetTeam() ) == 0 && !ShouldDoMunitionsDropFromEnt( pickup, player ) )                                          
 		return
+     
+                                                  
+        
       
 
 	float time = Time()
@@ -1101,9 +1120,9 @@ void function RespawnChamberOnUse_Common( entity pickup, entity player, float st
 		settings.icon = $""
 
                      
-                                                                                                                      
-                                        
-      
+		if ( CountTeammatesWaitingToBeRespawned( player.GetTeam() ) == 0 && ShouldDoMunitionsDropFromEnt( pickup, player ) )
+			settings.hint = "#MUNITIONS_SPAWNING"
+		else
         
 			settings.hint = "#HINT_RESPAWNING"
 		settings.icon = RESPAWN_BEACON_ICON
@@ -1206,8 +1225,8 @@ void function DisplayRuiForRespawnChamber_Internal( var rui, asset icon, float s
                                                                      
  
                     
-                                                        
-                                         
+		                                                      
+			                                      
        
 
 	                                                     
@@ -1476,7 +1495,7 @@ void function ServerCallback_RespawnDNAHint()
 	                                                  
 
 	                                                                                                                                                            
-	                                                                         
+	                                                               
 	                                                             
 
                
@@ -1530,15 +1549,21 @@ void function ServerCallback_RespawnDNAHint()
 
                                                                           
  
-	                             
-	                      
-		      
-
                     
-                                                                                                            
-        
+<<<<<<< HEAD
+	                                                                                                           
+		      
+=======
+                                                                                  
+>>>>>>> parent of 044c095 (game update)
        
 
+	                             
+	                      
+                     
+                                  
+        
+		      
 
 	            
 	           
@@ -1550,8 +1575,8 @@ void function ServerCallback_RespawnDNAHint()
 	 
 
                    
-                        
-                          
+	      	                
+	                         
       
 
 	                        
@@ -2211,7 +2236,7 @@ void function ServerCallback_RespawnDNAHint()
 	                                  
  
 
-                                                                                    
+                                                                      
  
 	                                                               
 	 
@@ -2280,6 +2305,14 @@ void function TryPingRespawnItem( entity player )
 		vector org = viewPlayer.GetOrigin()
 		Remote_ServerCallFunction( "ClientCallback_PingNearestRespawn", org )
 	}
+
+                    
+		if ( !PlayerIsMarkedAsCanBeRespawned( player ) )
+		{
+			vector org = viewPlayer.GetOrigin()
+			Remote_ServerCallFunction( "ClientCallback_PingNearestRespawn", org )
+		}
+       
 }
 #endif
 
@@ -2305,6 +2338,12 @@ void function TryPingRespawnItem( entity player )
 	 
 		                                       
 	 
+                    
+		                                                                                                                                       
+		 
+			                                            
+		 
+       
  
 
                                                                                                      
@@ -2473,8 +2512,8 @@ void function ServerCallback_RespawnBeaconStop()
 
 	entity player = GetLocalViewPlayer()
                    
-                                    
-                                   
+	if ( CanDoMunitionsDrop( player ) )
+		OnEndPlacingCarePackage( player )
       
 }
 #endif          

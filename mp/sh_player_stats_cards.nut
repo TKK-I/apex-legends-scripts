@@ -18,29 +18,24 @@ global function StatsCard_OnRankedPeriodRegistered
 global function StatsCard_GetNameOfGameMode
 global function StatsCard_GetApprovedModesCount
 global function StatsCard_IsSeasonOrRankedRefValidForMode
-                       
+                     
 global function StatsCard_OnArenasRankedPeriodRegistered
       
 #endif      
-               
+           
              
                             
                    
-                     
+                 
 
 global function StatCard_GetAvailableSeasons
 global function StatCard_GetAvailableRankedPeriods
 global function StatCard_GetAvailableSeasonsAndRankedPeriods
-global function StatCard_ClearAvailableSeasonsCache
-global function StatCard_ClearAvailableRankedPeriodsCache
-global function StatCard_ClearAvailableSeasonsAndRankedPeriodsCache
 
 global enum eStatCardGameMode
 {
 	BATTLE_ROYALE,
-                        
 	ARENAS,
-       
 	_count
 	UNKNOWN,
 }
@@ -134,10 +129,6 @@ struct
 
 	table<string, int> GUIDToSeasonNumber
 	int currentGUIDToSeasonNumber = 1
-
-	table< int, array< ItemFlavor > > availableSeasonsCache
-	table< int, array< ItemFlavor > > availableRankedPeriodsCache
-	table< int, array< ItemFlavor > > availableSeasonsAndRankedPeriods
 } file
 
 const string NO_DATA_REF = "000"
@@ -156,22 +147,30 @@ const STAT_TOOLTIP_COLUMNB_SEASON = "seasonColumnB"
 const int MAX_STATS_HEADER = 3
 const int MAX_STATS_BODY = 12
 
+const bool STAT_CARD_V2_DEBUG = false
+
 #if UI
 void function ShPlayerStatCards_Init()
 {
 	for( int i = 0; i < eStatCardGameMode._count; i++ )
 	{
-		printf( "StatCardV2Debug: Initializing stat card table for game mode %i", i )
+		#if STAT_CARD_V2_DEBUG
+			                                                                             
+		#endif
 		table<int, StatCardStruct > statCards
 		for ( int y = 0; y < eStatCardType._count; y++ )
 		{
-			printf( "StatCardV2Debug: Initializing stat card table for game mode %i, card type %i", i, y )
+			#if STAT_CARD_V2_DEBUG
+				                                                                                              
+			#endif
 			StatCardStruct emptyStatCard
 			statCards[y] <- emptyStatCard
 		}
 		file.statCards[i] <- statCards
 	}
-	printf( "StatCardV2Debug: file.statCards intialized with %i tables", file.statCards.len() )
+	#if STAT_CARD_V2_DEBUG
+		                                                                                           
+	#endif
 
 	var dataTable = GetDataTable( $"datatable/player_stat_cards.rpak" )
 	int numRows = GetDataTableRowCount( dataTable )
@@ -184,16 +183,16 @@ void function ShPlayerStatCards_Init()
 			case "BATTLEROYALE":
 				entry.gameMode = eStatCardGameMode.BATTLE_ROYALE
 				break
-                          
-				case "ARENAS":
-					entry.gameMode = eStatCardGameMode.ARENAS
-					break
-         
+			case "ARENAS":
+				entry.gameMode = eStatCardGameMode.ARENAS
+				break
 			default:
 				entry.gameMode = eStatCardGameMode.UNKNOWN
 				break
 		}
-		                                                                                      
+		#if STAT_CARD_V2_DEBUG
+			                                                                                    
+		#endif
 
 		string cardTypeString = GetDataTableString( dataTable, i, GetDataTableColumnByName( dataTable, "cardType" ) ).toupper()
 		switch( cardTypeString.toupper() )
@@ -211,7 +210,9 @@ void function ShPlayerStatCards_Init()
 				entry.cardType = eStatCardType.UNKNOWN
 				break
 		}
-		                                                                                      
+		#if STAT_CARD_V2_DEBUG
+			                                                                                    
+		#endif
 
 		string cardSectionString = GetDataTableString( dataTable, i, GetDataTableColumnByName( dataTable, "section" ) ).toupper()
 		switch ( cardSectionString.toupper() )
@@ -229,7 +230,9 @@ void function ShPlayerStatCards_Init()
 				entry.section = eStatCardSection.BODY
 				break
 		}
-		                                                                                        
+		#if STAT_CARD_V2_DEBUG
+			                                                                                      
+		#endif
 
 		entry.calcMethod = SetStatCalcMethodFromDataTable( GetDataTableString( dataTable, i, GetDataTableColumnByName( dataTable, "calcMethod" ) ) )
 		entry.label = GetDataTableString( dataTable, i, GetDataTableColumnByName( dataTable, "label" ) )
@@ -252,7 +255,9 @@ void function ShPlayerStatCards_Init()
 			entry.statRef = NO_DATA_REF
 		}
 
-		                                                                                                                                                                                                         
+		#if STAT_CARD_V2_DEBUG
+			                                                                                                                                                                                                       
+		#endif
 
 		switch ( entry.section )
 		{
@@ -309,7 +314,9 @@ int function SetStatCalcMethodFromDataTable( string method )
 #if UI
 void function StatCard_UpdateAndDisplayStats( var panel, entity player, int gameMode = eStatCardGameMode.BATTLE_ROYALE, string seasonRef = "" )
 {
-	printf( "StatCardV2Debug: Constructing Stats Displays for %s, seasonRef %s", GetGameModeName( gameMode ), seasonRef )
+	#if STAT_CARD_V2_DEBUG
+		                                                                                                                     
+	#endif
 
 	StatCard_ClearToolTipStringTables()
 
@@ -388,7 +395,9 @@ void function StatCard_ConstructCareerStatsDisplay( var panel, entity player, in
 
 	int bodyEntries = statEntries.len()
 	int openBodyFields = MAX_STATS_BODY - statEntries.len()
-	printf( "StatCardV2Debug: %s(): %i/%i body stats to display (%i empty fields)", FUNC_NAME(), bodyEntries, MAX_STATS_BODY, openBodyFields )
+	#if STAT_CARD_V2_DEBUG
+		                                                                                                                                          
+	#endif
 	              
 	for ( int i; i < (bodyEntries+openBodyFields); i++ )
 	{
@@ -648,7 +657,7 @@ void function StatCard_ConstructRankedBadges( var panel, entity player, string r
 
 	ItemFlavor rankedPeriodItemFlavor = GetItemFlavorByGUID( ConvertItemFlavorGUIDStringToGUID( rankedPeriodRef ) )
 	int itemType = ItemFlavor_GetType( rankedPeriodItemFlavor )
-                        
+                      
 		Assert( itemType == eItemType.calevent_rankedperiod || itemType == eItemType.calevent_arenas_ranked_period, "tried to custruct ranked badges with non ranked ref" )
        
 
@@ -674,7 +683,7 @@ void function StatsCard_ConstructRankBadgesForSingleBadgeShared( var rui, entity
 
 	if ( itemType == eItemType.calevent_rankedperiod )
 		Ranked_ConstructSingleRankBadgeForStatsCard( badgeRui, player, rankedPeriodRef )
-                        
+                      
 		else
 			ArenasRanked_ConstructSingleRankBadgeForStatsCard( badgeRui, player, rankedPeriodRef )
        
@@ -695,7 +704,7 @@ void function StatsCard_ConstructRankBadgesForDoubleBadgeShared( var rui, entity
 
 	if ( itemType == eItemType.calevent_rankedperiod )
 		Ranked_ConstructDoubleRankBadgeForStatsCard( firstSplitBadgeRui, secondSplitBadgeRui, player, rankedPeriodRef )
-                        
+                      
 		else
 			ArenasRanked_ConstructDoubleRankBadgeForStatsCard( firstSplitBadgeRui, secondSplitBadgeRui, player, rankedPeriodRef )
        
@@ -774,7 +783,9 @@ float function GetDataForStat_Float( entity player, string statRef, string mathR
 	}
 	else
 	{
-		printf( "StatCardV2Debug: Collecting Data for %s", statRef )
+		#if STAT_CARD_V2_DEBUG
+			                                                            
+		#endif
 
 		StatTemplate stat = GetStatTemplateFromString( statRef )
 
@@ -937,7 +948,6 @@ StatTemplate function GetStatTemplateFromString( string statRef )
 		case "CAREER_STATS.rankedperiod_win_streak_longest":
 			return CAREER_STATS.rankedperiod_win_streak_longest
 
-                         
 		                         
 		case "CAREER_STATS.modes_games_played":
 			return CAREER_STATS.modes_games_played
@@ -1015,8 +1025,6 @@ StatTemplate function GetStatTemplateFromString( string statRef )
 			return CAREER_STATS.arenas_rankedperiod_win_streak_longest_new
 		case "CAREER_STATS.arenas_rankedperiod_revived_ally":
 			return CAREER_STATS.arenas_rankedperiod_revived_ally
-        
-
 
 		default:
 			Assert( false, format( "Stat Card attempted to look up an unknown StatTemplate: %s", statRef) )
@@ -1138,58 +1146,64 @@ float function CalculateStat( entity player, StatTemplate stat1, StatTemplate st
 	unreachable
 }
 
+<<<<<<< HEAD
 void function StatCard_ClearAvailableSeasonsCache( int gameMode )
 {
 	if ( gameMode in file.availableSeasonsCache )
 		delete file.availableSeasonsCache[gameMode]
 }
 
-array< ItemFlavor > function StatCard_GetAvailableSeasons( int gameMode )
+array<ItemFlavor> function StatCard_GetAvailableSeasons( int gameMode )
 {
 	if ( gameMode in file.availableSeasonsCache )
 		return clone file.availableSeasonsCache[gameMode]
 
+	array<ItemFlavor> seasons = clone GetAllSeasonFlavors()
+=======
+array< ItemFlavor > function StatCard_GetAvailableSeasons( int gameMode )
+{
 	array< ItemFlavor > seasons = GetAllSeasonFlavors()
+>>>>>>> parent of 044c095 (game update)
 
 	foreach( ItemFlavor season in seasons )
 	{
 		if ( !CalEvent_IsRevealed( season, GetUnixTimestamp() ) )
 			seasons.removebyvalue( season )
 
-                         
-			                                                           
-			if ( gameMode == eStatCardGameMode.ARENAS )
-			{
-				ItemFlavor season09CalEvent = GetItemFlavorByAsset( $"settings/itemflav/calevent/season09.rpak" )
-				int season09StartTime       = CalEvent_GetStartUnixTime( season09CalEvent )
-				int startTime               = CalEvent_GetStartUnixTime( season )
-				if ( startTime < season09StartTime )
-					seasons.removebyvalue( season )
-			}
-        
+		                                                           
+		if ( gameMode == eStatCardGameMode.ARENAS )
+		{
+			ItemFlavor season09CalEvent = GetItemFlavorByAsset( $"settings/itemflav/calevent/season09.rpak" )
+			int season09StartTime       = CalEvent_GetStartUnixTime( season09CalEvent )
+			int startTime               = CalEvent_GetStartUnixTime( season )
+			if ( startTime < season09StartTime )
+				seasons.removebyvalue( season )
+
+			ItemFlavor season15CalEvent = GetItemFlavorByAsset( $"settings/itemflav/calevent/season15.rpak" )                                         
+			int season15EndTime = CalEvent_GetFinishUnixTime( season15CalEvent )
+			if ( startTime >= season15EndTime )
+				seasons.removebyvalue( season )
+		}
 	}
 
-	file.availableSeasonsCache[gameMode] <- seasons
 	return seasons
-}
-
-void function StatCard_ClearAvailableRankedPeriodsCache( int gameMode )
-{
-	if ( gameMode in file.availableRankedPeriodsCache )
-		delete file.availableRankedPeriodsCache[gameMode]
 }
 
 array<ItemFlavor> function StatCard_GetAvailableRankedPeriods( int gameMode )
 {
+<<<<<<< HEAD
 	if ( gameMode in file.availableRankedPeriodsCache )
 		return clone file.availableRankedPeriodsCache[gameMode]
 
+                      
+=======
                         
+>>>>>>> parent of 044c095 (game update)
 		ItemFlavor season09CalEvent = GetItemFlavorByAsset( $"settings/itemflav/calevent/season09.rpak" )
        
 
 	array<ItemFlavor> brRankedPeriods = GetAllRankedPeriodFlavorsByType( eItemType.calevent_rankedperiod )
-                        
+                      
 		array<ItemFlavor> arenaRankedPeriods = GetAllRankedPeriodFlavorsByType( eItemType.calevent_arenas_ranked_period )
        
 
@@ -1200,7 +1214,7 @@ array<ItemFlavor> function StatCard_GetAvailableRankedPeriods( int gameMode )
 	}
 
 	array<ItemFlavor> rankedPeriods = []
-                        
+                      
 		if ( gameMode == eStatCardGameMode.ARENAS )
 		{
 			rankedPeriods.extend( arenaRankedPeriods )
@@ -1215,7 +1229,7 @@ array<ItemFlavor> function StatCard_GetAvailableRankedPeriods( int gameMode )
 
 	rankedPeriods.sort( SortSeasonAndRankedStats )
 
-                        
+                      
 		if ( gameMode == eStatCardGameMode.ARENAS )
 		{
 			int season09Idx = rankedPeriods.find( season09CalEvent )
@@ -1225,28 +1239,19 @@ array<ItemFlavor> function StatCard_GetAvailableRankedPeriods( int gameMode )
 			}
 		}
        
-
-	file.availableRankedPeriodsCache[gameMode] <- rankedPeriods
 	return rankedPeriods
-}
-
-void function StatCard_ClearAvailableSeasonsAndRankedPeriodsCache( int gameMode )
-{
-	if ( gameMode in file.availableSeasonsAndRankedPeriods )
-		delete file.availableSeasonsAndRankedPeriods[gameMode]
 }
 
 array< ItemFlavor > function StatCard_GetAvailableSeasonsAndRankedPeriods( int gameMode )
 {
-	if ( gameMode in file.availableSeasonsAndRankedPeriods )
-		return clone file.availableSeasonsAndRankedPeriods[gameMode]
-
 	                                                     
 	array< ItemFlavor > seasons = clone GetAllItemFlavorsOfType( eItemType.calevent_season )                                                                                                                             
-                        
+                      
 		ItemFlavor season09CalEvent = GetItemFlavorByAsset( $"settings/itemflav/calevent/season09.rpak" )
 		int season09StartTime       = CalEvent_GetStartUnixTime( season09CalEvent )
        
+
+	ItemFlavor season15CalEvent = GetItemFlavorByAsset( $"settings/itemflav/calevent/season15.rpak" )                                         
 
 	foreach( ItemFlavor season in seasons )
 	{
@@ -1257,12 +1262,17 @@ array< ItemFlavor > function StatCard_GetAvailableSeasonsAndRankedPeriods( int g
 		string guid = ItemFlavor_GetGUIDString( season )
 		if ( guid == "SAID01769158912" )
 			seasons.removebyvalue( season )
+
+		int startTime       = CalEvent_GetStartUnixTime( season )
+		int season15EndTime = CalEvent_GetFinishUnixTime( season15CalEvent )
+		if ( gameMode == eStatCardGameMode.ARENAS && startTime >= season15EndTime )
+			seasons.removebyvalue( season )
 	}
 
 	array< ItemFlavor > rankedPeriods
 	rankedPeriods.extend( GetAllRankedPeriodFlavorsByType( eItemType.calevent_rankedperiod ) )
 
-                        
+                      
 		array< ItemFlavor > arenaRankedPeriods
 		arenaRankedPeriods.extend( GetAllRankedPeriodFlavorsByType( eItemType.calevent_arenas_ranked_period ) )
        
@@ -1275,7 +1285,7 @@ array< ItemFlavor > function StatCard_GetAvailableSeasonsAndRankedPeriods( int g
 
 	array< ItemFlavor > seasonsAndPeriods = []
 	seasonsAndPeriods.extend( seasons )
-                        
+                      
 		if ( gameMode == eStatCardGameMode.ARENAS )
 		{
 			seasonsAndPeriods.extend( arenaRankedPeriods )
@@ -1289,7 +1299,7 @@ array< ItemFlavor > function StatCard_GetAvailableSeasonsAndRankedPeriods( int g
        
 	seasonsAndPeriods.sort( SortSeasonAndRankedStats )
 
-                        
+                      
 	if ( gameMode == eStatCardGameMode.ARENAS )
 	{
 		int season09Idx = seasonsAndPeriods.find( season09CalEvent )
@@ -1299,8 +1309,6 @@ array< ItemFlavor > function StatCard_GetAvailableSeasonsAndRankedPeriods( int g
 		}
 	}
        
-
-	file.availableSeasonsAndRankedPeriods[gameMode] <- seasonsAndPeriods
 	return seasonsAndPeriods
 }
 
@@ -1370,7 +1378,7 @@ bool function ShouldIncludeModeRef( string modeRef, string seasonOrRankedRef )
 {
 	bool shouldInclude = true
 
-                        
+                      
 		if ( modeRef.toupper() == "ARENAS" )
 		{
 			if ( seasonOrRankedRef != "" )
@@ -1559,7 +1567,7 @@ void function StatsCard_OnRankedPeriodRegistered( ItemFlavor rp )
 	file.GUIDToSeasonNumber[ seasonGUIDString ] <- 0
 }
 
-                       
+                     
 void function StatsCard_OnArenasRankedPeriodRegistered( ItemFlavor calEventArenasRanked )
 {
 	string seasonGUIDString = ItemFlavor_GetGUIDString( calEventArenasRanked )
@@ -1578,10 +1586,8 @@ string function StatsCard_GetNameOfGameMode( int gameMode )
 {
 	switch( gameMode )
 	{
-                         
-			case eStatCardGameMode.ARENAS:
-				return "#STATS_CARD_MODE_ARENAS"
-        
+		case eStatCardGameMode.ARENAS:
+			return "#STATS_CARD_MODE_ARENAS"
 		default:
 			return "#STATS_CARD_MODE_BR"
 	}
@@ -1593,14 +1599,12 @@ string function StatsCard_GetNameOfGameMode( int gameMode )
 string function StatsCard_GetRefOfGameMode( int gameMode )
 {
 	string mode
-                        
-		switch( gameMode )
-		{
-			case eStatCardGameMode.ARENAS:
-				mode = "arenas"
-				break
-		}
-       
+	switch( gameMode )
+	{
+		case eStatCardGameMode.ARENAS:
+			mode = "arenas"
+			break
+	}
 
 	if ( STATS_ALTERNATE_MODE_REFS.contains( mode ) )
 	{
@@ -1618,10 +1622,8 @@ string function GetGameModeName( int gameMode )
 	{
 		case eStatCardGameMode.BATTLE_ROYALE:
 			return "BATTLE ROYALE"
-                         
-			case eStatCardGameMode.ARENAS:
-				return "ARENAS"
-        
+		case eStatCardGameMode.ARENAS:
+			return "ARENAS"
 		default:
 			return "UNKNOWN"
 	}
@@ -1704,7 +1706,7 @@ bool function StatsCard_IsSeasonOrRankedRefValidForMode( int gameMode, string ra
 }
 #endif      
 
-               
+           
              
                                                                                          
  
@@ -1879,5 +1881,5 @@ bool function StatsCard_IsSeasonOrRankedRefValidForMode( int gameMode, string ra
                      
  
                    
-                     
+                 
 

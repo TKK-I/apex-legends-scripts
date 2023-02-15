@@ -110,6 +110,9 @@ global enum eDamageSourceId
                                
                            
       
+                                
+                            
+       
                        
 		mp_weapon_throwingknife
        
@@ -185,9 +188,9 @@ global enum eDamageSourceId
 
 	melee_crypto_heirloom
 	mp_weapon_crypto_heirloom
-	
-		melee_valkyrie_spear
-		mp_weapon_valkyrie_spear
+
+	melee_valkyrie_spear
+	mp_weapon_valkyrie_spear
 
                      
 		melee_loba_heirloom
@@ -195,13 +198,23 @@ global enum eDamageSourceId
        
 
                      
-		melee_seer_heirloom
-		mp_weapon_seer_heirloom
+                     
+                         
+       
+
+                     
+		melee_wraith_kunai_rt01
+		mp_weapon_wraith_kunai_primary_rt01
        
 
                      
                     
                         
+       
+
+                     
+                        
+                                    
        
 
                                                 
@@ -242,7 +255,9 @@ global enum eDamageSourceId
                         
                                     
                   
+                      
                        
+                    
        
              
                         
@@ -458,13 +473,12 @@ global enum eDamageSourceId
 	mp_weapon_cluster_bomb
 
 	mp_weapon_mortar_ring
-	mp_weapon_black_hole
+	mp_ability_horizon_black_hole
 
                                  
                            
                           
                          
-                      
        
 
                
@@ -505,12 +519,20 @@ global enum eDamageSourceId
 		mp_weapon_3030
 		mp_weapon_dragon_lmg
 		mp_weapon_dragon_lmg_thermite
+<<<<<<< HEAD
+                    
+                        
+=======
+                                
+                            
+>>>>>>> parent of 044c095 (game update)
+       
                             
                         
        
 		mp_weapon_car
                                
-                           
+		mp_weapon_nemesis
        
                         
                     
@@ -533,8 +555,7 @@ global enum eDamageSourceId
        
 
                         
-                          
-                      
+                         
        
 
 	_count
@@ -683,6 +704,7 @@ void function DamageTypes_Init()
 		[ eDamageSourceId.stuck ] = "#DEATH_GENERIC_KILLED",
 
 		[ eDamageSourceId.melee_pilot_emptyhanded ] = "#DEATH_MELEE",
+
 		[ eDamageSourceId.melee_wraith_kunai ] = "#DEATH_MELEE_WRAITH_KUNAI",
 		[ eDamageSourceId.mp_weapon_wraith_kunai_primary ] = "#DEATH_MELEE_WRAITH_KUNAI",
 
@@ -737,13 +759,23 @@ void function DamageTypes_Init()
         
 
                       
-			[ eDamageSourceId.melee_seer_heirloom ] = "#DEATH_MELEE_SEER_HEIRLOOM",
-			[ eDamageSourceId.mp_weapon_seer_heirloom] = "#DEATH_MELEE_SEER_HEIRLOOM",
+                                                                          
+                                                                             
+        
+
+                      
+			[ eDamageSourceId.melee_wraith_kunai_rt01 ] = "#DEATH_MELEE_WRAITH_KUNAI_RT01",
+			[ eDamageSourceId.mp_weapon_wraith_kunai_primary_rt01 ] = "#DEATH_MELEE_WRAITH_KUNAI_RT01",
         
 
                       
                                                                         
                                                                            
+        
+
+                      
+                                                                                
+                                                                                           
         
 
 		[ eDamageSourceId.melee_rampart_wrench ] = "#DEATH_MELEE_RAMPART_WRENCH",

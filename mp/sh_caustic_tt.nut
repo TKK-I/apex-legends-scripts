@@ -388,7 +388,7 @@ string function GetCanisterSwitchUseTextOverride( entity canisterSwitch )
 
 void function CanisterSwitch_OnUse( entity canisterSwitch, entity player, int useInputFlags )
 {
-	if ( file.switchesEnabled && IsBitFlagSet( useInputFlags, USE_INPUT_LONG ) )
+	if ( file.switchesEnabled && useInputFlags & USE_INPUT_LONG )
 			thread CanisterSwitch_UseThink_Thread( canisterSwitch, player )
 	else
 	{
@@ -430,17 +430,16 @@ void function CanisterSwitch_DisplayRui( entity ent, entity player, var rui, Ext
 
 void function CanisterSwitch_ExtendedUseSuccess( entity canisterSwitch, entity player, ExtendedUseSettings settings )
 {
-	if ( !file.switchesEnabled )
-		return
+		if ( !file.switchesEnabled )
+			return
 
-	if ( !IsValid( player ) )
-		return
+		if ( !IsValid( player ) )
+			return
 
-	if ( !IsValid( canisterSwitch ) )
-		return
+		if ( !IsValid( canisterSwitch ) )
+			return
 
-	CanisterSwitches_Disabled()
-	SetCanistersOpen()
+		CanisterSwitches_Disabled( true )
 
 	if ( !file.isGasFunctionInverted )
 		thread CanisterSwitch_TrapActivate_Thread( player )
@@ -543,6 +542,7 @@ void function CanisterSwitch_TrapExpired_Thread()
 					                              
 						                                           
 
+					                                                    
 					                                                                                                                      
 					                                                                                                   
 				 
@@ -555,13 +555,13 @@ void function CanisterSwitch_TrapExpired_Thread()
 		                                       
 	#endif          
 
-	SetCanistersClosed()
-
 	wait 2.0
 
 	#if SERVER
 		                                                                                                 
 	#endif          
+
+	SetCanistersClosed()
 
 	wait 5.0
 
@@ -680,14 +680,13 @@ void function CanisterSwitch_TrapExpired_Inverted_Thread()
 					                              
 						                                           
 
+					                                                    
 					                                                                                                                      
 					                                                                                                   
 				 
 			 
 		 
 	#endif          
-
-	SetCanistersClosed()
 
 	wait 2.0
 
@@ -697,6 +696,7 @@ void function CanisterSwitch_TrapExpired_Inverted_Thread()
 		                                                          
 			                                                                                              
 	#endif          
+	SetCanistersClosed()
 
 	wait 5.0
 
@@ -713,7 +713,7 @@ void function CanisterSwitch_TrapExpired_Inverted_Thread()
 	CanisterSwitches_Enabled()
 }
 
-void function CanisterSwitches_Disabled()
+void function CanisterSwitches_Disabled( bool enableLooting )
 {
 	#if SERVER
 		                                                   
@@ -725,6 +725,11 @@ void function CanisterSwitches_Disabled()
 			                                                                                             
 
 	#endif          
+
+	if ( enableLooting )
+		SetCanistersOpen()
+	else
+		SetCanistersClosed()
 
 	file.switchesEnabled = false
 }
@@ -841,7 +846,7 @@ void function SetCanistersOpen()
 
 		                                                       
 		 
-			                                                                                                     
+			                                                                                                      
 
 			                         
 		 
@@ -850,17 +855,19 @@ void function SetCanistersOpen()
 
                                                  
  
-	                              
-	 
-		                                                                                             
-		                                                                                               
-	 
-	    
-	 
-		                                                                        
-		                                                                                  
-		                                                                          
-	 
+                         
+		                              
+		 
+			                                                                                             
+			                                                                                               
+		 
+		    
+                               
+		 
+			                                                                        
+			                                                                                  
+			                                                                          
+		 
 
 	                            
  
@@ -999,14 +1006,13 @@ void function SetCanistersOpen()
 	 
 
 	        
-
-	                                                                
-	                           
-
 	                        
 	                                   
 	 
 		                                                                                                
+
+		                                                                
+		                                  
 
 		                                                    
 			                            
@@ -1044,9 +1050,9 @@ void function SetCanistersOpen()
 		                                          
 			                                   
 	 
-	                                                                                                       
+	    
 	 
-		                                                                        
+		                                                                      
 		                                   
 		                                            
 		  
@@ -1054,8 +1060,8 @@ void function SetCanistersOpen()
 			                                                                                                                                                                                                                       
 		      
 		  
-			                                           
-				                                  
+		                                          
+			                                  
 	 
  
 #endif          

@@ -211,35 +211,35 @@ global enum eSurvivalCommentaryBucket
       
 
                        
-	ROUND1,
-	ROUND2,
-	ROUND3,
-	ROUND4,
-	ROUND5,
-	ROUND6,
-	ROUND7,
-	ROUND8,
-	ROUND9,
-	ROUND_FINAL,
-	ROUND_PREPARE,
-	ONE_TEAM_WINNING,
-	MATCH_POINT,
-	MATCH_POINT_TIED,
-	MATCH_POINT_SQUAD,
-	MATCH_POINT_ENEMY,
-	SUDDEN_DEATH,
-	SCORE_CLOSE,
-	WINNER_HAS_HORIZON,
-	ROUND_WON,
-	ROUND_LOST,
-	ROUND_PERFECT,
-	ROUND_FLAWLESS,
-	ROUND_CLUTCH,
-	MATCH_STOMP,
-	MATCH_COMEBACK,
-	MATCH_SHUTOUT,
-	DOUBLE_KILL,
-	TRIPLE_KILL,
+        
+        
+        
+        
+        
+        
+        
+        
+        
+             
+               
+                  
+             
+                  
+                   
+                   
+              
+             
+                    
+           
+            
+               
+                
+              
+             
+                
+               
+             
+             
       
 
                               
@@ -261,10 +261,10 @@ global enum eSurvivalCommentaryBucket
 	ARMORY_PANIC_BUTTON,
 	ARMORY_SUCCESS,
 	ARMORY_REDEPLOY,
-	ARMORY_OPENING,
       
 
                         
+	CONTROL_CARE_PACKAGE_DROPPING,
 	CONTROL_CAPTURE_BONUS_GENERIC,
 	CONTROL_CAPTURE_BONUS_A,
 	CONTROL_CAPTURE_BONUS_B,
@@ -288,9 +288,7 @@ global enum eSurvivalCommentaryBucket
 	CONTROL_MRB_TIMEDEVENT_MRB_CALLED_IN,
 	CONTROL_MRB_TIMEDEVENT_MRB_DEPLOYED,
 	CONTROL_MRB_TIMEDEVENT_MRB_EXPIRED,
-      
-	                                                                                       
-	SPONSORED_CARE_PACKAGE_DROPPING,
+       
 
                        
 	FREEDM_TEAM_HALFWAY,
@@ -311,7 +309,7 @@ global enum eSurvivalHostType
       
 	MIRAGE,
                        
-	ARENAS,
+        
       
 	MAGGIE,
 	_count
@@ -569,7 +567,7 @@ void function RegisterConditionalAltDialogue( asset dt )
 			{
 				if ( condPlayer in file.condAltMap[baseEventName][speakingPlayer] )
 				{
-					Assert( false, "Attempted to have duplicate conditional alt dialogue for event: \"" + baseEventName + "\" speaker: \"" + speakingPlayer +
+					Assert( 0, "Attempted to have duplicate conditional alt dialogue for event: \"" + baseEventName + "\" speaker: \"" + speakingPlayer +
 							"\" and condPlayer: \"" + condPlayer + "\". Can only have one cond alt for each unique combination of speaker, condPlayer, and event." )
 				}
 				else
@@ -616,7 +614,7 @@ void function RegisterConditionalAltDialogue( asset dt )
 			{
 				if ( requireAddressee && baseNameToSpeakingPlayerToRequireAddressee[baseEventName][speakingPlayer] )
 				{
-					Assert( false, "Tried to require an addressee for multiple different condPlayers for the same pairing of event and speaker. This is currently not supported by the system. Event: " + baseEventName + " Speaker: " + speakingPlayer )
+					Assert( 0, "Tried to require an addressee for multiple different condPlayers for the same pairing of event and speaker. This is currently not supported by the system. Event: " + baseEventName + " Speaker: " + speakingPlayer )
 				}
 			}
 		}
@@ -805,7 +803,7 @@ string function PickCommentaryLineFromBucket( int bucket )
 
 		if ( ! ( bucket in file.commentaryTables[host] ) )
 		{
-			Assert( false, "AI Host does not have line for bucket" )
+			Assert( 0, "AI Host does not have line for bucket" )
 			return ""
 		}
 	}
@@ -832,8 +830,8 @@ int function ConvertHostStringToEnum( string hostName )
 			return eSurvivalHostType.AI
 
                        
-		case "#HOST_ARENAS":
-			return eSurvivalHostType.ARENAS
+                      
+                                  
       
 
                                                
@@ -856,7 +854,7 @@ void function SurvivalCommentary_SetHost( int mainHost )
 {
 	if ( ! ( mainHost in file.commentaryTables ) )
 	{
-		Assert( false, "Invalid Host" )
+		Assert( 0, "Invalid Host" )
 		return
 	}
 

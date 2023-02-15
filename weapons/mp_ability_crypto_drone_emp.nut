@@ -50,12 +50,17 @@ void function MpAbilityCryptoDroneEMP_Init()
 
 bool function OnWeaponAttemptOffhandSwitch_ability_crypto_drone_emp( entity weapon )
 {
+	int ammoReq  = weapon.GetAmmoPerShot()
+	int currAmmo = weapon.GetWeaponPrimaryClipCount()
+	if ( currAmmo < ammoReq )
+		return false
+
 	entity player = weapon.GetWeaponOwner()
-	if ( !IsValid( player ) )
+	if ( player.IsPhaseShifted() )
 		return false
 
                         
-	if ( !StatusEffect_HasSeverity( player, eStatusEffect.crypto_has_camera ) )
+	if ( StatusEffect_GetSeverity( player, eStatusEffect.crypto_has_camera ) == 0.0 )
 	{
 		#if CLIENT
 			AddPlayerHint( 1.0, 0.25, $"rui/hud/tactical_icons/tactical_crypto", "#CRYPTO_ULTIMATE_CAMERA_NOT_READY" )
@@ -64,7 +69,7 @@ bool function OnWeaponAttemptOffhandSwitch_ability_crypto_drone_emp( entity weap
 	}
       
 
-	if ( StatusEffect_HasSeverity( player, eStatusEffect.crypto_camera_is_recalling ) )
+	if ( StatusEffect_GetSeverity( player, eStatusEffect.crypto_camera_is_recalling ) > 0.0 )
 	{
 		                                                    
 		return false
@@ -84,7 +89,7 @@ var function OnWeaponPrimaryAttack_ability_crypto_drone_emp( entity weapon, Weap
                        
                                                     
      
-	if ( !StatusEffect_HasSeverity( weaponOwner, eStatusEffect.crypto_has_camera ) )                                                                                                          
+	if ( StatusEffect_GetSeverity( weaponOwner, eStatusEffect.crypto_has_camera ) == 0.0 )                                                                                                          
       
 	{
                          
@@ -95,7 +100,7 @@ var function OnWeaponPrimaryAttack_ability_crypto_drone_emp( entity weapon, Weap
 			return 0
         
 	}
-	else if ( StatusEffect_HasSeverity( weaponOwner, eStatusEffect.crypto_camera_is_recalling ) )
+	else if ( StatusEffect_GetSeverity( weaponOwner, eStatusEffect.crypto_camera_is_recalling ) > 0.0 )
 	{
 		return 0
 	}
@@ -188,7 +193,7 @@ var function OnWeaponPrimaryAttack_ability_crypto_drone_emp( entity weapon, Weap
 		                              
 			        
 
-		                                                                            
+		                                                                                
 			        
 
 		                                 
@@ -226,9 +231,6 @@ var function OnWeaponPrimaryAttack_ability_crypto_drone_emp( entity weapon, Weap
 
 		                        
 		 
-			                          
-				        
-
 			                                          
 				                                                                       
 			                                                                 
@@ -426,7 +428,7 @@ var function OnWeaponPrimaryAttack_ability_crypto_drone_emp( entity weapon, Weap
 		                              
 			        
 
-		                                                                            
+		                                                                                
 			        
 
 		                                 

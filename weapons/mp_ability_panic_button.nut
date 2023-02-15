@@ -39,6 +39,15 @@ void function PanicButton_Init()
 
 bool function OnWeaponAttemptOffhandSwitch_ability_panic_button( entity weapon )
 {
+	int ammoReq = weapon.GetAmmoPerShot()
+	int currAmmo = weapon.GetWeaponPrimaryClipCount()
+	if ( currAmmo < ammoReq )
+		return false
+
+	entity player = weapon.GetWeaponOwner()
+	if ( player.IsPhaseShifted() )
+		return false
+
 	return true
 }
 
@@ -261,7 +270,7 @@ bool function OnWeaponAttemptOffhandSwitch_ability_panic_button( entity weapon )
 		                                            
 		                                                                                                   
 			                       
-				                                                     
+				                                                    
 		   
 	 
  

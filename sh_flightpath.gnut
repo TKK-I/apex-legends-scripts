@@ -391,7 +391,7 @@ FlightPath function InitializeFlightAnalysis( FlightPath Table, asset model, str
 	#endif
 
 	Table.points = FillFlightAnalysisPoints( dropship, anim )
-	if ( Table.points.len() > 0 )
+	if ( Table.points.len() )
 		CopyAttachPoint( Table.points.top(), Table.preview )
 
 	if ( event != "" )
@@ -461,7 +461,7 @@ array<AttachPoint> function FillFlightAnalysisPoints( entity dropship, string an
 	float time, ratio
 	array<AttachPoint> Array
 
-	if ( steps == 0 )
+	if ( !steps )
 	{
 		Attachment result = dropship.Anim_GetAttachmentAtTime( anim, attachName, 0.0 )
 
@@ -586,7 +586,7 @@ void function FillDeployForAnalysisForEvent( entity dropship, string anim, strin
 {
 	float frac = dropship.GetScriptedAnimEventCycleFrac( anim, event )
 	Assert( frac != -1, " event " + event + " does not exist in animation " + anim )
-	if ( frac == 0 )
+	if ( !frac )
 		return
 
 	float duration    = dropship.GetSequenceDuration( anim )
@@ -597,7 +597,7 @@ void function FillDeployForAnalysisForEvent( entity dropship, string anim, strin
 	point.origin = result.position
 	point.angles = result.angle
 
-	if ( attachments.len() > 0 )
+	if ( attachments.len() )
 	{
 		Table.deployAttach = {}
 
@@ -694,7 +694,7 @@ void function MaskTester( int mask )
 
 	foreach ( key, val in Table )
 	{
-		if ( IsBitFlagSet( int( val ), mask ) )
+		if ( val & mask )
 			printt( "found " + key )
 	}
 }
@@ -711,7 +711,7 @@ void function MaskTester( int mask )
 	                                               
 
 	                                  
-	                                            
+	                                       
 
 	                                               
 

@@ -146,7 +146,7 @@ void function Armor_ShieldRegen_RegisterNetworking()
 	      
 
 	                                                                                                                                          
-	                                                                                                                                                    
+	                                                                                                                                     
 	 
 		       
 			                         
@@ -246,10 +246,15 @@ void function Armor_ShieldRegen_RegisterNetworking()
 
 	                                                              
 	 
-		                                                                                                             
-		                                     
+		                     
+		                                                              
+		                                                          
 
-		                                                      
+		                                                                                                             
+		                                                                             
+		                      
+
+		                                           
 			       
 				                         
 					                                                             
@@ -257,7 +262,8 @@ void function Armor_ShieldRegen_RegisterNetworking()
 
 			                                                                                            
 
-			                                                     
+			                     
+				                 
 
 			                                                     
 			                                                        
@@ -280,6 +286,14 @@ void function Armor_ShieldRegen_RegisterNetworking()
 			                       
 			 
 				                                         
+			 
+
+			                                                                 
+			                                
+			 
+				                        
+				                                                         
+				                                                  
 			 
 
 			           

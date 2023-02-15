@@ -76,7 +76,6 @@ global function GameMode_GetLoadoutSelectTime
 #if CLIENT
 global function GameMode_DoesModeDisplayIconsForAllFriendlyTeams
 global function GameMode_DoesModeDisplayIconsForAllTeams
-global function GameMode_OverrideCompletedResolutionCleanupFunc
 #endif
 
 global struct GamemodeSettings
@@ -134,7 +133,7 @@ global enum eGameModes
 	                  					  
 	GAMEMODE_FREELANCE_ID = 3,
                        
-	ARENAS_ID				= 4,
+                  
       
                         
 	CONTROL_ID				= 5,
@@ -145,11 +144,22 @@ global enum eGameModes
 	_count,
 }
 
+                                                                     
+global enum eWinReason
+{
+	DEFAULT,
+	SCORE_LIMIT,
+	TIME_LIMIT,
+	ELIMINATION,
+	LOCKOUT,                                                                                
+	_count
+}
+
 const table<string, int> gameModesStringToIdMap = {
 	[ TEAM_DEATHMATCH ] 					= eGameModes.TEAM_DEATHMATCH_ID,
 	[ SURVIVAL ]							= eGameModes.SURVIVAL_ID,
                        
-	[ GAMEMODE_ARENAS ]						= eGameModes.ARENAS_ID,
+                                                 
       
                         
 	[ GAMEMODE_CONTROL ]					= eGameModes.CONTROL_ID,
@@ -163,10 +173,6 @@ const table<string, int> gameModesStringToIdMap = {
 struct
 {
 	table<string, GamemodeSettings> gameModeDefs
-
-	#if CLIENT
-		void functionref() completedResolutionCleanupFunc
-	#endif
 } file
 
 void function GameModes_Init()
@@ -202,21 +208,27 @@ void function GameModes_Init()
 #endif
 
                                   
-#if UI
-	AddCallback_UI_GameModeRulesDialog_PopulateTabsForMode( Survival_Hardcore_PopulateAboutText, GAMEMODE_SURVIVAL_HARDCORE )
-#endif
+      
+                                                                                                                          
+      
       
 
                          
       
                                                                                                                  
       
-      
 
                                
-#if UI
-	AddCallback_UI_GameModeRulesDialog_PopulateTabsForMode( Date_Night_PopulateAboutText, GAMEMODE_DATE_NIGHT )
-#endif
+      
+                                                                                                            
+      
+      
+
+<<<<<<< HEAD
+                                 
+       
+                                                                                                                       
+       
       
 
 	#if CLIENT
@@ -224,20 +236,23 @@ void function GameModes_Init()
 		GameMode_OverrideCompletedResolutionCleanupFunc( GameModes_DefaultCompletedResolutionCleanupFunc )
 	#endif
 
+=======
+>>>>>>> parent of 044c095 (game update)
 
+      
 
                        
-	gameMode = GAMEMODE_ARENAS
-	GamemodeSettings arenas = GameMode_Create( gameMode )
-	GameMode_SetName( gameMode, "#GAMEMODE_ARENAS" )
-	GameMode_SetGameModeAnnouncement( gameMode, "ffa_modeDesc" )
-	GameMode_SetDesc( gameMode, "#GAMEMODE_ARENAS_DESC" )
-	GameMode_SetIcon( gameMode, $"vgui/burncards/burncard_group_icon_weapons" )
-	GameMode_SetDefaultScoreLimits( gameMode, 50, 10 )
-	GameMode_SetDefaultTimeLimits( gameMode, 30, 0.0 )
-	GameMode_AddScoreboardColumnData( gameMode, "#SCOREBOARD_PILOT_KILLS", PGS_PILOT_KILLS, 2 )
-	GameMode_SetColor( gameMode, [147, 204, 57, 255] )
-	GameMode_SetWinBy2Rules( gameMode, 3, 3 )
+                           
+                                                      
+                                                 
+                                                             
+                                                      
+                                                                            
+                                                   
+                                                   
+                                                                                            
+                                                   
+                                          
       
 
                         
@@ -286,6 +301,12 @@ void function GameModes_Init()
 	GameMode_SetTimedEventsEnabled( gameMode, true )
 	#if UI
 		AddCallback_UI_GameModeRulesDialog_PopulateTabsForMode( FreeDM_PopulateAboutText, GAMEMODE_FREEDM )
+	#endif      
+      
+
+                    
+	#if UI
+		AddCallback_UI_GameModeRulesDialog_PopulateTabsForMode( TDM_PopulateAboutText, TEAM_DEATHMATCH )
 	#endif      
       
 
@@ -769,33 +790,11 @@ float function GameMode_GetLoadoutSelectTime()
 #if CLIENT
 bool function GameMode_DoesModeDisplayIconsForAllFriendlyTeams( string mode )
 {
-                         
-		if ( mode == GAMEMODE_CONTROL )
-			return true
-       
-	return false
+	return AllianceProximity_IsUsingAlliances()
 }
-#endif          
 
-#if CLIENT
 bool function GameMode_DoesModeDisplayIconsForAllTeams( string mode )
 {
 	return false
 }
-#endif          
-
-#if CLIENT
-                                                                                                                               
-void function GameModes_DefaultCompletedResolutionCleanupFunc()
-{
-	Signal( clGlobal.levelEnt, "GameModes_CompletedResolutionCleanup" )
-}
-#endif          
-
-#if CLIENT
-                                                                                                                                                                                  
-void function GameMode_OverrideCompletedResolutionCleanupFunc( void functionref() func )
-{
-	file.completedResolutionCleanupFunc = func
-}
-#endif          
+#endif

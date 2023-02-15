@@ -123,6 +123,7 @@ global struct CommunityUserInfo
 	bool isLivestreaming
 	bool isOnline
 	bool isJoinable
+	bool hasGraduatedBotsQueue
 	bool partyFull
 	bool partyInMatch
 	float lastServerChangeTime
@@ -155,34 +156,6 @@ global struct Party
 	bool amILeader
 	bool searching
 	array<PartyMember> members
-}
-
-global struct RemoteClientInfoFromMatchInfo
-{
-	string name
-	int teamNum
-	int score
-	int kills
-	int deaths
-}
-
-global struct RemoteMatchInfo
-{
-	string datacenter
-	string gamemode
-	string playlist
-	string map
-	int maxClients
-	int numClients
-	int maxRounds
-	int roundsWonIMC
-	int roundsWonMilitia
-	int timeLimitSecs
-	int timeLeftSecs
-	int teamsLeft
-	int maxScore
-	array<RemoteClientInfoFromMatchInfo> clients
-	array<int> teamScores
 }
 
 global struct NetTraceRouteResults
@@ -238,17 +211,6 @@ global struct GRXGetOfferInfo
 	bool isEligible
 	array< array< int > > prices
 }
-
-               
-global struct GRXGiftingInboxInfo
-{
-	int itemIndex
-	int itemCount
-	bool isNew
-	int timestamp
-	string senderNucleusPid
-}
-      
 #endif                          
 
 #if UI || CLIENT
@@ -257,6 +219,16 @@ global struct GRXBundleOffer
 	array< array<int> >bundlePrices
 	int purchaseCount
 	string ineligibleReason
+}
+
+global struct GRXScriptInboxMessage
+{
+	array<int> itemIndex
+	array<int> itemCount
+	bool       isNew
+	int        timestamp
+	string     senderNucleusPid
+	string     gifterName
 }
 #endif                
 
@@ -465,6 +437,7 @@ global struct WeaponFireGrenadeParams
 	bool lagCompensated
 	bool useScriptOnDamage
 	bool isZiplineGrenade = false
+	string ziplineGrenadeRopeMaterial = "cable/zipline"
 	int projectileIndex
 }
 
@@ -697,6 +670,7 @@ global struct PresenceState
 global struct CustomMatch_LobbyPlayer
 {
 	string uid
+	string uidHashed
 	string hardware
 	string name
 	string clubTag
@@ -803,11 +777,6 @@ global struct EadpPeopleData
 	string xbox_pid
 	string steam_pid
 	string switch_pid
-	int ea_has_played
-	int psn_has_played
-	int xbox_has_played
-	int steam_has_played
-	int switch_has_played
 	int friendCreationTime
 	array< EadpPresenceData > presences
 }
@@ -873,7 +842,6 @@ global enum eFriendStatus
 global struct Friend
 {
 	string id
-	string unspoofedid = ""
 	string hardware
 	string name = "Unknown"
 	string presence = ""

@@ -15,7 +15,6 @@ global function OnWeaponPrimaryAttack_weapon_trophy_defense_system
                                               
                                                
                                                  
-                                             
        
                                         
       
@@ -39,6 +38,7 @@ const asset TROPHY_DAMAGE_SPARK_FX = $"P_trophy_sys_dmg"
 const asset TROPHY_DESTROY_FX = $"P_trophy_sys_exp"
 const asset TROPHY_COIL_ON_FX = $"P_wpn_trophy_coil_spin"
 const asset TROPHY_PLAYER_TACTICAL_CHARGE_FX = $"P_wat_menu_coil_loop"
+const asset TROPHY_PLAYER_SHIELD_CHARGE_FX = $"P_armor_3P_loop_CP"
 
 const asset TROPHY_RANGE_RADIUS_REMINDER_FX = $"P_ar_edge_ring_gen"
 
@@ -186,7 +186,6 @@ struct
 		                                                               
 		                                                               
 		                                                                       
-		                                                            
        
 		                        				                      
       
@@ -216,6 +215,7 @@ function MpWeaponTrophy_Init()
 	PrecacheParticleSystem( TROPHY_DESTROY_FX )
 	PrecacheParticleSystem( TROPHY_COIL_ON_FX )
 	PrecacheParticleSystem( TROPHY_PLAYER_TACTICAL_CHARGE_FX )
+	PrecacheParticleSystem( TROPHY_PLAYER_SHIELD_CHARGE_FX )
 	PrecacheParticleSystem( TROPHY_RANGE_RADIUS_REMINDER_FX )
 	PrecacheParticleSystem( TROPHY_NO_SHIELDS_FX )
 
@@ -256,6 +256,9 @@ function MpWeaponTrophy_Init()
 		StatusEffect_RegisterEnabledCallback( eStatusEffect.trophy_tactical_charge, TacticalChargeVisualsEnabled )
 		StatusEffect_RegisterDisabledCallback( eStatusEffect.trophy_tactical_charge, TacticalChargeVisualsDisabled )
 
+		StatusEffect_RegisterEnabledCallback( eStatusEffect.trophy_shield_repair, ShieldRepairVisualsEnabled )
+		StatusEffect_RegisterDisabledCallback( eStatusEffect.trophy_shield_repair, ShieldRepairVisualsDisabled )
+
 		AddCallback_OnWeaponStatusUpdate( Trophy_OnWeaponStatusUpdate )
 
 		AddCreateCallback( PLAYER_WAYPOINT_CLASSNAME, OnWaypointCreated )
@@ -286,6 +289,18 @@ void function OnWeaponDeactivate_weapon_trophy_defense_system( entity weapon )
 
 bool function OnWeaponAttemptOffhandSwitch_weapon_trophy_defense_system( entity weapon )
 {
+	int ammoReq  = weapon.GetAmmoPerShot()
+	int currAmmo = weapon.GetWeaponPrimaryClipCount()
+	if ( currAmmo < ammoReq )
+		return false
+
+	entity player = weapon.GetWeaponOwner()
+	if ( player.IsPhaseShifted() )
+		return false
+
+	if ( player.IsZiplining() )
+		return false
+
 	return true
 }
 
@@ -1049,12 +1064,6 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 
                                                                        
  
-	                          
-	 
-		                                                      
-		      
-	 
-
 	                      
 		      
 
@@ -1076,88 +1085,6 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 	                                                                                     
 	                                                             
 		                                                   
- 
-
-                                                                             
- 
-	                                     
-	                                  
-
-	                                          
-	                                           
-	                                 
-
-	                                       
-	 
-		                                
-	 
-	    
-	 
-		                                   
-	 
-
-	                                                                                                           
-
-	            
-		                                                
-		 
-			                                                       
-
-			                                         
-			 
-				                                
-			 
-			    
-			 
-				                                     
-			 
-		 
-	 
-
-	              
-	 
-		           
-		                                                       
-		                                                  
-			      
-
-		                                   
-			      
-
-		                                                            
-			        
-
-		                                                                                 
-			        
-
-		                                             
-			        
-
-		                                                      
-	 
- 
-
-                                                                 
- 
-	                                                           
-	                                                           
-
-	                                                                                 
-
-	                                                          
-	                           
-
-	                                                                                                                                                       
-
-	                                   
-		           
-
-	            
- 
-
-                                                           
- 
-	                                       
  
 
                                                                                    
@@ -1359,7 +1286,8 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 	                         
 		      
 
-	                                                                                                        
+	                        
+	                                                  
 	                             
 
 	                                                             
@@ -1367,7 +1295,7 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 	                              
 
 	            
-		                                                                    
+		                                                              
 		 
 			                        
 			 
@@ -1378,11 +1306,8 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 				 
 
 				                                                    
-				                                     
-				 
+				                                                         
 					                                                                         
-				 
-				                                                     
 
 				                                  
 
@@ -1400,7 +1325,7 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 			 
 
 			       
-				                                                                                                                          
+				                                                                                 
 				 
 					                                        
 				 
@@ -1445,9 +1370,9 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 
 				                       
 				 
+					                                                         
+						                                                                         
 					                        
-					                                      
-					                                                                         
 				 
 
 				        
@@ -1491,9 +1416,9 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 
 					                       
 					 
+						                                                         
+							                                                                         
 						                        
-						                                      
-						                                                                         
 					 
 
 					        
@@ -1524,8 +1449,7 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 					                        
 					 
 						                       
-						                                     
-						                                                                           
+						                                                                                                                         
 					 
 
 					                                                                  
@@ -1545,9 +1469,9 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 			 
 			                            
 			 
+				                                                         
+					                                                                         
 				                        
-				                                      
-				                                                                         
 
 				                                                               
 				                           
@@ -2298,6 +2222,11 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 		                                       
 		      
 	 
+
+                 
+		                            
+			                                                                            
+       
  
 
                                                                          
@@ -2344,7 +2273,7 @@ void function OnCreateClientOnlyModel_weapon_trophy_defense_system( entity weapo
 
 	                                                              
 
-	                                                                    
+	                                                        
 	 
 		                                                                                                                              
 			                                                                
@@ -2454,6 +2383,66 @@ void function TacticalChargeFXThink( entity player, entity cockpit )
 
 		vector controlPoint = <1, 1, 1>
 		EffectSetControlPointVector( file.tacticalChargeFXHandle, 1, controlPoint )
+		WaitFrame()
+	}
+}
+
+
+void function ShieldRepairVisualsEnabled( entity player, int statusEffect, bool actuallyChanged )
+{
+	if ( player == GetLocalViewPlayer() )
+	{
+		EmitSoundOnEntity( player, TROPHY_SHIELD_REPAIR_START )
+		return
+	}
+
+	thread TacticalShieldRepairFXStart( player )
+}
+
+void function ShieldRepairVisualsDisabled( entity player, int statusEffect, bool actuallyChanged )
+{
+	if ( player == GetLocalViewPlayer() )
+	{
+		if ( player.GetShieldHealth() == player.GetShieldHealthMax() )
+			EmitSoundOnEntity( player, TROPHY_SHIELD_REPAIR_END )
+	}
+
+	player.Signal( "EndTacticalShieldRepair" )
+}
+
+void function TacticalShieldRepairFXStart( entity player )
+{
+	player.Signal( "EndTacticalShieldRepair" )
+	EndSignal( player, "EndTacticalShieldRepair", "OnDeath", "OnDestroy" )
+
+	int oldArmorTier     = -1
+	int attachID         = player.LookupAttachment( "CHESTFOCUS" )
+	int shieldChargeFXID = GetParticleSystemIndex( TROPHY_PLAYER_SHIELD_CHARGE_FX )
+	int fxID             = StartParticleEffectOnEntity( player, shieldChargeFXID, FX_PATTACH_POINT_FOLLOW, attachID )
+
+	OnThreadEnd(
+		function() : ( fxID )
+		{
+			if ( EffectDoesExist( fxID ) )
+				EffectStop( fxID, true, true )
+		}
+	)
+
+	while( true )
+	{
+		if( player.IsCloaked( true ) )
+		{
+			if ( EffectDoesExist( fxID ) )
+				EffectSetControlPointVector( fxID, 2, < 0, 0, 0> )
+		}
+		else
+		{
+			int armorTier = EquipmentSlot_GetEquipmentTier( player, "armor" )
+			vector shieldColor = GetFXRarityColorForTier( armorTier )
+			if ( EffectDoesExist( fxID ) )
+				EffectSetControlPointVector( fxID, 2, shieldColor )
+		}
+
 		WaitFrame()
 	}
 }

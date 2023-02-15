@@ -130,6 +130,10 @@ global const HIGHLIGHT_COLOR_OBJECTIVE = <0.9, 0.63, 0.09>
 const HIGHLIGHT_COLOR_FOCUSED_LOOT = <0, 1.0, 0>
 const HIGHLIGHT_COLOR_PINGED_LOOT = <0, 1.0, 0>
 
+                       
+                                                     
+                             
+
 global const HIGHLIGHT_OUTLINE_NONE = 0
 const HIGHLIGHT_OUTLINE_CUSTOM_COLOR = 101                                
 const HIGHLIGHT_OUTLINE_CUSTOM_COLOR_OCCLUDED = 145                                        
@@ -586,7 +590,7 @@ void function Highlight_Init()
 	HighlightContext_SetFarFadeDistance( highlight, GetEyeForQualityRadius() )
 	highlight.colorID = COLORID_LOOT_TIER3
 
-                                 
+                  
                                                               
                                                                          
                                                                                 
@@ -998,6 +1002,16 @@ void function Highlight_Init()
 		HighlightContext_SetFarFadeDistance( highlight, HIGHLIGHT_LOS_FAR_FADE_DIST )
                               
 
+                        
+                                                              
+                                                                          
+                                            
+                                                                            
+                                                                      
+                                                 
+                                                               
+                              
+
 	  
 	  
 	  
@@ -1045,14 +1059,14 @@ void function InitHighlightSettings( entity ent )
 
 	                                        
 	 
-		                                                                                   
+		                                                                                         
 			                                                                              
 		    
 			                                                                              
 	 
 	    
 	 
-		                                                                                   
+		                                                                                         
 			                                                                                  
 		    
 			                                                                                  
@@ -2299,7 +2313,9 @@ int function GetHighlightContextForEnt( entity viewPlayer, entity ent )
 	int entTeam = ent.GetTeam()
 
 	bool viewPlayerEmoting = viewPlayer == ent && viewPlayer.ContextAction_IsEmoting()
-	bool wantsFriendlyHighlight = (!viewPlayerEmoting) || viewPlayer.IsDrivingVehicle()
+	bool isDoor = IsCodeDoor( ent )
+	bool wantsFriendlyHighlight = !isDoor && ( (!viewPlayerEmoting) || viewPlayer.IsDrivingVehicle() )
+
 
                       
                                              
@@ -2314,8 +2330,8 @@ int function GetHighlightContextForEnt( entity viewPlayer, entity ent )
                 
                                                                                                                             
                       
-                                                                         
-                                                                      
+                                                                             
+                                                                          
                                                                                                                                               
     
                                                                                                
@@ -2359,13 +2375,13 @@ int function GetHighlightContextForEnt( entity viewPlayer, entity ent )
 			if ( viewTeam == TEAM_SPECTATOR && IsValid( viewPlayer.GetObserverTarget() ) )
 				viewTarget = viewPlayer.GetObserverTarget()
 
-			if ( !ent.IsPlayer() && IsFriendlyTeam( viewTarget.GetTeam(), entTeam) )                                                           
+			if ( !ent.IsPlayer() && !isDoor && IsFriendlyTeam( viewTarget.GetTeam(), entTeam) )                                                           
 				return HIGHLIGHT_CONTEXT_FRIENDLY
 
                         
                                                                                                                                                                                                
         
-			if ( StatusEffect_HasSeverity( ent, eStatusEffect.sonar_detected ) && (viewPlayerEmoting || ent.IsHighlightEnabledForTeam( HIGHLIGHT_CONTEXT_SONAR, viewTarget.GetTeam() )) )
+			if ( StatusEffect_GetSeverity( ent, eStatusEffect.sonar_detected ) && (viewPlayerEmoting || ent.IsHighlightEnabledForTeam( HIGHLIGHT_CONTEXT_SONAR, viewTarget.GetTeam() )) )
          
 			{
 				return HIGHLIGHT_CONTEXT_SONAR
@@ -2374,12 +2390,18 @@ int function GetHighlightContextForEnt( entity viewPlayer, entity ent )
                         
                                                                                                                                                                                              
         
-			else if ( StatusEffect_HasSeverity( ent, eStatusEffect.mortar_ring_reveal ) && ent.IsHighlightEnabledForTeam( HIGHLIGHT_CONTEXT_MOVEMENT_REVEALED, viewTarget.GetTeam() ) )
+			else if ( StatusEffect_GetSeverity( ent, eStatusEffect.mortar_ring_reveal ) && ent.IsHighlightEnabledForTeam( HIGHLIGHT_CONTEXT_MOVEMENT_REVEALED, viewTarget.GetTeam() ) )
          
 			{
 				return HIGHLIGHT_CONTEXT_MOVEMENT_REVEALED
 			}
       
+                   
+			                                                                                                                                                                             
+			 
+				                                            
+			 
+        
 			else if ( ShouldShowNovaBlackholeHighlight( viewTarget, ent ) && ent.IsHighlightEnabledForTeam( HIGHLIGHT_CHARACTER_SPECIAL_HIGHLIGHT_2, viewTarget.GetTeam() ) )
 			{
 				return HIGHLIGHT_CHARACTER_SPECIAL_HIGHLIGHT_2
@@ -2397,11 +2419,7 @@ int function GetHighlightContextForEnt( entity viewPlayer, entity ent )
 				return HIGHLIGHT_CONTEXT_MOVEMENT_REVEALED
 			}
                           
-                                                           
-    
-                                              
-    
-                                                            
+                                                      
     
                                               
     
@@ -2610,7 +2628,7 @@ void function ReconScan_RemoveHudForTarget( entity player, entity enemy )
 bool function TargetIsHighlightedForMyTeam( entity ent )
 {
 	entity viewPlayer = GetLocalViewPlayer()
-	if ( StatusEffect_HasSeverity( ent, eStatusEffect.sonar_detected ) && ent.IsHighlightEnabledForTeam( HIGHLIGHT_CONTEXT_SONAR, viewPlayer.GetTeam() ) )
+	if ( StatusEffect_GetSeverity( ent, eStatusEffect.sonar_detected ) && ent.IsHighlightEnabledForTeam( HIGHLIGHT_CONTEXT_SONAR, viewPlayer.GetTeam() ) )
 		return true
 
 	return false
@@ -2643,7 +2661,7 @@ bool function ShouldCausticGasHighlight( entity viewPlayer, entity ent )
                
        
 
-	if ( !StatusEffect_HasSeverity( ent, eStatusEffect.gas_cloud ) )
+	if ( !StatusEffect_GetSeverity( ent, eStatusEffect.gas_cloud ) )
 		return false
 
 	return true
@@ -2705,24 +2723,16 @@ bool function ShouldMaggieHighlight( entity viewPlayer, entity ent )
 }
 
                        
-                                                                         
- 
-                                                                      
-              
-
-                                                           
- 
-
                                                                         
  
-                                        
-                
-   
-                                                                               
-                
-   
-                                                  
-               
+                                      
+              
+
+                                                                                 
+              
+
+                                                
+             
 
              
  
@@ -2763,7 +2773,7 @@ bool function ShouldArmoredLeapThreatHighlight( entity viewPlayer, entity ent )
 
 bool function ShouldShowNovaBlackholeHighlight( entity viewPlayer, entity ent )
 {
-	if ( !StatusEffect_HasSeverity( ent, eStatusEffect.in_black_hole_field ) )
+	if ( !StatusEffect_GetSeverity( ent, eStatusEffect.in_black_hole_field ) )
 		return false
 
 	return true

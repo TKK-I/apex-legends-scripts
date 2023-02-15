@@ -19,7 +19,6 @@ global function ClientCodeCallback_AnimWindowStop
                 
                 
 global const asset BLOODHOUND_BIRD_MDL = $"mdl/creatures/bird/bird.rmdl"
-global const string BLOODHOUND_BIRD_KEY = "set_bloodhound_raven_skin"
 
 const bool SCRIPT_ANIM_WINDOWS_DEBUG = false
 
@@ -40,6 +39,10 @@ int LIFELINE_DRONE_EYEGLOW_FX_IDX = -1
 const int LIFELINE_DRONE_OFFLINE_SKIN = 0
 const int LIFELINE_DRONE_ONLINE_SKIN = 1
 
+const asset WRAITH_KUNAI_MDL = $"mdl/props/kunai/kunai.rmdl"
+const int WRAITH_KUNAI_SKIN = 0
+const int WRAITH_KUNAI_SKIN_NEW = 1
+
   
 struct {
 	table<string, void functionref(ScriptAnimWindow, var, entity)> createPropScriptCallbackMap
@@ -57,7 +60,14 @@ void function ShAnimWindows_LevelInit()
 
 	#if CLIENT
 		RegisterAnimWindowScriptCallback( "add_glad_card_rui", AddGladCardRUIToProp )
+<<<<<<< HEAD
 		RegisterAnimWindowScriptCallback ( BLOODHOUND_BIRD_KEY, AnimWindow_SetBloodhoundRavenPropSkin )
+                     
+                             
+                                                                                     
+        
+=======
+>>>>>>> parent of 044c095 (game update)
 	#endif
 
 	#if SERVER || CLIENT
@@ -178,6 +188,95 @@ void function CreateGladCardRui( entity prop )
 }
 #endif
 
+                   
+          
+                                                                                               
+ 
+                                   
+ 
+
+                                                
+ 
+                              
+                                  
+
+                                         
+
+                              
+        
+
+                        
+        
+
+                                     
+
+                      
+                           
+                           
+
+                      
+                                          
+                                           
+
+                         
+
+                                                                                      
+                                    
+
+                                                                                                          
+                                                                                          
+
+              
+                                 
+   
+                    
+                              
+   
+  
+
+                                                   
+
+                                     
+
+                         
+                     
+                          
+  
+                        
+                                  
+   
+                                               
+                         
+    
+                                                
+                    
+    
+   
+                                       
+   
+                                             
+                         
+    
+                                                   
+                    
+    
+   
+                                       
+   
+                                            
+                         
+    
+                                                   
+                    
+    
+   
+
+             
+  
+ 
+                
+      
+
 #if CLIENT
 void function CreateTeaseRui( entity prop, asset ruiAsset, int logId )
 {
@@ -229,6 +328,17 @@ void function AnimWindow_CreateProp_Precache( var settingsBlock )
 	{
 		PrecacheModel( GetSettingsBlockAsset( settingsBlock, "modelName" ) )
 	}
+	else if ( selectModelFrom == eAnimWindowCreatePropModelSelectionStrategy.SCRIPT_KEY )
+	{
+		switch ( GetSettingsBlockString( settingsBlock, "modelScriptKey" ) )
+		{
+			case "wraith_kunai":
+			{
+				PrecacheModel( WRAITH_KUNAI_MDL )
+				break
+			}
+		}
+	}
 }
 
 
@@ -250,7 +360,6 @@ void function AnimWindow_CreateProp_Start( ScriptAnimWindow window, var settings
 		                           
 	#elseif CLIENT
 		entity prop = CreateClientSidePropDynamic( window.ent.GetOrigin(), window.ent.GetAngles(), model )
-		prop.SetParent( window.ent )
 		                                                        
 		prop.MakeSafeForUIScriptHack()
 
@@ -263,6 +372,7 @@ void function AnimWindow_CreateProp_Start( ScriptAnimWindow window, var settings
 		  	                                                                                                                           
 		        
 
+		SetTeam( prop, window.ent.GetTeam() )
 		prop.kv.renderamt = window.ent.kv.renderamt
 		prop.CopyHighlightState( window.ent )
 		if ( window.ent.IsHidden() )
@@ -288,7 +398,7 @@ void function AnimWindow_CreateProp_Start( ScriptAnimWindow window, var settings
 		prop.SetSkin( window.ent.GetSkin() )
 		prop.SetCamo( window.ent.GetCamo() )
 	}
-	else
+	else if ( selectModelFrom != eAnimWindowCreatePropModelSelectionStrategy.SCRIPT_KEY )
 	{
 		string characterSkinName = window.ent.GetSkinNameByIndex( window.ent.GetSkin() )
 		int characterCamo = window.ent.GetCamo()
@@ -372,12 +482,37 @@ void function SetModelOnPropByScriptKey( entity propEnt, string key, entity pare
 	{
 		case "bloodhound_raven":
 			propEnt.SetModel( BLOODHOUND_BIRD_MDL )
+			#if CLIENT
+				CharacterSkin_CheckBloodhoundRavenSkin ( propEnt, parentEnt )
+			#endif
 			break
 		case "lifeline_drone":
 			propEnt.SetModel( LIFELINE_DRONE_MDL )
 			propEnt.SetSkin( LIFELINE_DRONE_ONLINE_SKIN )
 			break
 
+		case "wraith_kunai":
+			propEnt.SetModel( WRAITH_KUNAI_MDL )
+#if CLIENT
+			bool usesNewKunai = false;
+			ItemFlavor ornull meleeSkinFlavor = parentEnt.e.animWindowMeleeSkinItemFlavor
+			if ( meleeSkinFlavor != null )
+			{
+				expect ItemFlavor( meleeSkinFlavor )
+				string skinname = MeleeSkin_GetMainWeaponClassname( meleeSkinFlavor )
+				usesNewKunai = skinname == "mp_weapon_wraith_kunai_rt01_primary"
+			}
+
+			if ( usesNewKunai )
+			{
+				propEnt.SetSkin( WRAITH_KUNAI_SKIN_NEW )
+			}
+			else
+			{
+				propEnt.SetSkin( WRAITH_KUNAI_SKIN )
+			}
+			break
+#endif         
 		default:
 			Assert( false, "Unknown script key for CreateProp anim window: " + key )
 			break
@@ -405,7 +540,7 @@ void function AnimWindow_PlaySound_Start( ScriptAnimWindow window, var settingsB
 	string soundEventName = GetSettingsBlockString( settingsBlock, "soundEventName" )
 
 	#if SERVER
-		                                      
+		                                  
 	#elseif CLIENT
 		entity viewPlayer = GetLocalViewPlayer()
 		if ( IsValid( viewPlayer ) && !viewPlayer.DoesShareRealms( window.ent ) )
@@ -432,7 +567,7 @@ void function AnimWindow_PlaySound_Transition( ScriptAnimWindow window, var sett
 void function AnimWindow_PlaySound_Stop( ScriptAnimWindow window, var settingsBlock )
 {
 	#if SERVER
-		                      
+		                  
 	#elseif CLIENT
 		entity viewPlayer = GetLocalViewPlayer()
 		if ( windowSoundHandleMap[window.stringID] )
@@ -1045,24 +1180,6 @@ void function AnimWindow_LifelineDroneCommonFX_Stop( ScriptAnimWindow window, va
 	#endif
 }
 
-                                     
-                                     
-                                     
-                                     
-                                     
-
-#if CLIENT
-void function AnimWindow_SetBloodhoundRavenPropSkin ( ScriptAnimWindow window, var settingsBlock, entity prop )
-{
-	if ( IsValid( prop ) )
-	{
-		if ( prop.GetModelName() == BLOODHOUND_BIRD_MDL && window.ent.GetSkin() == 22 )
-		{
-			prop.SetSkin ( 2 )
-		}
-	}
-}
-#endif
 
                       
                       

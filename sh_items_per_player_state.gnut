@@ -230,11 +230,8 @@ void function Newness_IfNecessaryMarkItemFlavorAsNoLongerNewAndInformServer( Ite
 		}
 	}
 
-	if ( IsValid( GetLocalClientPlayer() ) )
-	{
-		SettingsAssetGUID guid = ItemFlavor_GetGUID( flavor )
-		Remote_ServerCallFunction( "ClientCallback_newness_clear", guid )
-	}
+	SettingsAssetGUID guid = ItemFlavor_GetGUID( flavor )
+	Remote_ServerCallFunction("ClientCallback_newness_clear", guid )
 }
 
 array<ItemFlavor> function Newness_GetNewItemFlavorSet()
@@ -536,7 +533,7 @@ void function ServerToClient_OnItemFlavorNewnessChanged( int guid, bool isNew )
 #if UI
 void function ClientToUI_OnItemFlavorNewnessChanged( int guid, bool isNew )
 {
-	                                                                                         
+	                                                                                   
 	if ( IsValidItemFlavorGUID( guid, eValidation.DONT_ASSERT ) == false )
 		return
 

@@ -468,6 +468,8 @@ void function Sh_JumpPad_Init()
 	 
 	    
 	 
+		                                                                                                              
+
 		                                                                            
 		                                                                            
 	 
@@ -943,7 +945,6 @@ void function StartGivePlayerDoubleJump(entity player)
 		                      
 		  
 			                                         
-		 	                                                          
 		  
 		                                
 		  
@@ -965,7 +966,7 @@ void function StartGivePlayerDoubleJump(entity player)
 	                                     
 	                          
 	 
-		                       
+		                   
 			                                                          
 		    
 			                                                    

@@ -237,6 +237,9 @@ void function Weapon_CAR_TryApplyAmmoSwap( entity player, entity weapon )
 		                                       
 		                       
 			      
+                        
+                                                                   
+        
 
 		                                                                
 		                                                           
@@ -295,10 +298,6 @@ void function Weapon_CAR_TryApplyAmmoSwap( entity player, entity weapon )
 				                          
 			 
 		 
-
-                   
-                                                                                                                  
-        
 	 
  
 #endif
@@ -310,9 +309,9 @@ void function Weapon_CAR_TryApplyAmmoSwap( entity player, entity weapon )
 			      
 
 	                                       
-		                                            
+		                                         
 	                                             
-		                                             
+		                                          
  
 #endif
 

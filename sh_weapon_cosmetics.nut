@@ -11,6 +11,7 @@ global function WeaponSkin_GetHackyRUISchemeIdentifier
 global function WeaponSkin_DoesReactToKills
 global function WeaponSkin_GetReactToKillsLevelCount
 global function WeaponSkin_GetReactToKillsDataForLevel
+global function WeaponSkin_GetReactToKillsLevelIndexForKillCount
 global function WeaponSkin_GetSortOrdinal
 global function WeaponSkin_GetWeaponFlavor
 global function WeaponSkin_GetVideo
@@ -30,6 +31,7 @@ global function GetWeaponThatCharmIsCurrentlyEquippedToForPlayer
 #endif
 #if SERVER || CLIENT
 global function WeaponCosmetics_Apply
+global function CodeCallback_GetWeaponSkin
 #endif
 #if DEV && CLIENT
 global function DEV_TestWeaponSkinData
@@ -195,7 +197,7 @@ void function OnItemFlavorRegistered_LootMainWeapon( ItemFlavor weaponFlavor )
 		}
 		charmEntry.networkTo            = eLoadoutNetworking.PLAYER_EXCLUSIVE
 		charmEntry.isItemFlavorUnlocked = bool function( EHI playerEHI, ItemFlavor flavor, bool shouldIgnoreGRX = false, bool shouldIgnoreOtherSlots = false ) : ( weaponFlavor ) {
-			if ( !shouldIgnoreOtherSlots )                                                                              
+			if ( !shouldIgnoreOtherSlots )                                                                                        
 			{
 				ItemFlavor ornull flavorCurrentWeaponEquippedTo = GetWeaponThatCharmIsCurrentlyEquippedToForPlayer( playerEHI, flavor )
 				if ( flavorCurrentWeaponEquippedTo != null && flavorCurrentWeaponEquippedTo != weaponFlavor )
@@ -627,6 +629,28 @@ WeaponReactiveKillsData function WeaponSkin_GetReactToKillsDataForLevel( ItemFla
 }
 
 
+int function WeaponSkin_GetReactToKillsLevelIndexForKillCount( ItemFlavor flavor, int killCount )
+{
+	                                                            
+	Assert( ItemFlavor_GetType( flavor ) == eItemType.weapon_skin )
+	Assert( WeaponSkin_DoesReactToKills( flavor ) )
+
+	var skinBlock = ItemFlavor_GetSettingsBlock( flavor )
+
+	var levelsArr = GetSettingsBlockArray( skinBlock, "featureReactsToKillsLevels" )
+	for ( int levelIndex = GetSettingsArraySize( levelsArr ) - 1; levelIndex >= 0; levelIndex-- )
+	{
+		var levelBlock = GetSettingsArrayElem( levelsArr, levelIndex )
+		if ( killCount >= GetSettingsBlockInt( levelBlock, "killCount" ) )
+		{
+			return levelIndex
+		}
+	}
+
+	return -1
+}
+
+
 asset function WeaponSkin_GetVideo( ItemFlavor flavor )
 {
 	Assert( ItemFlavor_GetType( flavor ) == eItemType.weapon_skin )
@@ -653,20 +677,51 @@ void function WeaponCosmetics_Apply( entity ent, ItemFlavor ornull skinOrNull, I
 		ItemFlavor skin = expect ItemFlavor( skinOrNull )
 		Assert( ItemFlavor_GetType( skin ) == eItemType.weapon_skin )
 
+<<<<<<< HEAD
+		if( ent.IsWeaponX() )
+			ent.ClearReactiveEffects()
+
 		ent.e.skinItemFlavorGUID = ItemFlavor_GetGUID( skin )
 		ent.SetSkin( 0 )                                                                                                                                                         
 
 		#if SERVER
 			                                                                                                                                                                                                    
 			                                                                                                
-			                                                                                                                                            
+			                                                                                                                                  
 			                                               
+=======
+		#if SERVER
+			                                                                                                  
+				                                              
+		#endif
+
+		ent.e.__itemFlavorNetworkId = ItemFlavor_GetNetworkIndex( skin )
+		ent.SetSkin( 0 )                                                                                                                                                         
+
+		#if SERVER
+			                                                     
+			 
+				                                                                                                
+
+				                                                                                                 
+			 
+			                                                    
+			 
+				                                                                                                                           
+				                                                
+>>>>>>> parent of 044c095 (game update)
 				                                                                         
 
-			                                                 
+				                                                                        
+			 
+			    
+			 
+				                                                                                                              
+			 
 		#elseif CLIENT
 			Assert( ent.IsClientOnly(), ent + " isn't client only" )
 			Assert( ent.GetCodeClassName() == "dynamicprop", ent + " has classname \"" + ent.GetCodeClassName() + "\" instead of \"dynamicprop\"" )
+
 			ent.SetModel( WeaponSkin_GetViewModel( skin ) )                                                                             
 		#endif
 
@@ -687,6 +742,16 @@ void function WeaponCosmetics_Apply( entity ent, ItemFlavor ornull skinOrNull, I
 
 		ent.SetSkin( skinIndex )
 		ent.SetCamo( camoIndex )
+
+<<<<<<< HEAD
+		if( ent.IsWeaponX() )
+			ent.UpdateReactiveEffects()
+=======
+		#if SERVER
+			                                               
+				                                               
+		#endif
+>>>>>>> parent of 044c095 (game update)
 	}
 
 	if ( charmOrNull != null )
@@ -696,7 +761,7 @@ void function WeaponCosmetics_Apply( entity ent, ItemFlavor ornull skinOrNull, I
 		string charmModel = WeaponCharm_GetCharmModel( charm )
 		string attachmentName = WeaponCharm_GetAttachmentName( charm )
 
-		ent.e.charmItemFlavorGUID = ItemFlavor_GetGUID( charm )
+		ent.e.charmItemFlavorNetworkId = ItemFlavor_GetNetworkIndex( charm )
 
 		#if SERVER
 			                                               
@@ -704,7 +769,7 @@ void function WeaponCosmetics_Apply( entity ent, ItemFlavor ornull skinOrNull, I
 				                  
 					                                                                                                                                                                                                   
 
-				                                                   
+				                                                         
 				                       
 					                                                
 				    
@@ -747,6 +812,34 @@ void function WeaponCosmetics_Apply( entity ent, ItemFlavor ornull skinOrNull, I
 		#endif
 	}
 }
+
+int function CodeCallback_GetWeaponSkin( entity weapon )
+{
+	if ( !GetConVarBool( "enable_code_weapon_reactive" ) )
+		return 0
+
+	if ( !IsValid( weapon ) )
+		return 0
+
+	int weaponGrade = weapon.GetGrade()
+	if ( !IsValidItemFlavorNetworkIndex( weaponGrade, eValidation.DONT_ASSERT ) )
+	{
+		printt( "Debugging CodeCallback_GetWeaponSkin: Not a valid item flavor network id: " + weaponGrade + " weapon name: " + weapon.GetWeaponClassName() )
+		return 0
+	}
+
+	ItemFlavor weaponSkin = GetItemFlavorByNetworkIndex( weaponGrade )
+	int flavorType = ItemFlavor_GetType( weaponSkin )
+
+	Assert( flavorType == eItemType.weapon_skin, "Debugging CodeCallback_GetWeaponSkin: For weapon " + weapon.GetWeaponClassName() +
+		": Itemflavor " + string(ItemFlavor_GetAsset( weaponSkin )) + " is not a valid skin asset. GUID: " +  ItemFlavor_GetGUIDString( weaponSkin ) +  " Type: " + flavorType + " NetworkIndex: " + ItemFlavor_GetNetworkIndex( weaponSkin ) )
+
+	if ( !GetGlobalSettingsBool( ItemFlavor_GetAsset( weaponSkin ), "featureReactsToKills" ) )
+		return 0
+
+	return ItemFlavor_GetGUID( weaponSkin )
+}
+
 #endif                    
 
 

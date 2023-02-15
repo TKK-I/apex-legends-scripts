@@ -573,7 +573,7 @@ void function _DebugThreadDrawCircleOnTag( entity ent, string tag, float radius,
 	ent.EndSignal( "OnDeath" )
 
 	int attachIdx = ent.LookupAttachment( tag )
-	Assert( attachIdx != 0 )
+	Assert( attachIdx )
 	float interval = 0.1
 
 	while ( time > 0 )

@@ -207,14 +207,9 @@ void function ShQuickchat_Init()
 		file.replyMap[ eCommsAction.REPLY_REVIVE_THANKS ] <- eCommsAction.REPLY_REVIVE_WELCOME
 
                                  
-			file.replyMap[eCommsAction.REPLY_LOVE_YOU] <- eCommsAction.REPLY_LOVE_YOU_MORE
-			file.replyMap[eCommsAction.REPLY_LOVE_YOU_MORE] <- eCommsAction.REPLY_NO_I_LOVE_YOU_MORE
-			file.replyMap[eCommsAction.REPLY_NO_I_LOVE_YOU_MORE] <- eCommsAction.REPLY_NO_I_LOVE_YOU_MORE
-
-			                                                         
-			file.altMap[eCommsAction.REPLY_LOVE_YOU] <- eCommsAction.REPLY_LOVE_YOU
-			file.altMap[eCommsAction.REPLY_LOVE_YOU_MORE] <- eCommsAction.REPLY_LOVE_YOU_MORE
-			file.altMap[eCommsAction.REPLY_NO_I_LOVE_YOU_MORE] <- eCommsAction.REPLY_NO_I_LOVE_YOU_MORE
+                                                                                 
+                                                                                           
+                                                                                                
         
 
 		file.altMap[ eCommsAction.REPLY_WELCOME ] <- eCommsAction.REPLY_WELCOME_ALT
@@ -227,7 +222,12 @@ void function ShQuickchat_Init()
 	#endif
 
 	#if SERVER
+                                 
+			                                                                               
+        
 		                                                                             
+		                                                                                    
+		                                                                                      
 	#endif
 
 	#if SERVER || CLIENT
@@ -382,13 +382,16 @@ array<string> function GetSubjectNamesForCommsAction( int commsAction, entity su
 			return [""]
 	}
 
+<<<<<<< HEAD
                     
-                                                                                                                                                 
-  
-                                                                 
-  
+	if( ( commsAction == eCommsAction.REPLY_CAREPACKAGE_INSIGHT || commsAction == eCommsAction.REPLY_CAREPACKAGE_INSIGHT_LOOTED ) && itemRef != "" )
+	{
+		return [SURVIVAL_Loot_GetLootDataByRef( itemRef ).pickupString]
+	}
        
 
+=======
+>>>>>>> parent of 044c095 (game update)
 	if ( subjectEnt.IsPlayer() )
 		return [subjectEnt.GetPlayerName()]
 
@@ -519,10 +522,14 @@ array<string> function GetSubjectNamesForCommsAction( int commsAction, entity su
 		{
 			if ( commsAction == eCommsAction.PING_CONTROL_OBJECTIVE_ATTACK || commsAction == eCommsAction.PING_CONTROL_OBJECTIVE_DEFEND )
 			{
-				entity owner = subjectEnt.GetOwner()
-				if ( IsValid( owner ) && IsPlayerWaypoint( owner ) && owner.GetWaypointType() == eWaypoint.CONTROL_OBJECTIVE )
+				if ( IsValid( subjectEnt ) && IsValid( subjectEnt.GetOwner() ) && !subjectEnt.GetOwner().IsPlayer() )
 				{
-					int objectiveID = owner.GetWaypointInt( INT_OBJECTIVE_ID )
+					int objectiveID = subjectEnt.GetOwner().GetWaypointInt( INT_OBJECTIVE_ID )
+					return [ Control_GetObjectiveNameFromObjectiveID_Localized( objectiveID ) ]
+				}
+				else if ( IsValid( subjectEnt ) && IsValid( subjectEnt.GetOwner() ) && subjectEnt.GetOwner().IsPlayer() )
+				{
+					int objectiveID = subjectEnt.GetWaypointInt( INT_OBJECTIVE_ID )
 					return [ Control_GetObjectiveNameFromObjectiveID_Localized( objectiveID ) ]
 				}
 			}
@@ -562,15 +569,15 @@ vector function GetSubjectColorForCommsAction( entity subjectEnt, string itemRef
 			{
 				if ( subjectEnt.GetWaypointInt( CONTROL_INT_OBJ_TEAM_OWNER ) == ALLIANCE_NONE )
 				{
-					return Control_GetColorVectorForObjectiveState( eControlObjectiveColorState.ENEMY_OWNED )
+					return GamemodeUtility_GetColorVectorForCaptureObjectiveState( eGamemodeUtilityCaptureObjectiveColorState.ENEMY_OWNED )
 				}
 				else if ( IsTeamInAlliance( player.GetTeam(), subjectEnt.GetWaypointInt( CONTROL_INT_OBJ_TEAM_OWNER ) ) )
 				{
-					return Control_GetColorVectorForObjectiveState( eControlObjectiveColorState.FRIENDLY_OWNED )
+					return GamemodeUtility_GetColorVectorForCaptureObjectiveState( eGamemodeUtilityCaptureObjectiveColorState.FRIENDLY_OWNED )
 				}
 				else if ( !IsTeamInAlliance( player.GetTeam(), subjectEnt.GetWaypointInt( CONTROL_INT_OBJ_TEAM_OWNER ) ) )
 				{
-					return Control_GetColorVectorForObjectiveState( eControlObjectiveColorState.ENEMY_OWNED )
+					return GamemodeUtility_GetColorVectorForCaptureObjectiveState( eGamemodeUtilityCaptureObjectiveColorState.ENEMY_OWNED )
 				}
 			}
 			break
@@ -616,11 +623,11 @@ vector function GetSecondarySubjectColorForCommsAction( entity subjectEnt, entit
 				}
 				else if ( IsTeamInAlliance( player.GetTeam(), subjectEnt.GetWaypointInt( CONTROL_INT_OBJ_TEAM_OWNER ) ) )
 				{
-					return Control_GetColorVectorForObjectiveState( eControlObjectiveColorState.FRIENDLY_OWNED )
+					return GamemodeUtility_GetColorVectorForCaptureObjectiveState( eGamemodeUtilityCaptureObjectiveColorState.FRIENDLY_OWNED )
 				}
 				else if ( !IsTeamInAlliance( player.GetTeam(), subjectEnt.GetWaypointInt( CONTROL_INT_OBJ_TEAM_OWNER ) ) )
 				{
-					return Control_GetColorVectorForObjectiveState( eControlObjectiveColorState.ENEMY_OWNED )
+					return GamemodeUtility_GetColorVectorForCaptureObjectiveState( eGamemodeUtilityCaptureObjectiveColorState.ENEMY_OWNED )
 				}
 			}
 			break
@@ -668,7 +675,7 @@ bool function GetCommsActionIsFar( entity player, entity subjectEnt, vector subj
 {
 	const float FAR_DIST_THRESHOLD = 2048.0
 
-	if ( IsBitFlagSet( commsFlags, eCommsFlags.FORCE_FAR ) )
+	if ( commsFlags & eCommsFlags.FORCE_FAR )
 	{
 		printt( "Far [YES] <- eCommsFlags.FORCE_FAR" )
 		return true
@@ -766,7 +773,7 @@ bool function PlayerDeliveryShouldBeUrgent( entity player, vector subjectPos, in
 	const float TEAMMATE_NEAR_SUBJECT_POS = 1024.0
 	const float SUBJECT_NEAR_SPOTTED_ENEMY = 1024.0
 
-	if ( IsBitFlagSet( commsFlags, eCommsFlags.FORCE_URGENT ) )
+	if ( commsFlags & eCommsFlags.FORCE_URGENT )
 	{
 		printt( "Urgent [YES] <- eCommsFlags.FORCE_URGENT" )
 		return true
@@ -845,18 +852,13 @@ float function GetCooldownTimeForCommsAction( int commsAction )
 			return 0.7
       
                          
-                                                     
-             
+		case eCommsAction.FIRING_RANGE_TARGET_SPEED_CHANGE:
+			return 0.9
       
                    
-                                              
-                                                     
-             
-      
-                       
-                                                      
-                                                   
-             
+		case eCommsAction.REPLY_CAREPACKAGE_INSIGHT:
+		case eCommsAction.REPLY_CAREPACKAGE_INSIGHT_FUTURE:
+			return 0.5
       
 	}
 
@@ -869,8 +871,8 @@ float function GetCooldownTimeForCommsAction( int commsAction )
 bool function ShouldMuteCommsActionForCooldown( entity player, int commsAction, entity subjectEnt )
 {
                                 
-		if ( commsAction == eCommsAction.REPLY_NO_I_LOVE_YOU_MORE )
-			return false
+                                                             
+               
        
 
 	if ( IsValid( subjectEnt ) && (subjectEnt.GetNetworkedClassName() == "prop_survival") && commsAction != eCommsAction.REPLY_LOOT_DIBS )
@@ -1048,23 +1050,8 @@ void function HandleBroadcastCommsAction( entity player, int commsAction, entity
 	RunQuickChatCallbacks( player, commsAction, subjectEnt )
 
 	string chatText = act.chatText
-	if ( chatText != "" && !IsBitFlagSet( commsFlags, eCommsFlags.NO_TEXT ) )
+	if ( chatText != "" && ! ( commsFlags & eCommsFlags.NO_TEXT ) )
 	{
-                                 
-			switch( commsAction )
-			{
-				case eCommsAction.REPLY_LOVE_YOU:
-				case eCommsAction.REPLY_LOVE_YOU_MORE:
-				case eCommsAction.REPLY_NO_I_LOVE_YOU_MORE:
-					if ( opt.isFirstPerson )
-						chatText += "_1P"
-					break
-
-				default:
-					break
-			}
-        
-
 		string playerName          = opt.isFirstPerson ? Localize( "#OBITUARY_YOU" ) : player.GetPlayerName()
 		vector playerColor         = GetChatTitleColorForPlayer( player )
 
@@ -1382,13 +1369,13 @@ void function PromptReplyWhenPrimaryFinishes( entity playerSpeakingPrimary, int 
 			break
                                
 
-		case eCommsAction.REPLY_LOVE_YOU_MORE:
-			locString = Localize( "#PING_SAY_LOVE_YOU_MORE" )
-			break
+                                        
+                                                    
+        
 
-		case eCommsAction.REPLY_NO_I_LOVE_YOU_MORE:
-			locString = Localize( "#PING_SAY_NO_I_LOVE_YOU_MORE" )
-			break
+                                             
+                                                         
+        
       
 
 		default:
@@ -1782,18 +1769,18 @@ void function AddCallback_OnQuickchatEvent( int index, void functionref(entity, 
 	                                                                
 
                    
-                 
-                                                                   
-  
-                                                                    
-                   
-  
+	                
+	                                                                  
+	 
+		                                                                  
+		                 
+	 
+	    
+	 
+		                                                                                       
+	 
      
-  
-                                                                                         
-  
-     
-	                                                                                           
+                                                                                            
       
 
                              
@@ -1813,7 +1800,7 @@ void function AddCallback_OnQuickchatEvent( int index, void functionref(entity, 
    
        
 
-	                                                           
+	                                            
 	 
 		                                                          
 
@@ -1824,7 +1811,7 @@ void function AddCallback_OnQuickchatEvent( int index, void functionref(entity, 
 		      
 	 
 
-	                                                                          
+	                                                           
 	 
 		                             
 
@@ -1929,8 +1916,8 @@ void function AddCallback_OnQuickchatEvent( int index, void functionref(entity, 
 			                                                                                                                                
        
                          
-                                                     
-                                                       
+		                                                   
+			                                                    
       
 	 
 
@@ -1955,7 +1942,7 @@ void function RunQuickChatCallbacks( entity player, int commsAction, entity subj
 #if SERVER
                                                                                      
  
-	                                                                             
+	                        
 		                                      
  
 #endif

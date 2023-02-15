@@ -174,6 +174,15 @@ void function OnWeaponDeactivate_weapon_mobile_hmg( entity weapon )
 
 bool function OnWeaponAttemptOffhandSwitch_weapon_mobile_hmg( entity weapon )
 {
+	int ammoReq = weapon.GetAmmoPerShot()
+	int currAmmo = weapon.GetWeaponPrimaryClipCount()
+	if ( currAmmo < ammoReq )
+		return false
+
+	entity player = weapon.GetWeaponOwner()
+	if ( player.IsPhaseShifted() )
+		return false
+
 	return true
 }
 
@@ -327,11 +336,6 @@ void function OnWeaponReload_weapon_mobile_hmg( entity weapon, int milestoneInde
 
 void function OnAnimEvent_weapon_mobile_hmg( entity weapon, string eventName )
 {
-#if CLIENT
-	if ( !weapon.IsPredicted() )
-		return
-#endif
-
 	switch ( eventName )
 	{
 		case "rampart_turret_mobile_button_press":
@@ -504,6 +508,9 @@ void function MobileHMG_RegisterNetworkFunctions()
                                                                           
  
 	                         
+		      
+
+	                                                                               
 		      
 
 	                                                                             

@@ -4,15 +4,8 @@ global function OnWeaponChargeEnd_ability_mirage_ultimate
 global function OnWeaponAttemptOffhandSwitch_ability_mirage_ultimate
 
                      
-            
-                                                          
-
-                
-                                                                   
-                                                                          
-                                    
-
-                                   
+                                      
+const int CLOAK_TRIGGER_RADIUS = 240
                            
 
 struct
@@ -53,7 +46,7 @@ void function CancelHint_OnDestroy( entity player, int statusEffect, bool actual
 bool function OnWeaponAttemptOffhandSwitch_ability_mirage_ultimate( entity weapon )
 {
 	entity player = weapon.GetWeaponOwner()
-	if ( !IsValid( player ) )
+	if ( player.IsPhaseShifted() )
 		return false
 
 	if ( !PlayerCanUseDecoy( player ) )
@@ -163,11 +156,8 @@ void function OnWeaponChargeEnd_ability_mirage_ultimate( entity weapon )
 		 
 			                             
 			 
-                         
-         
-					                                    
-						                                
-                               
+				                                    
+					                                
 				                                          
 			 
 		 
@@ -203,8 +193,6 @@ bool function ShouldDoKaleidoscopeUltimate()
  
 	                                      
 
-	                             
-
 	                                                                                          
 	                                                                                                  
 	                                                          
@@ -219,9 +207,7 @@ bool function ShouldDoKaleidoscopeUltimate()
 		                                                                     
 
 		                                                                       
-		                                                                   
 
-		                                     
 		                                 
 		                              
 		                                                                                                          
@@ -234,171 +220,20 @@ bool function ShouldDoKaleidoscopeUltimate()
 		                                            
 		                                                                                                   
 			                       
-				                                                     
+				                                                    
 		   
+                       
+		                                                                                              
+			                      
+				                                                   
+		  
+        
 	 
- 
-
-                                                                                       
- 
-	                                          
-
-	             
-
-	                                            
  
 #endif              
 
-                     
-
-                                        
- 
-                                                                 
- 
-
-          
-                                                                      
-
-                                          
- 
-                                       
-
-                                                                                           
-                                                                                                   
-                                                           
-  
-                                                                                       
-                                              
-                              
-                              
-
-                                                                                       
-                                                         
-                                                                                                
-                                                           
-                                            
-                                                                                                                                                        
-
-                                                                                                         
-                                    
-
-                                                                                                                            
-                                                                                                                            
-
-                                                                       
-
-                                                                         
-
-                                   
                                 
-                                                                                                            
-                              
-                              
-                                 
-                         
-                                         
-                                                    
-                                              
-                                                                                                     
-                          
-                                                         
-     
-  
- 
-
-                                                
- 
-                      
-        
-
-                            
-
-                                                                                                                                                
-                        
-                             
-                                         
-                                                  
-                            
-
-                                          
- 
-
-                                                               
- 
-                               
-
-                                       
-                    
-
-                                                                                                             
-                              
-                                          
-                                   
-                                             
-                                     
-
-                                  
-
-             
-                                   
-   
-                            
-                               
-                     
-                           
-                      
-   
-  
-
-                            
- 
-
-                                                            
- 
-                                          
-        
-
-                      
-                                                  
- 
-
-                                                                        
- 
-                                 
-                               
-                                  
-
-                                              
-                                                                                                                                                                                    
-
-             
-                                         
-   
-                           
-    
-                                                                                                                                     
-
-                                                                                
-                                                
-                                          
-    
-   
-  
-
-                                      
-  
-             
-  
- 
-
-                                                                                      
- 
-           
-
-                     
-                  
- 
-
+          
                            
 
                                                  
@@ -460,9 +295,9 @@ bool function ShouldDoKaleidoscopeUltimate()
                                                
                                                                                                        
                            
-                                                          
+                                                         
      
   
  
                 
-                           
+                                      

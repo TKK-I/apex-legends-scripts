@@ -542,9 +542,6 @@ void function ValkTacManageThreatIndicator()
 			arrow.EnableDraw()
 			mdl.EnableDraw()
 
-			arrow.kv.rendercolor = GetKeyColor( COLORID_HUD_INDICATOR_ARROW )
-			mdl.kv.rendercolor = GetKeyColor( COLORID_HUD_INDICATOR_GRENADE_MODEL )
-
 			arrow.DisableRenderWithViewModelsNoZoom()
 			arrow.EnableRenderWithCockpit()
 			arrow.EnableRenderWithHud()
@@ -608,6 +605,7 @@ var function OnWeaponPrimaryAttack_valk_cluster_missile( entity weapon, WeaponPr
 			                                           
 			                                                                  
 			                                                                                   
+			                                                                                                                     
 		#endif
 
 	}
@@ -763,10 +761,10 @@ var function OnWeaponPrimaryAttack_valk_cluster_missile( entity weapon, WeaponPr
 	        
 
                         
-		if ( weapon.HasMod( "arenas_tac_max" ) )
-		{
-			return weapon.GetAmmoPerShot()
-		}
+                                          
+   
+                                 
+   
        
 
 	                                                                                       
@@ -928,7 +926,7 @@ int function ValkCanFireTactical( entity weapon )
 		return eCanFireTactical.NO_OTHER
 
 	entity owner = weapon.GetWeaponOwner()
-	if ( StatusEffect_HasSeverity( owner, eStatusEffect.skyward_embark ) )
+	if ( StatusEffect_GetSeverity( owner, eStatusEffect.skyward_embark ) > 0.0 )
 	{
 		return eCanFireTactical.NO_OTHER
 	}

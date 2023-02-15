@@ -31,8 +31,6 @@ global function MobileRespawn_SetDeployPositionValidationFunc
                                                                                
             
                                                                                
-global const string MOBILE_RESPAWN_BEACON_WEAPON_REF = "mp_ability_mobile_respawn_beacon"
-
 const string MOBILE_RESPAWN_BEACON_STARTUP_SOUND = "Survival_MobileRespawnBeacon_Startup"
 
 const asset MOBILE_RESPAWN_BEACON_MODEL = $"mdl/props/mobile_respawn_beacon/mobile_respawn_beacon_animated.rmdl"
@@ -85,7 +83,7 @@ struct
                                                                                
 void function MobileRespawnBeacon_Init()
 {
-	SURVIVAL_Loot_RegisterConditionalCheck( MOBILE_RESPAWN_BEACON_WEAPON_REF, MobileRespawn_ConditionalCheck )
+	SURVIVAL_Loot_RegisterConditionalCheck( "mp_ability_mobile_respawn_beacon", MobileRespawn_ConditionalCheck )
 	PrecacheModel( MOBILE_RESPAWN_BEACON_MODEL )
 	PrecacheParticleSystem( MOBILE_RESPAWN_BEACON_EFFECT )
 	PrecacheParticleSystem( MOBILE_RESPAWN_BEACON_AR_DROP_POINT_FX )
@@ -121,6 +119,8 @@ void function OnWeaponActivate_mobile_respawn( entity weapon )
 	Assert( ownerPlayer.IsPlayer() )
 
 	#if CLIENT
+		if ( !InPrediction() )                             
+			return
 
 		RunUIScript( "CloseSurvivalInventoryMenu" )
 
@@ -134,16 +134,13 @@ void function OnWeaponActivate_mobile_respawn( entity weapon )
       
        
 		{
-			OnBeginPlacingMobileRespawn( weapon, ownerPlayer )
-
-			if ( !InPrediction() )                             
-				return
-
 			int skinIndex = weapon.GetSkinIndexByName( "mobile_respawn_beacon_clacker" )
 			if ( skinIndex != -1 )
 			{
 				weapon.SetSkin( skinIndex )
 			}
+
+			OnBeginPlacingMobileRespawn( weapon, ownerPlayer )
 		}
 	#endif          
 }
@@ -237,7 +234,7 @@ var function OnWeaponPrimaryAttack_mobile_respawn( entity weapon, WeaponPrimaryA
                                  
 		 
 			                                                                                         
-			                                                      
+			                                                        
 			 
 				                                        
 				        
@@ -315,7 +312,7 @@ var function OnWeaponPrimaryAttackAnimEvent_mobile_respawn(entity ent, WeaponPri
 	                                                                                         
 	                                           
                     
-                                                                                                                            
+		                                                                                                                          
        
 	                                      
 	                               

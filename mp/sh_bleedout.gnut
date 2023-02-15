@@ -19,10 +19,11 @@ global function Bleedout_GetPlayerBleedoutTypeCount
 global function Bleedout_GetRevivingPlayer
                         
 global function Bleedout_GetHasInfiniteSelfRes
+global function Bleedout_GetCanForceBleedoutTimeout
                               
 
 global function BleedoutState_GetPlayerBleedoutState
-global function Bleedout_GetCanForceBleedoutTimeout
+
 global function Bleedout_CheckPlayerUseTargetDist
 
 #if SERVER
@@ -83,6 +84,10 @@ struct BleedoutData
 struct
 {
 	bool                bleedoutLogicActive = false
+                        
+	bool 				hasInfiniteSelfRes = false
+	bool				canForceBleedoutTimeout = false
+                              
 	array<BleedoutData> bleedoutTypes
 
 	#if SERVER
@@ -150,8 +155,16 @@ void function BleedoutShared_Init()
 			                                                            
                                 
 	#endif
+                         
+		file.hasInfiniteSelfRes = GetCurrentPlaylistVarBool( "bleedout_has_infinite_self_res", false )
+		file.canForceBleedoutTimeout = GetCurrentPlaylistVarBool( "bleedout_can_force_bleedout_timeout", false )
+                               
+
+	if (IsFiringRangeGameMode())
+		file.canForceBleedoutTimeout = true
 
 	AddCallback_CheckPlayerCanUse( CheckPlayerCanUse )
+
 	file.bleedoutLogicActive = true
 }
 
@@ -160,14 +173,7 @@ bool function CheckPlayerCanUse( entity player, entity target )
 	if ( !Bleedout_IsBleedingOut( player ) )
 		return true
 
-                        
-                                
-                                                   
-              
-  
-                              
-
-	if ( target.GetNetworkedClassName() == "prop_door" || target.GetScriptName() == "survival_door_plain")
+	if ( target.GetNetworkedClassName() == "prop_door" || target.GetScriptName() == "survival_door_plain" )
 		return true
 
 	return false
@@ -196,22 +202,6 @@ const float DEBUG_REVIVE_ARROW_SIZE = 4
 
 bool function Bleedout_CanRevivePlayer( entity reviver, entity victim, int useFlags )
 {
-                                     
-                                
-         
-                                                                     
-          
-                                                                                                           
-           
-                                             
-            
-                       
-            
-           
-          
-         
-          
-
 	if ( !Bleedout_PlayerCanRes( reviver ) )
 		return false
 
@@ -352,7 +342,7 @@ float function Bleedout_GetFirstAidTime( entity player )
 	int type = player.GetPlayerNetInt( "bleedoutType" )
 
 #if SERVER
-	                                                                                                                                                                 
+	                                                                                                                                                                     
 	 
 		                                                                                   
 	 
@@ -372,13 +362,13 @@ float function Bleedout_GetFirstAidTime( entity player )
 
 float function Bleedout_GetFirstAidTimeSelf( entity player )
 {
-		if ( (StatusEffect_HasSeverity( player, eStatusEffect.ring_immunity )) && GetCurrentPlaylistVarBool( "heatshield_allow_fast_revive", VOID_RING_CAN_FAST_REVIVE) )
+		if ( (StatusEffect_GetSeverity( player, eStatusEffect.ring_immunity ) > 0) && GetCurrentPlaylistVarBool( "heatshield_allow_fast_revive", VOID_RING_CAN_FAST_REVIVE) )
 		{
 			return GetCurrentPlaylistVarFloat( "heatshield_self_revive_time", VOID_RING_SELF_REVIVE_TIME)
 		}
 
                
-                                                                                      
+                                                                                          
    
                                           
    
@@ -503,7 +493,7 @@ bool function Bleedout_PlayerCanRes( entity player )
 		}
 	}
 
-	if ( StatusEffect_HasSeverity( player, eStatusEffect.interrupted ) )
+	if ( StatusEffect_GetSeverity( player, eStatusEffect.interrupted ) > 0.0 )
 		return false
 
 
@@ -630,9 +620,13 @@ int function BleedoutState_GetPlayerBleedoutState( entity player )
 void function OnPingCreatedByAnyPlayer_TrackCrosshairTarget( entity pingingPlayer, int pingType, entity focusEnt, vector pingLoc, entity wayPoint )
 {
                     
-                                                                                                                                                                                                                                    
+<<<<<<< HEAD
+		if ( pingType != ePingType.BLEEDOUT && pingType != ePingType.RESPAWN_BANNER && pingType != ePingType.CAREPACKAGE_INSIGHT && pingType != ePingType.CAREPACKAGE_INSIGHT_FUTURE )
+=======
+                                                                                                                                                                                
+>>>>>>> parent of 044c095 (game update)
       
-		if ( pingType != ePingType.BLEEDOUT && pingType != ePingType.RESPAWN_BANNER )
+                                                                               
        
 			return
 
@@ -693,12 +687,12 @@ bool function Bleedout_CheckPlayerUseTargetDist( entity player, entity useTarget
                                                                             
 bool function Bleedout_GetHasInfiniteSelfRes()
 {
-	return GetCurrentPlaylistVarBool( "bleedout_has_infinite_self_res", false )
+	return file.hasInfiniteSelfRes
 }
-                              
 
                                                                                                          
 bool function Bleedout_GetCanForceBleedoutTimeout()
 {
-	return GetCurrentPlaylistVarBool( "bleedout_can_force_bleedout_timeout", false )
+	return file.canForceBleedoutTimeout
 }
+                              

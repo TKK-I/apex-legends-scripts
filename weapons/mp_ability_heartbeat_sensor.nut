@@ -8,7 +8,6 @@ global function DeactivateHeartbeatSensor
 global function GetHeartbeatSensorRange
 #if CLIENT
 global function InitializeHeartbeatSensorUI
-global function GeneratePlayersInViewInfo
 #endif         
 
 #if SERVER
@@ -19,16 +18,16 @@ global function GeneratePlayersInViewInfo
 #endif         
 global const float HEARTBEAT_SENSOR_NATURAL_RANGE = 75 / INCHES_TO_METERS            
                                
-                                                                  
-                                                           
-                                                                                                                                                                                                                                                                                                                              
-                                                                                                                                                      
-                                                                                          
-     
+global const float HEARTBEAT_SENSOR_INITIAL_ACTIVATION_DELAY_DEFAULT = 0.4
 global const float HEARTBEAT_SENSOR_PING_INTERVAL_MIN = 0.4
-global const float HEARTBEAT_SENSOR_PING_INTERVAL_MAX = 1.75
-const float HEARTBEAT_SENSOR_STARTUP_TARGET_DELAY_MIN = HEARTBEAT_SENSOR_PING_INTERVAL_MIN                                                                                           
+global const float HEARTBEAT_SENSOR_PING_INTERVAL_MAX = 1.65                                                                                                                                                                                                                                                                  
+const float HEARTBEAT_SENSOR_STARTUP_TARGET_DELAY_MIN = 1.0                                                                                           
 const float HEARTBEAT_SENSOR_STARTUP_TARGET_DELAY_MAX = HEARTBEAT_SENSOR_PING_INTERVAL_MAX
+     
+                                                           
+                                                            
+                                                                                                                                                                                     
+                                                                                          
                                     
 
 const float TICK_RATE = 0.01
@@ -71,6 +70,9 @@ const bool HEARTBEAT_SENSOR_DEBUG = false
 const bool HEARTBEAT_SENSOR_DEBUG_VERBOSE = false
 const bool HEARTBEAT_SENSOR_WEAPON_MODS_DEBUG = false
 const bool HEARTBEAT_SENSOR_STAT_TRACKING_DEBUG = false
+                               
+const bool DEBUG_HEARTBEAT_SENSOR_DELAY = false
+      
                                    
 const bool HEARTBEAT_SENSOR_COMMS_DEBUG = false
                                         
@@ -127,7 +129,6 @@ void function PassiveHeartbeatSensor_Init()
 	PrecacheWeapon( "mp_ability_heartbeat_sensor" )
 	RegisterSignal( "DestroyHeartbeatSensor" )                                        
 	RegisterSignal( "EndHeartbeatSensorUI" )               
-	RegisterSignal( "DeactivateHeartbeatSensor" )
 
 	file.heartbeatSensorRange = GetHeartbeatSensorRange()
 	file.heartbeatSensorRangeSqr = pow( file.heartbeatSensorRange, 2 )
@@ -252,7 +253,9 @@ void function PlayerZoomInCallback( entity player )
 			thread TurretHeartbeatSensor_Thread( player )
 		}
 	}
-	#endif         
+	#elseif SERVER
+	                                       
+	#endif
 }
 
 #if CLIENT
@@ -319,7 +322,9 @@ void function PlayerZoomOutCallback( entity player )
 	{
 		player.Signal("EndHeartbeatSensorUI")
 	}
-	#endif         
+	#elseif SERVER
+	                                          
+	#endif
 }
 
 void function OnWeaponActivate_ability_heartbeat_sensor( entity weapon )
@@ -333,30 +338,59 @@ void function OnWeaponActivate_ability_heartbeat_sensor( entity weapon )
 		return
 
                                 
-                                                              
+	thread DelayedActivateHeartbeatSensor_Thread( player, false )
       
-	ActivateHeartbeatSensor( player, false )
+                                         
        
 }
                                
+<<<<<<< HEAD
+void function DelayedActivateHeartbeatSensor_Thread( entity player, bool fromTac )
+{
+	EndSignal( player, "OnDeath" )
+	EndSignal( player, "OnDestroy" )
+	EndSignal( player, "DeactivateHeartbeatSensor" )
+=======
                                                                                   
  
                                
                                  
-                                                 
+>>>>>>> parent of 044c095 (game update)
 
-                                                                     
-                            
-  
-                        
-         
-                                        
-         
-             
-  
+	float delayTime = Time() + HEARTBEAT_SENSOR_INITIAL_ACTIVATION_DELAY_DEFAULT
 
-                                           
- 
+	entity viewWeapon = player.GetActiveWeapon( eActiveInventorySlot.mainHand )
+	if ( IsValid( viewWeapon ) && !DoesWeaponTriggerMeleeAttack( viewWeapon ) )
+	{
+		float raiseTime = viewWeapon.GetWeaponSettingFloat( eWeaponVar.raise_time )
+		if ( raiseTime > 0.0 )
+		{
+			#if DEV
+				if ( DEBUG_HEARTBEAT_SENSOR_DELAY )
+					printt( FUNC_NAME() + "Setting delay to: " + ( raiseTime * 0.5 ) )
+			#endif
+			delayTime = Time() + ( raiseTime * 0.5 )
+		}
+	}
+	#if DEV
+	else
+	{
+		if ( DEBUG_HEARTBEAT_SENSOR_DELAY )
+			printt( FUNC_NAME() + "Setting delay to: " + HEARTBEAT_SENSOR_INITIAL_ACTIVATION_DELAY_DEFAULT )
+	}
+	#endif
+
+	while( Time() < delayTime )
+	{
+		if( !IsValid(player) )
+			return
+		if ( !PlayerIsInADS( player, false ) )
+			return
+		WaitFrame()
+	}
+
+	ActivateHeartbeatSensor( player, fromTac )
+}
       
 
 void function OnWeaponDeactivate_ability_heartbeat_sensor( entity weapon )
@@ -374,9 +408,12 @@ void function OnWeaponDeactivate_ability_heartbeat_sensor( entity weapon )
 
 bool function OnWeaponAttemptOffhandSwitch_ability_heartbeat_sensor( entity weapon )
 {
-	entity player = weapon.GetOwner()
+	entity player = weapon.GetWeaponOwner()
 
-	if( !IsValid( player ) )
+	if ( !IsValid( player ) )
+		return false
+
+	if ( !player.IsPlayer() )
 		return false
 
 	return PlayerHasPassive( player, ePassives.PAS_PARIAH )
@@ -411,7 +448,7 @@ void function HeartbeatSensorTogglePressed( entity player )
 	if ( !IsValid( activeWeapon ) )
 		return
 
-	if ( StatusEffect_HasSeverity( player, eStatusEffect.silenced ) )
+	if ( StatusEffect_GetSeverity( player, eStatusEffect.silenced ) > 0 )
 		return
 
 	if ( activeWeapon.IsWeaponAdsButtonPressed() || activeWeapon.IsWeaponInAds() )
@@ -594,7 +631,7 @@ void function InitializeHeartbeatSensorUI( entity player )
 		file.heartbeatSensorRui = CreateCockpitRui( $"ui/heartbeat_sensor_waveform_radial.rpak" )
 		RuiSetGameTime( file.heartbeatSensorRui, "startTime", Time() )
                                  
-                                                              
+		RuiSetBool( file.heartbeatSensorRui, "alternateMode", true )
         
 		entity activeWeapon = player.GetActiveWeapon( eActiveInventorySlot.mainHand )
 		thread CL_HeartSeekerRUIThread( player, activeWeapon )
@@ -618,8 +655,6 @@ void function ActivateHeartbeatSensor( entity player, bool fromTac )
 
 			                                                       
 		 
-
-		                                       
 	#endif         
 	#if CLIENT
 		entity localViewPlayer = GetLocalViewPlayer()
@@ -944,11 +979,14 @@ void function ShowHeartbeatSensorRange_Thread( entity player )
 
 void function DeactivateHeartbeatSensor( entity player, bool fromTac )
 {
+<<<<<<< HEAD
 	player.Signal("DeactivateHeartbeatSensor")
 
+=======
 	#if SERVER
 		                                          
 	#endif         
+>>>>>>> parent of 044c095 (game update)
 	#if CLIENT
 		if ( player == GetLocalViewPlayer() )
 		{
@@ -1113,7 +1151,7 @@ void function ManageVictims_Thread( entity player )
          
 
                    
-				if ( IsValid( victimInfo.player ) && FerroWall_BlockScan( player.GetOrigin(), victimInfo.player.GetOrigin() ) )
+				if ( IsValid( victimInfo.player ) && FerroWall_BlockScan( player.EyePosition(), victimInfo.player.GetWorldSpaceCenter() ) )
 					continue
          
 
@@ -1356,9 +1394,7 @@ void function DoVictimHeartbeat_Thread( entity player, entity victim, float watc
 
 				UpdateDataForHeartseekerRadarWaveformRadial( player, victim, false, false )
 				beatSoundTime = HEARTBEAT_SOUND_BAR_WAIT_TIME
-			}
-			else if ( victim in file.waveformRadialValueTable )
-			{
+			}else if ( victim in file.waveformRadialValueTable ){
 				delete file.waveformRadialValueTable[victim]
 			}
 		}
@@ -1507,7 +1543,6 @@ void function CL_HeartSeekerRUIThread( entity player, entity weapon )
 	                                                                                                             
 	weaponFireDelay += 0.3
 
-	                                                      
 	RuiSetFloat( file.heartbeatSensorRui, "weaponFireDelay", weaponFireDelay )
 	RuiSetFloat( file.heartbeatSensorRui, "offset", offset )
 	RuiSetFloat( file.heartbeatSensorRui, "heartbeatSensorNaturalRange", file.heartbeatSensorRange )
@@ -1521,7 +1556,7 @@ void function CL_HeartSeekerRUIThread( entity player, entity weapon )
 
 	while ( true )
 	{
-		bool isSilenced = ( StatusEffect_HasSeverity( player, eStatusEffect.silenced ) )
+		bool isSilenced = ( StatusEffect_GetSeverity( player, eStatusEffect.silenced ) > 0 )
 		RuiSetBool( file.heartbeatSensorRui, "isSilenced", isSilenced )
 
 		bool targetsInRange = false
@@ -1552,8 +1587,7 @@ void function CL_HeartSeekerRUIThread( entity player, entity weapon )
 				RuiSetBool( file.heartbeatSensorRui, "target" + (j + 1) + "Locked", false )
 			}
 		}
-		if(lastTargetsInRange != targetsInRange)
-		{
+		if(lastTargetsInRange != targetsInRange){
 			lastTargetsInRange = targetsInRange
 			Minimap_SetVisiblityConeColor((targetsInRange)?GetKeyColor( COLORID_HUD_SEER_IN_RANGE ): GetKeyColor( COLORID_HUD_SEER_DEFAULT ))
 		}

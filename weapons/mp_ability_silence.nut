@@ -8,11 +8,17 @@ global function Silence_GetEffectDuration
 
 #if SERVER
                                         
+                       
+                                  
+      
 #endif
 
                    
 const float SILENCE_AREA_DURATION = 10.0
 const float SILENCE_AREA_RADIUS = 175.0                               
+                       
+                                                                             
+      
 
             
 const asset FX_SILENCE_READY_1P = $"P_wpn_bSilence_glow_FP"
@@ -154,7 +160,9 @@ void function OnProjectileCollision_ability_silence( entity projectile, vector p
                                                                                              
  
 	                               
+                         
 	         
+       
 	                         	                                                     
 		      
 
@@ -178,7 +186,13 @@ void function OnProjectileCollision_ability_silence( entity projectile, vector p
 	                                                                          
 
 	                      
-	                                  
+	            
+                        
+                                                                 
+                                    
+     
+       
+		                            
 	                                               
 
 	                           
@@ -236,14 +250,6 @@ void function OnProjectileCollision_ability_silence( entity projectile, vector p
 	 
 		                                           
 		 
-			                       
-				                          
-
-			       
-			                    
-				                                                   
-			      
-
 			                                      
 			                                           
 			                                  
@@ -252,12 +258,6 @@ void function OnProjectileCollision_ability_silence( entity projectile, vector p
 			                  
 
 			                                                                                                               
-
-			       
-			                    
-				                                                           
-			      
-
 			                                            
 			 
 				                                                       
@@ -267,14 +267,8 @@ void function OnProjectileCollision_ability_silence( entity projectile, vector p
 				 
 					                           
 					 
-						                                       
-						 
-							                                
-								                        
-
-							                                
-								                        
-						 
+						                                                                    
+							                        
 
 						        
 					 

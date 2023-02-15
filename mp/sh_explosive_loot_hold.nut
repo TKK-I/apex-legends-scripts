@@ -25,7 +25,7 @@ const string EXPLOSIVE_HOLD_VENT_SMOKE_SCRIPTNAME = "explosive_hold_vent_fx_help
 const string EXPLOSIVE_HOLD_ATTACHMENTS_PARENT_SCRIPTNAME = "explosive_hold_attachments_parent"
 
 const string EXPLOSIVE_HOLD_WEAPON_LOOT_GROUP = "Weapon_Medium"
-const string EXPLOSIVE_HOLD_ATTACHMENTS_LOOT_GROUP = "Explosive_Hold_Attachments"
+global const string EXPLOSIVE_HOLD_ATTACHMENTS_LOOT_GROUP = "Explosive_Hold_Attachments"
 
 const string DOOR_DENY_SOUND = "menu_deny"
 const string GRENADE_DETONATE_SOUND = "Loot_ExplosiveHold_Explosion_3p"
@@ -391,7 +391,7 @@ void function ExplosiveHoldDoor_OnUse( entity panel, entity player, int useInput
 
 		if ( !ExplosiveHold_IsOpen( panel ) )
 		{
-			if ( IsBitFlagSet( useInputFlags, USE_INPUT_LONG ) )
+			if ( useInputFlags & USE_INPUT_LONG )
 			{
 				if ( !ExplosiveHold_PlayerHasGrenadeInInventory( player ) )
 				{
@@ -769,6 +769,10 @@ void function ExplosiveHoldDoor_DisplayRui( entity ent, entity player, var rui, 
 
 	                                                        
 
+	          
+		                                                                                                   
+	      
+
 	                                        
 	                                                                          
 
@@ -1010,7 +1014,7 @@ bool function ExplosiveHold_IsOpen( entity explosiveHoldEnt )
 	bool isOpen = false
 
 	if ( IsValid( explosiveHold ) )
-		isOpen = StatusEffect_HasSeverity( explosiveHold, eStatusEffect.hold_is_open )
+		isOpen = StatusEffect_GetSeverity( explosiveHold, eStatusEffect.hold_is_open ) > 0.0
 
 	return isOpen
 }
@@ -1117,8 +1121,7 @@ entity function GetExplosiveHoldProxyForLoot( entity lootEnt )
 
                                                                 
  
-	                                                                                                     
-	 
+	                                                                                                      
 		                                
 			        
 

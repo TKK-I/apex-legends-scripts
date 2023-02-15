@@ -10,6 +10,7 @@ global function ShResin_Init
 #endif
 global function GetResinStructureFromRoot
 global function GetResinStructureLeaf
+global function GetResinShotCount
 
 global function GetAllResinShards
 global function IsResinShard
@@ -212,6 +213,9 @@ void function ShResin_Init()
 
 	                                       
 
+	                                                                  
+		                                                    
+
 	            
  
 
@@ -273,7 +277,7 @@ void function ShResin_Init()
 		                                                                        
 		 
 			                                                              
-			                                            
+			                             
 			 
 				                                                           
 				 
@@ -301,6 +305,26 @@ void function ShResin_Init()
 		                                                                                                                
 		                                                  
 	 
+ 
+                                                                 
+ 
+	                               
+
+	                            
+	             
+	 
+		                                                                 
+		                                             
+			      
+
+		                       
+			     
+		           
+	 
+
+	                                                                                        
+	                                                                                                                              
+	               
  
        
                                     
@@ -386,6 +410,48 @@ entity function GetResinStructureRoot( entity ent )
 		root = root.GetParent()
 
 	return root
+}
+
+entity function GetResinShotRoot( entity ent )
+{
+	if( !IsResinShard( ent ) )
+		return null
+
+	entity root = ent
+	while( IsResinShotModel( root.GetParent() ) )
+		root = root.GetParent()
+
+	return root
+}
+
+int function GetResinShotCount( entity ent )
+{
+	int count = 0
+	if( !IsResinShard( ent ) )
+		return 0
+
+	entity leaf = GetResinShotRoot( ent )
+	count = 1
+	while( ( leaf ) )
+	{
+		bool childFound = false
+		array< entity > children = leaf.GetChildren()
+		foreach ( child in children )
+		{
+			if ( IsResinShotModel( child ) )
+			{
+				childFound = true
+				leaf = child
+				count += 1
+				break
+			}
+		}
+
+		if( !childFound )
+			break
+	}
+
+	return count
 }
 
 entity function GetResinStructureLeaf( entity ent )

@@ -326,6 +326,7 @@ void function WinterExpress_Init()
 		                                                  
 		                                                      
 
+		                                                                                       
 		                                      
 		 
 			                                                                               
@@ -333,7 +334,7 @@ void function WinterExpress_Init()
 			                                                                  
 		 
 
-
+		                                                                   
 
 		                                                           
 		                                           
@@ -451,7 +452,7 @@ void function WinterExpress_RegisterNetworking()
 	RegisterNetworkedVariable( "WinterExpress_RoundCounter", SNDC_GLOBAL, SNVT_INT, 0 )
 	RegisterNetworkedVariable( "WinterExpress_NarrowWin", SNDC_GLOBAL, SNVT_BOOL, false )
 	RegisterNetworkedVariable( "WinterExpress_HasGracePeriodPermit", SNDC_PLAYER_GLOBAL, SNVT_BOOL, false )
-	RegisterNetworkedVariable( "WinterExpress_IsPlayerAllowedLegendChange", SNDC_PLAYER_EXCLUSIVE, SNVT_BOOL, false )
+	RegisterNetworkedVariable( "WinterExpress_IsPlayerAllowedLegendChange", SNDC_PLAYER_EXCLUSIVE, SNVT_BOOL, true )
 
 	#if CLIENT
 		RegisterNetVarIntChangeCallback( "WinterExpress_RoundState", OnServerVarChanged_RoundState )
@@ -618,10 +619,10 @@ void function OnServerVarChanged_ConnectedPlayers( entity player, int new )
 {
 	foreach ( team in GetAllTeams() )
 	{
-		int uiTeam = Squads_GetTeamsUIId( team )
-		if ( !(uiTeam in file.scoreElements) )
+		if ( !(team in file.scoreElements) )
 			continue
 
+		int uiTeam = Squads_GetTeamsUIId( team )
 		if ( GetPlayerArrayOfTeam( team ).len() == 0 )
 		{
 			RuiSetBool( file.scoreElements[uiTeam], "teamValid", false )
@@ -697,11 +698,8 @@ void function WinterExpress_OnResolution()
 void function Client_OnWinnerDetermined( )
 {
 	int winningTeam = GetWinningTeam()
-	if ( winningTeam != TEAM_UNASSIGNED)
-	{
-		int squadIndex = Squads_GetSquadUIIndex( GetWinningTeam() )
-		SetVictoryScreenTeamName( Localize( Squads_GetSquadNameLong( squadIndex ) ) )
-	}
+	int squadIndex = Squads_GetSquadUIIndex( GetWinningTeam() )
+	SetVictoryScreenTeamName( Localize( Squads_GetSquadNameLong( squadIndex ) ) )
 }
 #endif
 
@@ -1068,9 +1066,6 @@ void function Client_OnWinnerDetermined( )
 
 	                                       
 
-	                                                                                                           
-	                                                                 
-
 	                                 
 	                                                                  
 	                                                                                                  
@@ -1175,7 +1170,12 @@ void function Client_OnWinnerDetermined( )
  
 	           
 
-	                                                                
+	                         
+		      
+
+	                                           
+
+	                                            
 		      
 
 	                                                            
@@ -1674,6 +1674,17 @@ void function Client_OnWinnerDetermined( )
 
 #endif         
 
+#if SERVER
+                                                                                        
+ 
+	                                                  
+	                                                   
+	                                                    
+
+	                              
+ 
+#endif         
+
                                         
                                         
                                         
@@ -1869,8 +1880,7 @@ void function Client_OnWinnerDetermined( )
 	                         
 		      
 
-	                                                             
-	                                                                              
+	                                                                            
 	                                                   
 	                                   
  
@@ -2277,7 +2287,6 @@ void function Client_OnWinnerDetermined( )
 				                                                                                                                                
 				                                                         
 				                                                 
-
 				                                                                             
 
 				           
@@ -2452,8 +2461,7 @@ void function Client_OnWinnerDetermined( )
 
 	                                                        
 	                                                 
-	                                                             
-	                                                                              
+	                                                                            
 	                                                                 
 
 	                                                 
@@ -2725,7 +2733,7 @@ void function Client_OnWinnerDetermined( )
 	                                                                           
 	                               
 
-	                               
+	                           
 	 
 		                       
 		                      
@@ -2984,7 +2992,7 @@ void function Client_OnWinnerDetermined( )
 
                                                                       
  
-	                      
+	                  
 		      
 
 	                                      
@@ -3106,6 +3114,9 @@ string function PickCommentaryLineFromBucket_WinterExpressCustom( int commentary
 #if UI
 void function UI_UpdateOpenMenuButtonCallbacks_Spectate( int newLifeState, bool shouldCloseMenu )
 {
+	if ( GetGameState() > eGameState.WinnerDetermined || uiGlobal.isLevelShuttingDown )
+		return
+
 	if ( newLifeState == LIFE_ALIVE )
 	{
 		if ( shouldCloseMenu )
@@ -3114,7 +3125,7 @@ void function UI_UpdateOpenMenuButtonCallbacks_Spectate( int newLifeState, bool 
 
 		if ( IsUsingLoadoutSelectionSystem() )
 		{
-			if ( shouldCloseMenu && LoadoutSelectionMenu_IsLoadoutMenuOpen())
+			if ( shouldCloseMenu )
 				LoadoutSelectionMenu_CloseLoadoutMenu()
 		}
 	}
@@ -3587,23 +3598,23 @@ void function CL_ScoreUpdate( int team, int score )
 	RuiSetInt( file.scoreElementsFullmap[uiTeam], "score", score )
 }
 
-int function WinterExpress_GetTeamScore( int uiTeam )
+int function WinterExpress_GetTeamScore( int team )
 {
-	if ( !( uiTeam in file.objectiveScore ) )
+	if ( !( team in file.objectiveScore ) )
 		return 0
 
-	return  file.objectiveScore[ uiTeam ]
+	return  file.objectiveScore[ team ]
 }
 
-bool function WinterExpress_IsTeamWinning( int uiTeamToCheck )
+bool function WinterExpress_IsTeamWinning( int teamToCheck )
 {
-	if ( !( uiTeamToCheck in file.objectiveScore ) )
+	if ( !( teamToCheck in file.objectiveScore ) )
 		return false
 
-	int teamToCheckScore = file.objectiveScore[ uiTeamToCheck ]
+	int teamToCheckScore = file.objectiveScore[ teamToCheck ]
 	bool isWinning = true
 
-	foreach ( uiTeam, score in file.objectiveScore)
+	foreach ( team, score in file.objectiveScore)
 	{
 		if ( teamToCheckScore < score )
 		{
@@ -3680,31 +3691,31 @@ void function DisplayUnlockDelay()
 	RuiSetInt( ClGameState_GetRui(), "roundState", eWinterExpressRoundState.ABOUT_TO_UNLOCK_STATION )
 
 	bool shouldShowMatchPoint
-	int uiMatchTeam = -1
-	foreach( uiTeam, value in file.isTeamOnMatchPoint )
+	int matchTeam = -1
+	foreach( team, value in file.isTeamOnMatchPoint )
 	{
-		if ( uiTeam == TEAM_INVALID )
+		if ( team == TEAM_INVALID )
 			continue
 
 		if ( value )
 		{
-			if ( uiTeam in file.hasTeamGottenMatchPointAnnounce && file.hasTeamGottenMatchPointAnnounce[uiTeam] )
+			if ( team in file.hasTeamGottenMatchPointAnnounce && file.hasTeamGottenMatchPointAnnounce[team] )
 				continue
 
 			shouldShowMatchPoint = true
-			file.hasTeamGottenMatchPointAnnounce[uiTeam] <- true
-			uiMatchTeam          = uiTeam
+			file.hasTeamGottenMatchPointAnnounce[team] <- true
+			matchTeam = team
 			break
 		}
 	}
 
 	if ( shouldShowMatchPoint )
 	{
-		int uiSquadIndex  = Squads_GetArrayIndexForTeam( uiMatchTeam )
-		string matchSquad = uiSquadIndex == 0 ? "#PL_YOUR_SQUAD" : Localize( Squads_GetSquadNameLong( uiSquadIndex ) )
+		int squadIndex = Squads_GetSquadUIIndex( matchTeam )
+		string matchSquad = squadIndex == 0 ? "#PL_YOUR_SQUAD" : Localize( Squads_GetSquadNameLong( squadIndex ) )
 		matchSquad = "`3" + Localize( matchSquad ) + "`0"
 
-		vector announcementColor = Squads_GetSquadColor( uiSquadIndex )
+		vector announcementColor = Squads_GetSquadColor( squadIndex )
 		AnnouncementMessageRight( GetLocalClientPlayer(), Localize( "#PL_MATCH_POINT", matchSquad ), "", announcementColor, $"", 4, "WXpress_Train_Update_Small", announcementColor )
 	}
 }
@@ -3914,16 +3925,6 @@ bool function IsRoundBasedRespawn()
  
 	                                           
 		           
-
-	                                              
-	 
-		                                                            
-		 
-			                                                   
-			                                                
-		 
-		           
-	 
 
 	                                                                           
  
@@ -4212,7 +4213,7 @@ VictorySoundPackage function GetVictorySoundPackage()
 	                                   
 	                                      
 
-	              
+	           
 	 
 		                                 
 		                                  
@@ -4324,8 +4325,7 @@ VictorySoundPackage function GetVictorySoundPackage()
 		                                                                      
 		                                                                      
 		 
-			                                                             
-			                                                                              
+			                                                                            
 			                                                                                                         
 		 
 	 

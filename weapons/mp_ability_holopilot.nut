@@ -4,6 +4,9 @@ global function OnWeaponActivate_holopilot
 global function PlayerCanUseDecoy
 #if CLIENT
 global function CreateARIndicator
+                     
+global function ServerToClient_ShowHolopilotDestroyedText
+                           
 #endif
 
 const string FLASH_DECOY_IMPACT_TABLE = "exp_emp"
@@ -12,6 +15,10 @@ global const int DECOY_FADE_DISTANCE = 16000
 const float DECOY_PING_MIN_DURATION = 1.5
 const float DECOY_PING_MAX_DURATION = 8.0
 const float ULTIMATE_DECOY_DURATION = 5.0
+
+                     
+const float BAMBOOZLE_DURATION = 3.5
+      
 
 global const vector HOLOPILOT_ANGLE_SEGMENT = <0, 60, 0>
 global function Decoy_Init
@@ -26,13 +33,13 @@ global function CodeCallback_PlayerDecoyStateChange
                                               
                                      
                                  
-                                         
+                                        
+                     
+                                       
+      
                                              
                                            
                                                       
-                     
-                                             
-                           
 #endif          
 
 global const SOUND_DECOY_CONTROL = "Mirage_PsycheOut_ModeSwitch"
@@ -45,10 +52,6 @@ const DECOY_FLAG_FX = $"P_flag_fx_foe"
 const HOLO_EMITTER_CHARGE_FX_1P = $"P_mirage_holo_emitter_glow_FP"
 const HOLO_EMITTER_CHARGE_FX_3P = $"P_mirage_emitter_flash"
 const asset DECOY_TRIGGERED_ICON = $"rui/hud/tactical_icons/tactical_mirage_in_world"
-
-                     
-                                               
-                           
 
 enum eDecoyReceiveDamage
 {
@@ -77,10 +80,6 @@ struct
 
 void function Decoy_Init()
 {
-                      
-                                        
-                            
-
 	file.decoyFlashEnabled = GetCurrentPlaylistVarBool( "mirage_flashbang_decoys", false )
 
 	Remote_RegisterServerFunction( "ClientCallback_ToggleDecoys" )
@@ -541,12 +540,18 @@ void function DestroyAfterTime( int fxHandle, float time )
 	                                             
 	                                                                                                
 		                        
-			                                                         
+			                                                        
 	   
 	                                                                                                    
 		                        
-			                                                      
+			                                                     
 	   
+                      
+	                                                                                               
+		                       
+			                                                    
+	  
+       
 	            
  
 
@@ -571,12 +576,18 @@ void function DestroyAfterTime( int fxHandle, float time )
 	                                             
 	                                                                                                
 		                        
-			                                                         
+			                                                        
 	   
 	                                                                                                    
 		                        
-			                                                      
+			                                                     
 	   
+                      
+	                                                                                               
+		                       
+			                                                    
+	  
+       
 	            
  
 
@@ -596,7 +607,7 @@ void function DestroyAfterTime( int fxHandle, float time )
 	                                                                                              
 	                            
 	 
-		                                                                                                                                                                             
+		                                                                                                                                                                  
 		 
 			                                      
 			                                      
@@ -609,7 +620,7 @@ void function DestroyAfterTime( int fxHandle, float time )
 	                                 
  
 
-                                                                                        
+                                                                                       
  
 	                                                                    
 
@@ -623,7 +634,7 @@ void function DestroyAfterTime( int fxHandle, float time )
 	 
  
 
-                                                                                     
+                                                                                    
  
 	                                                      
 
@@ -654,18 +665,44 @@ void function DestroyAfterTime( int fxHandle, float time )
 	                                                             
 
                       
+<<<<<<< HEAD
+		                                                                 
+		 
+			                                                       
+			                                                                 
+				                                                          
+		 
+		    
+=======
                                                                     
    
-                                                          
-                                                                    
-                                                              
+                                                         
    
       
+   
+                                                             
+   
+      
+		                                                          
+>>>>>>> parent of 044c095 (game update)
                             
-		 
-			                                                          
-		 
  
+
+                     
+                                                                                   
+ 
+	                                                      
+
+	                                                                                                          
+		      
+
+	                                                       
+	                                                                 
+	 
+		                                                                                
+	 
+ 
+                           
 
                                                                                                              
  
@@ -673,18 +710,25 @@ void function DestroyAfterTime( int fxHandle, float time )
 		                                                                               
 
 	                                         
+<<<<<<< HEAD
 	         
                       
-                                                                    
-   
-                                                                                  
-                            
-   
-      
+		                                                                 
+		 
+			                                                                               
+			                         
+
+			                               
+			                                                                                               
+		 
+		    
                             
 		 
 			                                                                                 
 		 
+=======
+	                                                                                        
+>>>>>>> parent of 044c095 (game update)
 	                          
 
 	                                                                                     
@@ -697,7 +741,7 @@ void function DestroyAfterTime( int fxHandle, float time )
 
 	                                                                                             
 
-	                                        
+	                                              
 	                                                                                           
 
 	                                      
@@ -718,42 +762,6 @@ void function DestroyAfterTime( int fxHandle, float time )
 
 	         
  
-
-                     
-                                                                                       
- 
-                                
-        
-
-                              
-                                                                                 
-
-                                          
-
-                                       
-                                               
-
-                                                                                                                                                                                               
-                                            
-                                                           
-
-             
-                                       
-   
-                              
-                                      
-
-                              
-                           
-   
-  
-
-                                                                            
-  
-             
-  
- 
-                           
 
           
                                                         
@@ -802,29 +810,39 @@ void function DestroyAfterTime( int fxHandle, float time )
  
       
 
-                                                             
+                                                                   
  
 	                           
 	                                      
 
 	            
-		                   
+		                              
 		 
 			                    
 				            
+                        
+			                           
+			 
+				                             
+			 
+         
 		 
 	 
 
+<<<<<<< HEAD
                       
-                                                                    
-   
-           
-   
-      
+		                                                                 
+		 
+			                       
+		 
+		    
                             
 		 
 			        
 		 
+=======
+	        
+>>>>>>> parent of 044c095 (game update)
  
 
                                                                                           
@@ -870,7 +888,6 @@ void function DestroyAfterTime( int fxHandle, float time )
 	                                                             
 	                                                                    
 	                                   
-	                                                                                            
 
 	                                                     
 
@@ -925,32 +942,6 @@ void function DestroyAfterTime( int fxHandle, float time )
 		                               
 	  
 	                                                         
- 
-
-                                                                                              
- 
-	                             
-	 
-		                                
-			                                             
-
-		                                     
-			           
-
-                                
-		                                    
-			                        
-			 
-				                                               
-				                         
-				 
-					                                                 
-				 
-			 
-			            
-       
-	 
-	           
  
 
                                                                                        
@@ -1040,9 +1031,14 @@ bool function PlayerCanUseDecoy( entity ownerPlayer )
 {
 	if ( !ownerPlayer.IsZiplining() )
 	{
+		if ( ownerPlayer.IsTraversing() )
+			return false
+
 		if ( ownerPlayer.ContextAction_IsActive() )                                                                                                     
 			return false
 	}
+
+	                                                                                                                                
 
 	return true
 }
@@ -1083,12 +1079,18 @@ bool function PlayerCanUseDecoy( entity ownerPlayer )
 				                                       
 				                                                                                               
 					                       
-						                                                        
+						                                                       
 				   
 				                                                                                                   
 					                       
-						                                                     
+						                                                    
 				   
+                         
+				                                                                                              
+					                      
+						                                                   
+				  
+          
 				                                                           
 				             
 				                        
@@ -1251,6 +1253,18 @@ void function AttemptToggleDecoys( entity player )
 
 	Remote_ServerCallFunction( "ClientCallback_ToggleDecoys" )
 }
+
+                     
+void function ServerToClient_ShowHolopilotDestroyedText()
+{
+	entity player = GetLocalViewPlayer()
+
+	if (IsValid(player))
+	{
+		AnnouncementMessageRight( player, "#WPN_HOLOPILOT_DESTROYED" )
+	}
+}
+                           
 #endif
 
 void function OnWeaponActivate_holopilot( entity weapon )

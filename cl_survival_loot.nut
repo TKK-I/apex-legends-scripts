@@ -778,11 +778,11 @@ void function Sur_OnUseEntGainFocus( entity ent )
 
 void function TryStreamHintForWeapon( entity ent )
 {
-	int skinGUID = ent.GetItemFlavorGUID()
+	int skinNetworkIdx = GetPropSurvivalMainProperty( ent.GetSurvivalProperty() )
 	ItemFlavor ornull weaponSkinOrNull
-	if ( IsValidItemFlavorGUID( skinGUID ) )
+	if ( skinNetworkIdx > 0 )
 	{
-		weaponSkinOrNull = GetItemFlavorByGUID( skinGUID )
+		weaponSkinOrNull = GetItemFlavorByNetworkIndex( skinNetworkIdx )
 	}
 	else
 	{
@@ -882,13 +882,6 @@ void function UpdateUseHintForEntity( entity ent, var rui = null )
 	RuiSetFloat( rui, "zOffset", ent.GetBoundingMaxs().z )
 
 	PerfEnd( PerfIndexClient.UpdateLootRui )
-
-                  
-                                                          
-                                             
-      
-                                              
-       
 }
 
 
@@ -963,7 +956,17 @@ void function UpdateLootRuiWithData( entity player, var rui, LootData data, int 
 	RuiSetBool( rui, "isFocused", true )
 
 	RuiSetImage( rui, "iconImage", data.hudIcon )
+
+	bool useCustomLootColor = false
+	if( data.ref == "expired_banners" )
+	{
+		useCustomLootColor = true
+		RuiSetFloat3( rui, "customLootColor", SrgbToLinear( GetKeyColor( COLORID_HUD_HEAL_COLOR ) / 255.0 ) )
+	}
+
 	RuiSetInt( rui, "lootTier", data.tier )
+	RuiSetBool( rui, "useCustomLootColor", useCustomLootColor )
+
 
 	vector iconScale = data.lootType == eLootType.MAINWEAPON ? <2.0, 1.0, 0.0> : <1.0, 1.0, 0.0>
 	RuiSetFloat2( rui, "iconScale", iconScale )
@@ -975,7 +978,7 @@ void function UpdateLootRuiWithData( entity player, var rui, LootData data, int 
 	#endif
 	RuiSetString( rui, "subText", SURVIVAL_Loot_GetDesc( data, player ) )
 
-	RuiSetBool( rui, "canPing", ShouldShowButtonHints() && IsPingEnabledForPlayer( player ) && IsValid( lootRef.lootEnt ) )
+	RuiSetBool( rui, "canPing", IsPingEnabledForPlayer( player ) && IsValid( lootRef.lootEnt ) )
 
 	string passiveName = data.passive != ePassives.INVALID ? PASSIVE_NAME_MAP[data.passive] : ""
 	string passiveDesc = data.passive != ePassives.INVALID ? PASSIVE_DESCRIPTION_SHORT_MAP[data.passive] : ""
@@ -1203,13 +1206,10 @@ void function UpdateLootRuiWithData( entity player, var rui, LootData data, int 
 
 		RuiSetBool( rui, "isFullyKitted", SURVIVAL_Weapon_IsAttachmentLocked( data.ref ) )
 
-		int skinGUID = 0
-		if ( IsValid( lootRef.lootEnt ) )
-			skinGUID = lootRef.lootEnt.GetItemFlavorGUID()
-		
-		if ( IsValidItemFlavorGUID( skinGUID ) )
+		int skinNetworkIdx = GetPropSurvivalMainProperty( lootRef.lootProperty )
+		if ( skinNetworkIdx > 0 )
 		{
-			ItemFlavor weaponSkin = GetItemFlavorByGUID( skinGUID )
+			ItemFlavor weaponSkin = GetItemFlavorByNetworkIndex( skinNetworkIdx )
 			if ( ItemFlavor_HasQuality( weaponSkin ) )
 			{
 				string weaponName = GetWeaponInfoFileKeyField_WithMods_GlobalString( data.baseWeapon, data.baseMods,"shortprintname" )
@@ -1368,7 +1368,7 @@ void function UpdateLootRuiWithData( entity player, var rui, LootData data, int 
 							if ( exceptionIndex < attachmentTagData.exceptionToTheRuleForThisWeaponClass.len() - 1 && tagIndex < MAX_ATTACHMENT_TAGS - 1 )
 								exceptionName += ","
 
-							                                                                                                                                                         
+							                                                                                                                                                   
 							                                                                                                                                                              
 							if ( tagIndex == 2 )
 								tagIndex = 3
@@ -1388,8 +1388,8 @@ void function UpdateLootRuiWithData( entity player, var rui, LootData data, int 
 		array<entity> weapons = SURVIVAL_GetPrimaryWeaponsSorted( player )
 
                            
-                                                                                             
-                                                                 
+			if ( IsFiringRangeGameMode() && GetCurrentPlaylistVarBool( "has_infinite_clips", false ) )
+				RuiSetString( rui, "subText", "#INFINITE_CLIPS_IN_SETTINGS" )
         
 
 		array<string> weaponNames
@@ -1418,12 +1418,12 @@ void function UpdateLootRuiWithData( entity player, var rui, LootData data, int 
 				{
 					LootData weaponData = SURVIVAL_Loot_GetLootDataByRef( weaponRef )
                              
-                                                                                               
-                                                   
+					if ( IsFiringRangeGameMode() && GetCurrentPlaylistVarBool( "has_infinite_clips", false ) )
+						RuiSetImage( rui, "attachWeapon1Icon",  $"" )
+					else
+						RuiSetImage( rui, "attachWeapon1Icon", weaponData.hudIcon )
          
-                                                                 
-         
-					RuiSetImage( rui, "attachWeapon1Icon", weaponData.hudIcon )
+                                                                
           
 
 					RuiSetBool( rui, "hasAttach1", true )
@@ -1500,7 +1500,7 @@ bool function HasWeaponForTag( entity player, int tagId )
 				break
 
 			default:
-				Assert( false, "Unhandled tag " + tagId )
+				Assert( 0, "Unhandled tag " + tagId )
 		}
 	}
 
@@ -1542,6 +1542,11 @@ bool function ShouldLootHintBeVisible( entity prop )
    
                               
 
+                         
+		if ( Control_IsModeEnabled() && IsScoreboardShown() )
+			return false
+       
+
 	entity player = GetLocalViewPlayer()
 
 	if ( file.checkWeaponDisableForLootPingPrompt && player.GetWeaponDisableFlags() == WEAPON_DISABLE_FLAGS_ALL )
@@ -1558,7 +1563,7 @@ bool function ShouldLootHintBeVisible( entity prop )
 
 void function ManageDeathBoxLootThread()
 {
-	while ( true )
+	while ( 1 )
 	{
 		WaitFrame()
 
@@ -1584,16 +1589,17 @@ void function ManageDeathBoxLoot()
 		return
 
 	bool isBlackMarket      = false
+	int blackMarketUseCount = -1
 	array<entity> loot
 	entity currentDeathBox = Survival_GetDeathBox()
 	if ( IsValid( currentDeathBox ) )
 	{
 		loot = GetDeathBoxLootEnts( currentDeathBox )
 
-		                      
 		if ( currentDeathBox.GetScriptName() == BLACK_MARKET_SCRIPTNAME )
 		{
 			isBlackMarket = true
+			blackMarketUseCount = GetBlackMarketUseCount( currentDeathBox, GetLocalClientPlayer() )
 		}
 	}
 
@@ -1614,7 +1620,7 @@ void function ManageDeathBoxLoot()
 #if LOOT_GROUND_VERTICAL_LINES
 void function ManageVerticalLines()
 {
-	while ( true )
+	while ( 1 )
 	{
 		WaitFrame()
 
@@ -1857,14 +1863,17 @@ void function TrackLootToPing( entity player )
 					DeathboxNetwork_UntrackBoxTargets( lastEnt )
 				}
 			}
+<<<<<<< HEAD
                       
-                                          
-    
-               
-            
-    
+			if( Perks_UpdateHighlightedPerkIcon() )
+			{
+				WaitFrame()
+				continue
+			}
 
          
+=======
+>>>>>>> parent of 044c095 (game update)
 
 			if ( player.ContextAction_IsInVehicle() )
 				loot = GetSurvivalLootNearbyPos( player.EyePosition(), LOOT_PING_DISTANCE * GetFovScalar( player ), false, false, false, player )
@@ -1949,7 +1958,6 @@ entity function GetEntityPlayerIsLookingAt( entity player, array<entity> ents, f
 	array<PlayerLookAtItem> finalLootEnts
 
 	vector playerEyePos = player.EyePosition()
-	vector playerViewVector = player.GetViewVector()
 
 	foreach ( ent in ents )
 	{
@@ -1959,7 +1967,7 @@ entity function GetEntityPlayerIsLookingAt( entity player, array<entity> ents, f
 				continue
 		}
 
-		dot = DotProduct( Normalize( ent.GetWorldSpaceCenter() - playerEyePos ), playerViewVector )
+		dot = DotProduct( Normalize( ent.GetWorldSpaceCenter() - playerEyePos ), player.GetViewVector() )
 		if ( dot < minDot )
 			continue
 
@@ -1987,6 +1995,14 @@ entity function GetEntityPlayerIsLookingAt( entity player, array<entity> ents, f
 		int index     = item.ent.GetSurvivalInt()
 		LootData data = SURVIVAL_Loot_GetLootDataByIndex( index )
 
+		                   
+		                                                                                                                        
+		   
+		  	                  
+		  	      
+		   
+		      
+		        
 		if ( PlayerHasPassive( GetLocalViewPlayer(), ePassives.PAS_LOBA_EYE_FOR_QUALITY ) && data.tier - 1 >= eRarityTier.EPIC )
 		{
 			theEnt = item.ent

@@ -82,6 +82,7 @@ global function OnWeaponEnergizedStart
                                                
 #endif
 
+                         
 #if SERVER
                                                             
                                                     
@@ -89,6 +90,7 @@ global function OnWeaponEnergizedStart
 #if CLIENT
 global function UICallback_UpdateLaserSightColor
 #endif              
+                                   
 
 global function Weapon_AddSingleCharge
 
@@ -102,6 +104,7 @@ global function ApplyKineticLoaderFunctionality
 global function OnWeaponTryEnergize
 
 global function OnWeaponAttemptOffhandSwitch_Never
+global function OnWeaponAttemptOffhandSwitch_NoZip
 
 #if DEV
 global function DevPrintAllStatusEffectsOnEnt
@@ -211,6 +214,7 @@ global const string MARKSMANS_TEMPO_FADEOFF_ON_PERFECT_MOMENT_SETTING = "marksma
 global const string MARKSMANS_TEMPO_FADEOFF_ON_FIRE_SETTING = "marksmans_tempo_fadeoff_on_fire"
 global const string MARKSMANS_TEMPO_FADEOFF_THREAD_ABORT = "marksmans_tempo_fadeoff_abort"
 global const string ENERGIZE_STATUS_RUI_ABORT_SIGNAL = "EnergizRuiThinkAbortSignal"
+global const string WEAPON_CHARGED_RUI_ABORT_SIGNAL = "ChargedRuiThinkAbortSignal"
 global function MarksmansTempo_Validate
 global function MarksmansTempo_OnActivate
 global function MarksmansTempo_OnDeactivate
@@ -506,7 +510,9 @@ void function WeaponUtility_Init()
                            
                                                                  
                                     
+                          
 	Remote_RegisterServerFunction( "ClientCallback_UpdateLaserSightColor" )
+                                    
 	#if CLIENT
 	RegisterSignal ( END_KINETIC_LOADER_RUI )
 	#endif
@@ -538,7 +544,9 @@ void function WeaponUtility_Init()
 		                                                                                           
 		                                                                                           
 		                                                                                             
+                           
 		                                                                                          
+        
 		                                                                                             
 		                                              
 		                                            
@@ -664,16 +672,15 @@ void function OnWeaponActivate_RUIColorSchemeOverrides( entity weapon )
 
                                                                                                                
                                                                                                                
-                                                                              
                                                                         
  
 	                         
 		      
 
 	           
-	                                                                                   
+	                                                                                  
 	 
-		                                                                         
+		                                                                        
 		                                                          
 	 
 
@@ -874,7 +881,7 @@ void function EnergyChargeWeapon_StopCharge_Think( entity weapon, EnergyChargeWe
 	weapon.EndSignal( "EnergyWeapon_ChargeStart" )
 	weapon.EndSignal( "EnergyWeapon_ChargeReleased" )
 
-	while ( true )
+	while ( 1 )
 	{
 		WaitFrame()
 
@@ -1571,7 +1578,7 @@ bool function PlantStickyEntityOnConsistentSurface( entity projectile, Deployabl
 bool function PlantStickyEntityThatBouncesOffWalls( entity projectile, DeployableCollisionParams cp, float bounceDot, vector angleOffset = ZERO_VECTOR )
 {
                      
-	if ( IsBitFlagSet( cp.deployableFlags, eDeployableFlags.VEHICLES_LARGE_DEPLOYABLE ) && EntIsHoverVehicle( cp.hitEnt ) )
+	if ( (cp.deployableFlags & eDeployableFlags.VEHICLES_LARGE_DEPLOYABLE) && EntIsHoverVehicle( cp.hitEnt ) )
 		return PlantStickyEntity_LargeDeployableOnVehicle( projectile, cp, angleOffset )
                            
 
@@ -1732,7 +1739,7 @@ bool function PlantStickyEntity( entity ent, DeployableCollisionParams cp, vecto
 		else
 			ent.SetParent( cp.hitEnt )	                                                                 
 
-		if ( cp.hitEnt.IsPlayer() )
+		if ( cp.hitEnt.IsPlayer() || IsDoor( cp.hitEnt ) || IsReinforced (cp.hitEnt))
 			thread HandleDisappearingParent( ent, cp.hitEnt )
 	}
 
@@ -1785,6 +1792,8 @@ bool function IsABaseGrenade( entity ent )
                                                                       
  
 	                                
+	                                  
+	                                                         
 	                            
 
 	            
@@ -1839,7 +1848,7 @@ bool function EntityShouldStickEx( entity stickyEnt, DeployableCollisionParams p
 		return false
 
                      
-	if ( IsBitFlagSet( params.deployableFlags, eDeployableFlags.VEHICLES_NO_STICK ) && ( className == "player_vehicle" ) )
+	if ( (params.deployableFlags & eDeployableFlags.VEHICLES_NO_STICK) && (className == "player_vehicle") )
 		return false
                            
 
@@ -1859,15 +1868,6 @@ bool function EntityCanHaveStickyEnts( entity stickyEnt, entity ent )
 {
 	if ( !IsValid( ent ) )
 		return false
-
-	string stickyEntScriptName = stickyEnt.GetScriptName()
-	string entScriptName = ent.GetScriptName()
-
-	                                                         
-	if( ent.GetScriptName() == FIRING_RANGE_TARGET_FLIP_SCRIPTNAME )
-		return true
-	if( ent.GetScriptName() == FIRING_RANGE_TARGET_FOLD_SCRIPTNAME )
-		return true
 
 	if ( ent.GetModelName() == $"" )                                                                        
 		return false
@@ -2690,7 +2690,7 @@ bool function IsPilotShotgunWeapon( string weaponName )
 				             
 				              
 
-				                        
+				                    
 					     
 			 
 		 
@@ -2976,7 +2976,7 @@ entity function GetMeleeWeapon( entity player )
 	                      
 		      
 
-	                                                                                          
+	                                                                           
 		      
 
 	                                                        
@@ -3159,7 +3159,7 @@ entity function GetMeleeWeapon( entity player )
 			     
 
 		        
-			                                                   
+			                                               
 	 
 
 	                                                        
@@ -3248,7 +3248,7 @@ entity function GetMeleeWeapon( entity player )
 			     
 
 		        
-			                                                   
+			                                               
 	 
 
 	                                                        
@@ -3377,7 +3377,7 @@ entity function GetMeleeWeapon( entity player )
                                                            
  
 	                                                                 
-	                                                                                 
+	                                                                  
 		           
 
 	                            
@@ -3489,7 +3489,9 @@ entity function GetMeleeWeapon( entity player )
 
                                                              
  
+                         
 	                              
+                                   
  
 
                                                                                               
@@ -3926,7 +3928,7 @@ void function RunWeaponModChangedCallbacks( entity weapon, string mod, bool modA
 		 
 	 
 
-	              
+	           
 	 
 		                                                                       
 		                               
@@ -3936,7 +3938,7 @@ void function RunWeaponModChangedCallbacks( entity weapon, string mod, bool modA
 			                                          
 				        
 
-			                                                                                               
+			                                            
 				        
 
 			                                                                                 
@@ -4262,7 +4264,7 @@ void function RunWeaponModChangedCallbacks( entity weapon, string mod, bool modA
        
                                  
  
-	                                  
+	                              
 		      
 
 	                                   
@@ -4367,6 +4369,15 @@ bool function IsWeaponInAutomaticMode( entity weapon )
 bool function OnWeaponAttemptOffhandSwitch_Never( entity weapon )
 {
 	return false
+}
+
+bool function OnWeaponAttemptOffhandSwitch_NoZip( entity weapon )
+{
+	entity player = weapon.GetWeaponOwner()
+	if ( player.IsZiplining() )
+		return false
+
+	return true
 }
 
 
@@ -4504,12 +4515,12 @@ void function PlayDelayedShellEject( entity weapon, float time, int count = 1, b
 		                                        
 
 		                             
-		                                                                                                    
-		                                                                     
-		                                                                  
-		                                                              
+		                                                                                                  
+		                                                                
 		                                                               
-		                                                              
+		                                                            
+		                                                                
+		                                                    
 
 		                                                             
 		 
@@ -4586,12 +4597,12 @@ void function PlayDelayedShellEject( entity weapon, float time, int count = 1, b
 			 
 
 			                                   
-			                                                                            
-				                                                       
+			                                                                                     
+				                                                                
 
 			                                    
-			                                                                             
-				                                                         
+			                                                                                      
+				                                                                  
 
 			                                                
 				                                                        
@@ -4760,6 +4771,7 @@ void function PlayDelayedShellEject( entity weapon, float time, int count = 1, b
  
 
 
+                         
                                                      
                                                      
                                                      
@@ -4789,13 +4801,16 @@ void function PlayDelayedShellEject( entity weapon, float time, int count = 1, b
  
 	                              
  
+                                   
 #endif         
 
 #if CLIENT
+                         
 void function UICallback_UpdateLaserSightColor()
 {
 	Remote_ServerCallFunction( "ClientCallback_UpdateLaserSightColor" )
 }
+                                   
 
 bool function TryCharacterButtonCommonReadyChecks( entity player )
 {
@@ -4989,9 +5004,9 @@ bool function AreAbilitiesSilenced( entity player )
 	if ( !IsValid( player ) )
 		return true
 
-	if ( StatusEffect_HasSeverity( player, eStatusEffect.silenced ) )
+	if ( StatusEffect_GetSeverity( player, eStatusEffect.silenced ) )
 		return true
-	if ( StatusEffect_HasSeverity( player, eStatusEffect.is_boxing ) )
+	if ( StatusEffect_GetSeverity( player, eStatusEffect.is_boxing ) )
 		return true
 
 	return false
@@ -5008,7 +5023,7 @@ int function GetNeededEnergizeConsumableCount( entity weapon, entity player )
 	                                                      
 	{
 		if ( consumableRef == "health_pickup_combo_small" )
-			requiredCountWithPassive = player.HasPassive( ePassives.PAS_BONUS_SMALL_HEAL ) ? maxint( 0, consumableRequiredCount - 1 ) : consumableRequiredCount
+			requiredCountWithPassive = player.HasPassive( ePassives.PAS_BONUS_SMALL_HEAL ) ? maxint( 1, consumableRequiredCount - 1 ) : consumableRequiredCount
 	}
 
 	return requiredCountWithPassive
@@ -5031,26 +5046,10 @@ bool function OnWeaponTryEnergize( entity weapon, entity player )
 	if ( !IsValid( weapon ) )
 		return false
 
-	string weaponName = weapon.GetWeaponClassName()
-	float maxInputFrac = GetWeaponInfoFileKeyField_GlobalFloat( weaponName, "energized_max_reenergize_frac" )
-	float energizedDuration = GetWeaponInfoFileKeyField_GlobalFloat( weaponName, "energized_duration" )
-	float chargeFrac = max( weapon.GetEnergizedEndTime() - Time(), 0 ) / energizedDuration
-
-	if ( !(weapon.GetEnergizeState() == ENERGIZE_ENERGIZED && weapon.GetLastEnergizeState() == ENERGIZE_ENERGIZING) )
-	{
-		if ( chargeFrac > maxInputFrac )
-		{
-			#if CLIENT
-				string pingStringData = GetWeaponInfoFileKeyField_GlobalString ( weaponName, "energized_full_text" )
-				AnnouncementMessageRight( player, Localize( pingStringData ) )
-			#endif
-			return false
-		}
-	}
-
 	if( !HasEnoughEnergizeConsumable( weapon, player ) )
 	{
 		#if CLIENT
+		string weaponName = weapon.GetWeaponClassName()
 		int consumableRequiredCount = GetNeededEnergizeConsumableCount( weapon, player )
 		string consumableName = GetWeaponInfoFileKeyField_GlobalString( weaponName, consumableRequiredCount > 1 ? "energized_consumable_name_plural" : "energized_consumable_name_singular" )
 		string pingStringData = GetWeaponInfoFileKeyField_GlobalString ( weaponName, "energized_consumable_required_hint" )
@@ -6130,11 +6129,17 @@ void function KineticLoaderChokeGraceWindow_ServerThink( entity player, entity w
 #if CLIENT
 void function ServerCallback_KineticLoaderReloadedThroughSlide( entity weapon, int ammoToLoadTotal )
 {
+	if ( !IsValid( weapon ) )
+		return
+
 	file.weaponReloadedThroughSlideTable[weapon] <- true
 	file.weaponAmmoToLoadTotalTable[weapon] <- ammoToLoadTotal
 }
 void function ServerCallback_KineticLoaderReloadedThroughSlideEnd( entity weapon )
 {
+	if ( !IsValid( weapon ) )
+		return
+
 	if( weapon in file.weaponReloadedThroughSlideTable )
 		delete file.weaponReloadedThroughSlideTable[ weapon ]
 

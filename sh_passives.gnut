@@ -20,9 +20,6 @@ global function Pas_GetWattsonUltAccelExtraCount
 
                                
                                              
-
-                               
-                                
 #endif
 
 #if (SERVER || CLIENT) && DEV
@@ -47,11 +44,14 @@ const string MIRAGE_DECOY_DROP_MOVER_SCRIPTNAME 		= "mirage_decoy_drop_mover"
       
 #endif
 
+<<<<<<< HEAD
 #if CLIENT
                      
-                                                
+global function ServerToClient_ShowCloakHintText
                            
 #endif   
+=======
+>>>>>>> parent of 044c095 (game update)
 
             
 #if CLIENT
@@ -69,7 +69,6 @@ global enum ePassives
 	INVALID = -1,
 
 	                                                                                            
-	PAS_NONE,
 	PAS_ADRENALINE,
 	PAS_ADS_SHIELD,
 	PAS_FAST_HEAL,
@@ -127,7 +126,6 @@ global enum ePassives
        
                 
               
-                   
        
                  
                      
@@ -140,6 +138,7 @@ global enum ePassives
        
                   
                    
+                     
        
                 
                     
@@ -170,7 +169,9 @@ global enum ePassives
 	PAS_FORTIFIED,
 	PAS_LOWPROFILE,
 	PAS_INFINITE_HEAL,
-	PAS_EXTRA_MED_INV
+                       
+		PAS_EXTRA_MED_INV
+       
 
 	PAS_NOVA,
 	PAS_PARIAH,
@@ -196,9 +197,6 @@ global enum ePassives
                         
                       
        
-                                 
-                     
-       
 
 
 	_count,
@@ -216,7 +214,9 @@ global const table<int, string> PASSIVE_NAME_MAP = {
 	[ePassives.PAS_GUARDIAN_ANGEL] = "#PAS_GUARDIAN_ANGEL",
 	[ePassives.PAS_FORTIFIED] = "#PAS_FORTIFIED",
 	[ePassives.PAS_LOWPROFILE] = "#PAS_LOW_PROFILE",
+                      
 	[ePassives.PAS_EXTRA_MED_INV] = "#PAS_EXTRA_MED_INV",
+      
 }
 
 global const table<int, string> PASSIVE_DESCRIPTION_SHORT_MAP = {
@@ -228,7 +228,9 @@ global const table<int, string> PASSIVE_DESCRIPTION_SHORT_MAP = {
 	[ePassives.PAS_GUARDIAN_ANGEL] = "#PAS_GUARDIAN_ANGEL_DESC",
 	[ePassives.PAS_FORTIFIED] = "#PAS_FORTIFIED_DESC",
 	[ePassives.PAS_LOWPROFILE] = "#PAS_LOW_PROFILE_DESC",
+                      
 	[ePassives.PAS_EXTRA_MED_INV] = "#PAS_EXTRA_MED_INV_DESC",
+      
 }
 #endif	              
 
@@ -285,10 +287,10 @@ void function PassivesShared_Init()
 		                                          
 		                                                                           
                        
-                                                                     
-    
-                                                                   
-    
+			                                                                 
+			 
+				                                                               
+			 
                              
 	 
 	                                                                            
@@ -316,6 +318,7 @@ void function PassivesShared_Init()
                                                                                        
         
 
+		                                                                                  
 		                                                                    
 		                                                                 
 	#endif
@@ -411,6 +414,9 @@ void function OnRegisterRootItemFlavors()
 #if SERVER || CLIENT
 bool function PlayerHasPassive( entity player, int passive )
 {
+	if( !IsValid( player ) )
+		return false
+
 	return player.HasPassive( passive )
 }
 #endif
@@ -602,26 +608,36 @@ void function ClientCodeCallback_OnPassiveChanged( entity player, int passiveIdx
                      
                                                                      
  
-                                                                                                     
-  
-                                       
-                                         
+	                                                                                                    
+	 
+			                                    
+			                                      
 
-                                                                                
-                                                                                  
+<<<<<<< HEAD
+			                                                                             
+			                                                                               
 
+			                                                  
+	 
+=======
                                                      
   
+>>>>>>> parent of 044c095 (game update)
  
 
                                                                        
  
-                                                                                 
-            
+	                                                                                
+	           
 
-                                
-                                                                                                    
-                                                                                                      
+<<<<<<< HEAD
+	                               
+	                                                                                                   
+	                                                                                                     
+=======
+                                                                                                                       
+                                                                                                                         
+>>>>>>> parent of 044c095 (game update)
  
                            
 
@@ -656,19 +672,22 @@ void function ClientCodeCallback_OnPassiveChanged( entity player, int passiveIdx
  
 #endif
 
+<<<<<<< HEAD
 #if CLIENT
                      
-                                                
- 
-                                     
+void function ServerToClient_ShowCloakHintText()
+{
+	entity player = GetLocalViewPlayer()
 
-                     
-  
-                                                                                        
-  
- 
+	if (IsValid(player))
+	{
+		AnnouncementMessageRight( player, "#CLOAK_UNARMED_WARNING" )
+	}
+}
                            
 #endif          
+=======
+>>>>>>> parent of 044c095 (game update)
 
 #if SERVER
                                                   
@@ -1003,26 +1022,6 @@ void function ClientCodeCallback_OnPassiveChanged( entity player, int passiveIdx
 		                                         
 	 
  
-
-                                              
- 
-	                                         
-	 
-		                                          
-	 
-
-	                               
- 
-
-                                               
- 
-	                               
-	                                                                  
-	                                         
-		                                          
- 
-
-
 #endif
 
                
@@ -1054,8 +1053,6 @@ void function ClientCodeCallback_OnPassiveChanged( entity player, int passiveIdx
  
                    
                                                                    
-                                                               
-                                                       
                                 
   
                                                
@@ -1063,7 +1060,7 @@ void function ClientCodeCallback_OnPassiveChanged( entity player, int passiveIdx
 
                           
    
-                                                                                  
+                                                                                            
                 
    
   
@@ -1090,6 +1087,25 @@ void function ClientCodeCallback_OnPassiveChanged( entity player, int passiveIdx
       
 
 #if SERVER
+                                                                                             
+ 
+	                         
+		      
+
+	                                        
+		      
+
+	             
+	 
+		                                                         
+	 
+
+	                   
+	 
+		                                                         
+	 
+ 
+
                                                                                       
  
 	                                                              

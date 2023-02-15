@@ -240,9 +240,9 @@ const string STATS_PERSISTENCE_PREFIX_START_OF_PREVIOUS_MATCH = "stats_sopm"
                            
                            
 #if DEV
-void function StatCallStackCheck( bool DEV_isManualDevSet, int up = 1 )
+void function StatCallStackCheck( bool DEV_isManualDevSet, int up = 2 )
 {
-	                                                                                                 
+	                                                                                                                                                                                            
 	string fileName =  FILE_NAME( up )
 	if ( fileName != "sh_stats_internals.gnut" && fileName != "sh_stats.gnut" && DEV_isManualDevSet == false )
 		Assert( false, "Tried to manipulate a stat from " + fileName + ". Do NOT call Stat manipulation functions directly EXCEPT in a DEV_ helper function." )
@@ -270,7 +270,7 @@ void function ShStatsInternals_LevelInit()
 			                                                                       
 		      
 
-		                                                          
+		                                                                
 	#endif
 
 	#if SERVER || CLIENT
@@ -321,14 +321,14 @@ int function GetStat_Int( entity player, StatEntry entry, int when = eStatGetWhe
 
 	Assert( entry.type == eStatType.INT )
 	#if CLIENT || UI
-		if ( !IsBitFlagSet( entry.flags, eStatFlags.PERSISTENCE_WRITE_IMMEDIATELY ) )
+		if ( !(entry.flags & eStatFlags.PERSISTENCE_WRITE_IMMEDIATELY) )
 			Assert( when != eStatGetWhen.CURRENT || IsLobby(), format( "Cannot get current stats in client or UI VM during a match (they could be out of date): %s", entry.persistenceFullKey_Current ) )
 	#endif
 
 	if ( HasStatCachingOptimizations() )
 	{
 		int unixTime = GetUnixTimestamp()
-		                                                                                                                                                                    
+		                                                                                                                                                              
 		                                                                                                                                         
 		                                                                                                                                
 
@@ -389,7 +389,7 @@ int function GetStat_Int( entity player, StatEntry entry, int when = eStatGetWhe
 
 	#if SERVER
 
-		                            
+		                                       
 		                                
 				                                                                     
 
@@ -405,7 +405,7 @@ int function GetStat_Int( entity player, StatEntry entry, int when = eStatGetWhe
 		 
 		                                                        
 		 
-			                                                                                                                                                                                                                    
+			                                                                                                                                                                                                     
 			                                                                                                   
 			                                                                                           
 		 
@@ -413,13 +413,13 @@ int function GetStat_Int( entity player, StatEntry entry, int when = eStatGetWhe
 	#elseif CLIENT || UI
 		if ( when == eStatGetWhen.CURRENT || when == eStatGetWhen.START_OF_CURRENT_MATCH )
 		{
-			if ( !IsBitFlagSet( entry.flags, eStatFlags.PERSISTENCE_WRITE_IMMEDIATELY ) )
+			if ( !(entry.flags & eStatFlags.PERSISTENCE_WRITE_IMMEDIATELY) )
 				Assert( when != eStatGetWhen.CURRENT || IsLobby() )
 			return expect int(player.GetPersistentVar( entry.persistenceFullKey_Current ))
 		}
 		else if ( when == eStatGetWhen.START_OF_PREVIOUS_MATCH )
 		{
-			Assert( IsBitFlagSet( entry.flags, eStatFlags.STORE_START_OF_PREVIOUS_MATCH ), "Tried to get with eStatGetWhen.START_OF_PREVIOUS_MATCH on a stat that does not have eStatFlags.STORE_START_OF_PREVIOUS_MATCH set." )
+			Assert( entry.flags & eStatFlags.STORE_START_OF_PREVIOUS_MATCH, "Tried to get with eStatGetWhen.START_OF_PREVIOUS_MATCH on a stat that does not have eStatFlags.STORE_START_OF_PREVIOUS_MATCH set." )
 			return expect int(player.GetPersistentVar( entry.persistenceFullKey_StartOfPreviousMatch ))
 		}
 		unreachable
@@ -541,7 +541,7 @@ bool function DoesStatSatisfyValue( entity player, StatEntry entry, float checkV
 
 
 #if SERVER
-                                                    
+                                                          
  
 	                                
 	 
@@ -773,14 +773,6 @@ string function GetStatTemplateDebugName( StatTemplate template )
 	                             
 		      
 
-	           
-		                                                                                                                        
-		 
-			                                                                                                                
-			      
-		 
-	      
-
 	                                     
 	                                                                                                 
 	                              
@@ -794,7 +786,7 @@ string function GetStatTemplateDebugName( StatTemplate template )
 			                                                                                 
 	      
 
-	                            
+	                                       
 	                                
 		                                                                     
 
@@ -819,7 +811,7 @@ string function GetStatTemplateDebugName( StatTemplate template )
 	                                     
       
 	 
-		                                                                                                                          
+		                                                                                                           
 		 
 			                                                                     
 		 
@@ -837,14 +829,6 @@ string function GetStatTemplateDebugName( StatTemplate template )
  
 	                             
 		      
-
-	           
-		                                                                                                                        
-		 
-			                                                                                                          
-			      
-		 
-	      
 
 	                                     
 
@@ -882,7 +866,11 @@ string function GetStatTemplateDebugName( StatTemplate template )
 	                                     
       
 	 
-		                                                                                                                          
+<<<<<<< HEAD
+		                                                                                                                                           
+=======
+		                                                                                                           
+>>>>>>> parent of 044c095 (game update)
 		 
 			                                                                     
 		 
@@ -976,7 +964,7 @@ StatEntry function ResolveStatEntry( StatTemplate template, ... )
 		                                                                     
 		                                 
 		 
-			                                                                                                                 
+			                                                                                                             
 			                         
 		 
 	#endif
@@ -988,7 +976,7 @@ StatEntry function ResolveStatEntry( StatTemplate template, ... )
                                                                                  
  
                                                    
-                                                                        
+                                                                  
                                                                                       
                                                                                 
                                                                                
@@ -1371,7 +1359,7 @@ StatTemplate function RegisterCachedCalculatedStat_Int( StatEnumStruct ornull en
 			                                                                                                                                                           
 		 
 
-		                                                                                                                          
+		                                                                                                             
 		 
 			                                                                                          
 			                                                                                                                                                       

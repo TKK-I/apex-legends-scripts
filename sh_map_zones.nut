@@ -21,6 +21,7 @@ global function MapZones_GetChromaBackgroundForZoneId
                                           
                                               
                                        
+                                       
                                                  
                                             
                                                
@@ -365,6 +366,15 @@ string function MapZones_GetZoneStatsRef( int zoneId )
  
 
                                                   
+ 
+	                               
+		         
+
+	                                 
+	                  
+ 
+
+                                                     
  
 	                               
 		         
@@ -803,7 +813,7 @@ void function SCB_OnPlayerEntersMapZone( int zoneId, int zoneTier )
 	Chroma_SetPlayerZone( zoneId )
 
 	int ceFlags = player.GetCinematicEventFlags()
-	if ( IsBitFlagSet( ceFlags, (CE_FLAG_HIDE_MAIN_HUD | CE_FLAG_INTRO ) ) )
+	if ( ceFlags & (CE_FLAG_HIDE_MAIN_HUD | CE_FLAG_INTRO) )
 		return
 
 	string zoneDisplayName = GetZoneNameForZoneId( zoneId )
